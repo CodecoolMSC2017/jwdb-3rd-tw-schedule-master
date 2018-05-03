@@ -1,5 +1,6 @@
 package com.codecool.web.service;
 
+import com.codecool.web.exception.AlreadyRegisteredException;
 import com.codecool.web.exception.UserNotFoundException;
 import com.codecool.web.exception.WrongPasswordException;
 import com.codecool.web.model.User;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public interface UserService {
 
-    void register(String userName, String password, String email) throws SQLException;
+    void register(String userName, String password, String email) throws SQLException, AlreadyRegisteredException;
 
     User login(String email, String password) throws SQLException, WrongPasswordException, UserNotFoundException;
 

@@ -1,6 +1,7 @@
 package com.codecool.web.service.simple;
 
 import com.codecool.web.dao.UserDao;
+import com.codecool.web.exception.AlreadyRegisteredException;
 import com.codecool.web.exception.UserNotFoundException;
 import com.codecool.web.exception.WrongPasswordException;
 import com.codecool.web.model.User;
@@ -18,8 +19,12 @@ public class SimpleUserService implements UserService {
     }
 
     @Override
-    public void register(String userName, String password, String email) throws SQLException {
-        userDao.insertUser(email, userName, password, "user");
+    public void register(String userName, String password, String email) throws SQLException, AlreadyRegisteredException {
+        if (userDao.find(email) == null) {
+            userDao.insertUser(email, userName, password, "user");
+        } else {
+            throw new AlreadyRegisteredException();
+        }
     }
 
     @Override
