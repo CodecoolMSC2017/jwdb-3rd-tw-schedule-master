@@ -15,7 +15,7 @@ public class Day extends AbstractModel {
         return scheduleId;
     }
 
-    public String getTitlee() {
+    public String getTitle() {
         return title;
     }
 }
