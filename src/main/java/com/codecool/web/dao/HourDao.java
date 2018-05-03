@@ -13,5 +13,5 @@ public interface HourDao {
 
     Hour findHourById(int id) throws SQLException;
 
-    List<Hour> findHoursByDayId(int dayId) throws SQLException;
+    List<Hour> findHoursByUserId(int userId) throws SQLException;
 }
