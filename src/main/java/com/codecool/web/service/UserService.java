@@ -1,12 +1,19 @@
 package com.codecool.web.service;
 
+import com.codecool.web.exception.UserNotFoundException;
+import com.codecool.web.exception.WrongPasswordException;
+import com.codecool.web.model.User;
+
+import java.sql.SQLException;
+import java.util.List;
+
 public interface UserService {
 
-    void register(String userName, String password, String email);
+    void register(String userName, String password, String email) throws SQLException;
 
-    void login(String email, String password);
+    User login(String email, String password) throws SQLException, WrongPasswordException, UserNotFoundException;
 
-    void findUserById(int id);
+    List<User> findAll() throws SQLException;
 
 
 }
