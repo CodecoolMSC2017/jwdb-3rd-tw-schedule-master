@@ -6,6 +6,7 @@ import com.codecool.web.model.User;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseUserDao  extends AbstractDao implements UserDao {
 
@@ -30,7 +31,7 @@ public class DatabaseUserDao  extends AbstractDao implements UserDao {
     }
 
     @Override
-    public ArrayList<User> findAll() throws SQLException {
+    public List<User> findAll() throws SQLException {
         return null;
     }
 }

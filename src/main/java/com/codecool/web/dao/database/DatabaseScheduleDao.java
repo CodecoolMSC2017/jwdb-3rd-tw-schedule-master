@@ -6,6 +6,7 @@ import com.codecool.web.model.Schedule;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseScheduleDao extends AbstractDao implements ScheduleDao {
     public DatabaseScheduleDao(Connection connection) {
@@ -38,12 +39,12 @@ public class DatabaseScheduleDao extends AbstractDao implements ScheduleDao {
     }
 
     @Override
-    public ArrayList<Schedule> findAllByUserId(int id) throws SQLException {
+    public List<Schedule> findAllByUserId(int id) throws SQLException {
         return null;
     }
 
     @Override
-    public ArrayList<Schedule> findall() throws SQLException {
+    public List<Schedule> findall() throws SQLException {
         return null;
     }
 }
