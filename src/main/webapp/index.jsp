@@ -24,5 +24,25 @@
 </div>
 
 
+<div id="register-content" class="content hidden">
+
+
+</div>
+
+<div id="schedules-content" class="content hidden">
+
+</div>
+
+<div id="tasks-content" class="content hidden">
+
+
+</div>
+
+<div id="logout-content" class="content hidden">
+
+
+</div>
+
+
 </body>
 </html>

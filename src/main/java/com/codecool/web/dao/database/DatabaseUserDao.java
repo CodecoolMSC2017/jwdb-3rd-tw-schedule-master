@@ -16,9 +16,6 @@ public class DatabaseUserDao  extends AbstractDao implements UserDao {
 
     @Override
     public void insertUser(String email, String userName, String password, String role) throws SQLException {
-        if (email == null || "".equals(email)) {
-            throw new IllegalArgumentException("Email cannot be null or empty");
-        }
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
         String sql = "INSERT INTO app_user (email, user_name, password, role) VALUES (?,?,?,?)";
