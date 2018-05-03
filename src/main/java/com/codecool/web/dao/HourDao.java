@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface HourDao {
 
-    void addHour(int day_id, int value) throws SQLException;
+    void addHour(int dayId, int value) throws SQLException;
 
     void deleteHour(int id) throws SQLException;
 
     Hour findHourById(int id) throws SQLException;
 
-    List<Hour> findHourByUserId(int userId) throws SQLException;
+    List<Hour> findHoursByDayId(int dayId) throws SQLException;
 }

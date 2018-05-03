@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface UserDao {
 
-    void insertUser(String email, String user_name, String password, String role) throws SQLException;
+    void insertUser(String email, String userName, String password, String role) throws SQLException;
 
     User find(String email) throws SQLException;
 

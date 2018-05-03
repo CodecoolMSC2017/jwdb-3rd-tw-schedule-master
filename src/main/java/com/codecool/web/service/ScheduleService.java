@@ -32,6 +32,5 @@ public interface ScheduleService {
 
     List<Hour> findHoursByDayId(int dayId);
 
-    
 
 }
