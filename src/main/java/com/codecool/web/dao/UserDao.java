@@ -3,7 +3,8 @@ package com.codecool.web.dao;
 import com.codecool.web.model.User;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
+
 
 public interface UserDao {
 
@@ -13,5 +14,5 @@ public interface UserDao {
 
     User find(String email, String password) throws SQLException;
 
-    ArrayList<User> findAll() throws SQLException;
+    List<User> findAll() throws SQLException;
 }
