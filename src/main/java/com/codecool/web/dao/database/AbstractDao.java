@@ -5,11 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 
-public class AbstractDao {
+abstract class AbstractDao {
 
     final Connection connection;
 
-    public AbstractDao(Connection connection) {
+    AbstractDao(Connection connection) {
         this.connection = connection;
     }
 
