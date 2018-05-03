@@ -1,6 +1,6 @@
 # About
 
-Repo for a the `Schedule Master` assignment
+Repo for the `Schedule Master` assignment
 
 ## `DataSource`
 
