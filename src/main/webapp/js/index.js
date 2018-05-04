@@ -80,19 +80,19 @@ function onOtherResponse(targetEl, xhr) {
 }
 
 function hasAuthorization() {
-    return localStorage.getItem('user') !== null;
+    return sessionStorage.getItem('user') !== null;
 }
 
 function setAuthorization(user) {
-    return localStorage.setItem('user', JSON.stringify(user));
+    return sessionStorage.setItem('user', JSON.stringify(user));
 }
 
 function getAuthorization() {
-    return JSON.parse(localStorage.getItem('user'));
+    return JSON.parse(sessionStorage.getItem('user'));
 }
 
 function setUnauthorized() {
-    return localStorage.removeItem('user');
+    return sessionStorage.removeItem('user');
 }
 
 function onLoad() {
@@ -105,13 +105,13 @@ function onLoad() {
     loginButtonEl.addEventListener('click', onLoginButtonClicked);
 
     const registerButtonEl = document.getElementById('register-button');
-    registerButtonEl.addEventListener('click', onRegisterButtonClicked)
+    registerButtonEl.addEventListener('click', onRegisterButtonClicked);
 
     const logoutButtonEl = document.getElementById('logout-button');
     logoutButtonEl.addEventListener('click', onLogoutButtonClicked);
 
     if (hasAuthorization()) {
-        onProfileLoad(getAuthorization());
+        onMainPageLoad(getAuthorization());
     }
 }
 
