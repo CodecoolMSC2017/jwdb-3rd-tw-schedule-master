@@ -1,15 +1,14 @@
 function onLoginResponse() {
     if (this.status === OK) {
-        const dto = JSON.parse(this.responseText);
-        setAuthorization(dto);
-        onProfileLoad(dto);
+        const user = JSON.parse(this.responseText);
+        setAuthorization(user);
+        onMainLoad(user);
     } else {
         onOtherResponse(loginContentDivEl, this);
     }
 }
 
 function onLoginButtonClicked() {
-
 
     const loginFormEl = document.forms['login-form'];
 
