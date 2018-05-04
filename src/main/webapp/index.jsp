@@ -10,11 +10,15 @@
     <c:url value="/js/index.js" var="indexScriptUrl"/>
     <c:url value="/js/login.js" var="loginScriptUrl"/>
     <c:url value="/js/logout.js" var="logoutScriptUrl"/>
+    <c:url value="/js/register.js" var="registerScriptUrl"/>
+    <c:url value="/js/main-page.js" var="main-pageScriptUrl"/>
     <link rel="stylesheet" type="text/css" href="${styleUrl}">
     <script src="${indexScriptUrl}"></script>
     <script src="${loginScriptUrl}"></script>
     <script src="${logoutScriptUrl}"></script>
-    <link rel="shortcut icon" href="/icons/favicon.png" type="image/x-icon"/>
+    <script src="${registerScriptUrl}"></script>
+    <script src="${main-pageScriptUrl}"></script>
+    <link rel="shortcut icon" type="image/png" href="/icons/favicon.png"/>
     <title>Schedule Master</title>
 </head>
 <body>
@@ -24,12 +28,12 @@
             <div class="input-div">
                 <h2 id="h2">Logging in</h2><br>E-mail:<br>
                 <input type="email" name="email">
-                <sbr> Password:<br>
+                <br> Password:<br>
                     <input type=password name="password"><br>
                     <input id="login-button" type="submit" value="Login">
             </div>
         </form>
-        <button onclick="toRegistration()"></button>
+        <button id="register-button" onclick="toRegistration()"></button>
     </div>
 </div>
 
@@ -50,7 +54,8 @@
 </div>
 
 <div id="schedules-content" class="content hidden">
-
+    <h2>Schedules</h2>
+    <p>Welcome <span id="user-name"></span></p>
 </div>
 
 <div id="tasks-content" class="content hidden">
