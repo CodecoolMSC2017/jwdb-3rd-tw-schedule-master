@@ -11,14 +11,14 @@
     <c:url value="/js/login.js" var="loginScriptUrl"/>
     <c:url value="/js/logout.js" var="logoutScriptUrl"/>
     <c:url value="/js/register.js" var="registerScriptUrl"/>
-    <c:url value="/js/main-page.js" var="main-pageScriptUrl"/>
+    <c:url value="/js/main-page.js" var="mainPageScriptUrl"/>
     <link rel="stylesheet" type="text/css" href="${styleUrl}">
     <script src="${indexScriptUrl}"></script>
     <script src="${loginScriptUrl}"></script>
     <script src="${logoutScriptUrl}"></script>
     <script src="${registerScriptUrl}"></script>
-    <script src="${main-pageScriptUrl}"></script>
-    <link rel="shortcut icon" type="image/png" href="/icons/favicon.png"/>
+    <script src="${mainPageScriptUrl}"></script>
+    <link rel="shortcut icon" type="image/png" href="icons/favicon.png"/>
     <title>Schedule Master</title>
 </head>
 <body>
@@ -55,7 +55,7 @@
 
 <div id="schedules-content" class="content hidden">
     <h2>Schedules</h2>
-    <p>Welcome <span id="user-name"></span></p>
+    <p>Welcome <span id="user-welcome"></span>!</p>
 </div>
 
 <div id="tasks-content" class="content hidden">
