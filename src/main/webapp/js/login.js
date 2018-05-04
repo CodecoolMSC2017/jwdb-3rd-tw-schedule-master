@@ -20,7 +20,7 @@ function onLoginButtonClicked() {
     const password = passwordInputEl.value;
     if (email == null || email == "") {
         newError(loginFormEl, "Enter an e-mail address!");
-        document.getElementById("loginPassword").value = "";
+        passwordInputEl.value = "";
         return false;
     }
     if (password == null || password == "") {
