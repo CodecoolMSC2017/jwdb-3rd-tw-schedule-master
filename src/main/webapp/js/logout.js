@@ -13,6 +13,6 @@ function onLogoutButtonClicked() {
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onLogoutResponse);
     xhr.addEventListener('error', onNetworkError);
-    xhr.open('POST', 'protected/logout');
+    xhr.open('POST', 'logout');
     xhr.send();
 }
