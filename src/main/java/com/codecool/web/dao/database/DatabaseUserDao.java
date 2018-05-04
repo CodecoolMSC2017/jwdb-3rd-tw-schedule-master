@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseUserDao  extends AbstractDao implements UserDao {
+public class DatabaseUserDao extends AbstractDao implements UserDao {
 
 
     public DatabaseUserDao(Connection connection) {
@@ -18,7 +18,7 @@ public class DatabaseUserDao  extends AbstractDao implements UserDao {
     public void insertUser(String email, String userName, String password, String role) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
-        String sql = "INSERT INTO app_user (email, user_name, password, role) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO app_user(email, user_name, password, role) VALUES (?,?,?,?)";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, email);
             statement.setString(2, userName);
@@ -35,8 +35,7 @@ public class DatabaseUserDao  extends AbstractDao implements UserDao {
 
     @Override
     public User find(String email) throws SQLException {
-        String sql = "Select * from app_user\n" +
-                " where email = ?";
+        String sql = "SELECT * FROM app_user WHERE email = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, email);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -50,8 +49,7 @@ public class DatabaseUserDao  extends AbstractDao implements UserDao {
 
     @Override
     public User find(String email, String password) throws SQLException {
-        String sql = "Select * from app_user\n" +
-                " where email = ? and password = ?";
+        String sql = "SELECT * FROM app_user WHERE email = ? AND password = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, email);
             statement.setString(2, password);
@@ -67,7 +65,7 @@ public class DatabaseUserDao  extends AbstractDao implements UserDao {
     @Override
     public List<User> findAll() throws SQLException {
         List<User> users = new ArrayList<>();
-        String sql = "Select * from app_user";
+        String sql = "SELECT * FROM app_user";
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {

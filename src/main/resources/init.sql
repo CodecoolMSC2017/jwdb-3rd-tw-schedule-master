@@ -59,24 +59,24 @@ INSERT INTO app_user (email, user_name, password, role)  VALUES
 	('norbi@gmail.com', 'Norbi', 'password4', 'user');	--4
 	
 INSERT INTO schedule (app_user_id, title, description) VALUES
-	(2, 'Work', 'my working day'),
-	(2, 'PS4', 'God of War'),
-	(3, 'fap', 'pubg');
+	(2, 'Work', 'my working day'), --1
+	(2, 'PS4', 'God of War'), -- 2
+	(3, 'fap', 'pubg'); --3
 	
 INSERT INTO day (schedule_id, title) VALUES
-	(2, 'prologue'),
-	(3, 'one round');
+	(2, 'prologue'), --1
+	(3, 'one round'); --2
 	
 INSERT INTO hour (day_id, value) VALUES
-    (1,0),
-    (1,1),
-	(1, 17),
-	(1, 18),
-	(2, 20);
+    (1,0), --1
+    (1,1), --2
+	(1, 17), --3
+	(1, 18), --4
+	(2, 20); --5
 	
 INSERT INTO task (app_user_id, title, description) VALUES
-	(2, 'gaming', 'playing god of war'),
-	(3, 'fap', 'playing gay games');
+	(2, 'gaming', 'playing god of war'), --1
+	(3, 'fap', 'playing gay games'); --2
 	
 INSERT INTO task_hour (task_id, schedule_id, hour_ids) VALUES
 	(1, 1, '1,2'),

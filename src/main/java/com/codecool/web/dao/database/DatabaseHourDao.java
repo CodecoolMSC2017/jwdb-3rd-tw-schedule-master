@@ -7,7 +7,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-public class DatabaseHourDao extends AbstractDao implements HourDao{
+public class DatabaseHourDao extends AbstractDao implements HourDao {
+
     public DatabaseHourDao(Connection connection) {
         super(connection);
     }
@@ -28,7 +29,7 @@ public class DatabaseHourDao extends AbstractDao implements HourDao{
     }
 
     @Override
-    public List<Hour> findHourByUserId(int userId) throws SQLException {
+    public List<Hour> findHoursByUserId(int userId) throws SQLException {
         return null;
     }
 }
