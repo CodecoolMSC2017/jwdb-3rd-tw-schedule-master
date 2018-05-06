@@ -22,51 +22,49 @@
     <title>Schedule Master</title>
 </head>
 <body>
-<div id="login-content" class="content">
-    <div>
-        <form id="login-form" name="login" onsubmit="return false;">
-            <div class="input-div">
-                <h2 id="h2">Logging in</h2><br>E-mail:<br>
-                <input type="email" name="email">
-                <br> Password:<br>
-                    <input type=password name="password"><br>
-                    <input id="login-button" type="submit" value="Login">
-            </div>
-        </form>
-        <button id="register-button" onclick="toRegistration()"></button>
+    <div id="login-content" class="content">
+        <div>
+            <form id="login-form" name="login" onsubmit="return false;">
+                <div class="input-div">
+                    <h2 id="h2">Log in</h2><br>E-mail:<br>
+                    <input type="email" name="email">
+                    <br> Password:<br>
+                        <input type=password name="password"><br>
+                        <input id="login-button" type="submit" value="Login">
+                </div>
+            </form>
+            <p><a id="register-button" href="toRegistration()">Register</a> an account</p>
+        </div>
     </div>
-</div>
 
-
-<div id="register-content" class="content hidden">
-    <div>
-        <form id="register-form" name="register" onsubmit="return false;">
-            <div>
-                <h2>Registration</h2>Name:<br>
-                <input type="text" name="name"><br>E-mail:<br>
-                <input type="email" name="email"><br>Password:<br>
-                <input type=password name="password"><br>Confirm Password:<br>
-                <input type="password" name="password-again">
-            </div>
-        </form>
-        <button onclick="toLogin()"></button>
+    <div id="register-content" class="content hidden">
+        <div>
+            <form id="register-form" name="register" onsubmit="return false;">
+                <div>
+                    <h2>Registration</h2>Name:<br>
+                    <input type="text" name="name"><br>E-mail:<br>
+                    <input type="email" name="email"><br>Password:<br>
+                    <input type=password name="password"><br>Confirm Password:<br>
+                    <input type="password" name="password-again">
+                </div>
+            </form>
+            <button onclick="toLogin()"></button>
+        </div>
     </div>
-</div>
 
-<div id="schedules-content" class="content hidden">
-    <h2>Schedules</h2>
-    <p>Welcome <span id="user-welcome"></span>!</p>
-</div>
+    <div id="schedules-content" class="content hidden">
+        <h2>Schedules</h2>
+        <p>Welcome <span id="user-welcome"></span>!</p>
+    </div>
 
-<div id="tasks-content" class="content hidden">
+    <div id="tasks-content" class="content hidden">
 
 
-</div>
+    </div>
 
-<div id="logout-content" class="content hidden">
-    <button id="logout-button">Logout</button>
-</div>
-
+    <div id="logout-content" class="content hidden">
+        <button id="logout-button">Logout</button>
+    </div>
 
 </body>
 </html>
