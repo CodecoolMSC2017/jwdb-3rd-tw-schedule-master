@@ -2,6 +2,7 @@ const OK = 200;
 const BAD_REQUEST = 400;
 const UNAUTHORIZED = 401;
 const NOT_FOUND = 404;
+const CONFLICT = 409;
 const INTERNAL_SERVER_ERROR = 500;
 
 let loginContentDivEl;
@@ -24,8 +25,8 @@ function newMessage(targetEl, cssClass, message) {
     pEl.classList.add('message');
     pEl.classList.add(cssClass);
     pEl.textContent = message;
-
-    targetEl.appendChild(pEl);
+    const firstChild = targetEl.firstElementChild;
+    targetEl.insertBefore(pEl, firstChild);
 }
 
 function clearMessages() {
@@ -61,7 +62,7 @@ function onNetworkError(response) {
     newError(bodyEl, 'Network error, please try reloading the page');
 }
 
-function onOtherResponse(targetEl, xhr) {
+function onMessageResponse(targetEl, xhr) {
     if (xhr.status === NOT_FOUND) {
         newError(targetEl, 'Not found');
         console.error(xhr);
@@ -69,7 +70,7 @@ function onOtherResponse(targetEl, xhr) {
         const json = JSON.parse(xhr.responseText);
         if (xhr.status === INTERNAL_SERVER_ERROR) {
             newError(targetEl, `Server error: ${json.message}`);
-        } else if (xhr.status === UNAUTHORIZED || xhr.status === BAD_REQUEST) {
+        } else if (xhr.status === UNAUTHORIZED || xhr.status === BAD_REQUEST || xhr.status === CONFLICT) {
             newError(targetEl, json.message);
         } else if (xhr.status === OK) {
             newInfo(targetEl, json.message);

@@ -3,9 +3,9 @@ function onLogoutResponse() {
         setUnauthorized();
         clearMessages();
         showContents(['login-content']);
-        onOtherResponse(loginContentDivEl, this);
+        onMessageResponse(loginContentDivEl, this);
     } else {
-        onOtherResponse(logoutContentDivEl, this);
+        onMessageResponse(logoutContentDivEl, this);
     }
 }
 

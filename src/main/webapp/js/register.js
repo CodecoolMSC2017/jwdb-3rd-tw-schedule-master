@@ -57,9 +57,9 @@ function onRegisterResponse() {
     if (this.status === OK) {
         clearMessages();
         showContents(['login-content']);
-        onOtherResponse(loginContentDivEl, this);
+        onMessageResponse(loginContentDivEl, this);
     } else {
-        onOtherResponse(registerContentDivEl, this);
+        onMessageResponse(registerContentDivEl, this);
     }
 }
 

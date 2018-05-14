@@ -4,7 +4,7 @@ function onLoginResponse() {
         setAuthorization(user);
         onMainPageLoad(user);
     } else {
-        onOtherResponse(loginContentDivEl, this);
+        onMessageResponse(loginContentDivEl, this);
     }
 }
 
@@ -17,12 +17,12 @@ function onLoginButtonClicked() {
 
     const email = emailInputEl.value;
     const password = passwordInputEl.value;
-    if (email == null || email == "") {
+    if (email == null || email === "") {
         newError(loginFormEl, "Enter an e-mail address!");
         passwordInputEl.value = "";
         return false;
     }
-    if (password == null || password == "") {
+    if (password == null || password === "") {
         newError(loginFormEl, "Enter a password!");
         return false;
     }
