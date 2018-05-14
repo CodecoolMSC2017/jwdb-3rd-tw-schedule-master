@@ -1,0 +1,99 @@
+package com.codecool.web.service.simple;
+
+import com.codecool.web.dao.DayDao;
+import com.codecool.web.dao.HourDao;
+import com.codecool.web.dao.ScheduleDao;
+import com.codecool.web.model.Day;
+import com.codecool.web.model.Hour;
+import com.codecool.web.model.Schedule;
+import com.codecool.web.service.ScheduleService;
+
+import java.sql.SQLException;
+import java.util.List;
+
+public class SimpleScheduleService implements ScheduleService {
+
+    ScheduleDao scheduleDao;
+    DayDao dayDao;
+    HourDao hourDao;
+
+    public SimpleScheduleService(ScheduleDao scheduleDao, DayDao dayDao, HourDao hourDao) {
+        this.scheduleDao = scheduleDao;
+        this.dayDao = dayDao;
+        this.hourDao = hourDao;
+    }
+
+    @Override
+    public void createSchedule(String title, String description, int userId) throws SQLException {
+        scheduleDao.addSchedule(userId,title, description);
+
+    }
+
+    @Override
+    public void deleteSchedule(int scheduleId) throws SQLException {
+        scheduleDao.deleteSchedule(scheduleId);
+    }
+
+    @Override
+    public void updateSchedule(int scheduleId, String title, String description) throws SQLException {
+        Schedule schedule = scheduleDao.findById(scheduleId);
+        String scheduleTile = schedule.getTitle();
+        String scheduleDescription = schedule.getDescription();
+        if(scheduleTile.equals(title) && !scheduleDescription.equals(description)){
+            scheduleDao.updateDescription(scheduleId,description);
+        }
+        else if(!scheduleTile.equals(title) && scheduleDescription.equals(description)){
+            scheduleDao.updateTitle(scheduleId, title);
+        }
+        else if(!scheduleTile.equals(title) && !scheduleDescription.equals(description)){
+            scheduleDao.updateTitle(scheduleId, title);
+            scheduleDao.updateDescription(scheduleId,description);
+        }
+    }
+
+    @Override
+    public Schedule findById(int scheduleId) throws SQLException {
+        return scheduleDao.findById(scheduleId);
+    }
+
+    @Override
+    public List<Schedule> findAll() throws SQLException {
+        return scheduleDao.findall();
+    }
+
+    @Override
+    public List<Schedule> findAllByUserId(int userId) throws SQLException {
+        return scheduleDao.findAllByUserId(userId);
+    }
+
+    @Override
+    public void addDay(int scheduleId, String title) throws SQLException {
+        dayDao.addDay(scheduleId,title);
+    }
+
+    @Override
+    public void updateDay(int dayId, String title) throws SQLException {
+        dayDao.updateDay(dayId,title);
+    }
+
+    @Override
+    public Day findDayById(int id) throws SQLException {
+        return dayDao.findDayById(id);
+    }
+
+    @Override
+    public List<Day> findDayByScheduleId(int scheduleId) throws SQLException {
+        return dayDao.findDayByScheduleId(scheduleId);
+    }
+
+    @Override
+    public Hour findHourById(int id) throws SQLException {
+        return hourDao.findHourById(id);
+    }
+
+    @Override
+    public List<Hour> findHoursByDayId(int dayId) throws SQLException {
+        return hourDao.findHoursByDayId(dayId);
+    }
+}
+

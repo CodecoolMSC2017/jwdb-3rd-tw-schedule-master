@@ -1,10 +1,12 @@
 package com.codecool.web.servlet;
 
 import com.codecool.web.dto.MessageDto;
+import com.codecool.web.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -19,6 +21,11 @@ abstract class AbstractServlet extends HttpServlet {
         DataSource dataSource = (DataSource) sce.getAttribute("dataSource");
         return dataSource.getConnection();
     }
+
+    User getUser(HttpServletRequest req) {
+        return (User) req.getSession().getAttribute("user");
+    }
+
 
     void sendMessage(HttpServletResponse resp, int status, String message) throws IOException {
         sendMessage(resp, status, new MessageDto(message));

@@ -13,7 +13,7 @@ public class DatabaseScheduleDao extends AbstractDao implements ScheduleDao {
     }
 
     @Override
-    public void insertSchedule(int appUserId, String title, String description) throws SQLException {
+    public void addSchedule(int appUserId, String title, String description) throws SQLException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);
         String sql = "INSERT INTO schedule (app_user_id, title, description) VALUES (?,?,?)";

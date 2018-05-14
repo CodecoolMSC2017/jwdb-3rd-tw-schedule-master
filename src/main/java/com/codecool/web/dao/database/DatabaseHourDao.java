@@ -29,7 +29,9 @@ public class DatabaseHourDao extends AbstractDao implements HourDao {
     }
 
     @Override
-    public List<Hour> findHoursByUserId(int userId) throws SQLException {
+    public List<Hour> findHoursByDayId(int dayId) throws SQLException {
         return null;
     }
+
+
 }
