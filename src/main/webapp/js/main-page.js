@@ -1,8 +1,23 @@
 function onMainPageLoad(user) {
     clearMessages();
-    showContents(['schedules-content', 'logout-content']);
+    showContents(['schedules-content', 'logout-content', 'tasks-content']);
 
-    const userWelcomeSpanEl = document.getElementById('user-welcome');
-
-    userWelcomeSpanEl.textContent = user.userName;
+    const taskEl = document.createElement("ul");
+    taskEl.setAttribute("id","tasksUl");
+    taskEl.classList.add('hidden');
+    for (let i = 0; i < tasks.length ; i++) {
+         let taskLi = document.createElement("li");
+         let taskSpan = document.createElement("span");
+         taskSpan.textContent = tasks[i].title;
+         let taskButt = document.createElement("button");
+         taskButt.addEventListener('click',renameTaskTitle);
+         taskLi.appendChild(taskSpan);
+         taskLi.appendChild(taskButt);
+         taskEl.appendChild(taskLi);
+    }
+    taskDiv.appendChild(taskEl);
+    const createButton = document.createElement("button");
+    createButton.addEventListener('click',showCreateTask);
 }
+
+

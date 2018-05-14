@@ -58,7 +58,9 @@
     </div>
 
     <div id="tasks-content" class="content hidden">
-
+        <div id="tasks">
+            <p>Tasks</p>
+        </div>
 
     </div>
 
