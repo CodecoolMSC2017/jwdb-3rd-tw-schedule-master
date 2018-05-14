@@ -12,12 +12,14 @@
     <c:url value="/js/logout.js" var="logoutScriptUrl"/>
     <c:url value="/js/register.js" var="registerScriptUrl"/>
     <c:url value="/js/main-page.js" var="mainPageScriptUrl"/>
+    <c:url value="/js/task.js" var="taskScriptUrl"/>
     <link rel="stylesheet" type="text/css" href="${styleUrl}">
     <script src="${indexScriptUrl}"></script>
     <script src="${loginScriptUrl}"></script>
     <script src="${logoutScriptUrl}"></script>
     <script src="${registerScriptUrl}"></script>
     <script src="${mainPageScriptUrl}"></script>
+    <script src="${taskScriptUrl}"></script>
     <link rel="shortcut icon" type="image/png" href="icons/favicon.png"/>
     <title>Schedule Master</title>
 </head>
@@ -33,7 +35,8 @@
                         <input id="login-button" type="submit" value="Login">
                 </div>
             </form>
-            <p><a id="register-button" href="toRegistration()">Register</a> an account</p>
+            <p><a id="toRegister-button" href="javascript:void(0)" onclick="toRegistration()">Register</a> an account
+            </p>
         </div>
     </div>
 
@@ -46,9 +49,11 @@
                     <input type="email" name="email"><br>Password:<br>
                     <input type=password name="password"><br>Confirm Password:<br>
                     <input type="password" name="password-again">
+                    <input id="register-button" type="submit" value="Register">
                 </div>
             </form>
-            <button onclick="toLogin()"></button>
+            <p>Already have an account?<a id="toLogin-button" href="javascript:void(0)" onclick="toLogin()">Login</a>
+            </p>
         </div>
     </div>
 

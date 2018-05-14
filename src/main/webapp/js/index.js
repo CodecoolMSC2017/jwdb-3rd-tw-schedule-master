@@ -66,21 +66,16 @@ function onNetworkError(response) {
 }
 
 function onMessageResponse(targetEl, xhr) {
-    if (xhr.status === NOT_FOUND) {
-        newError(targetEl, 'Not found');
-        console.error(xhr);
-    } else {
         const json = JSON.parse(xhr.responseText);
         if (xhr.status === INTERNAL_SERVER_ERROR) {
             newError(targetEl, `Server error: ${json.message}`);
-        } else if (xhr.status === UNAUTHORIZED || xhr.status === BAD_REQUEST || xhr.status === CONFLICT) {
+        } else if (xhr.status === UNAUTHORIZED || xhr.status === BAD_REQUEST || xhr.status === CONFLICT || xhr.status === NOT_FOUND) {
             newError(targetEl, json.message);
         } else if (xhr.status === OK) {
             newInfo(targetEl, json.message);
         } else {
             newError(targetEl, `Unknown error: ${json.message}`);
         }
-    }
 }
 
 function hasAuthorization() {
