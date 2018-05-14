@@ -11,6 +11,8 @@ let logoutContentDivEl;
 let profileContentDivEl;
 let taskContentDivEl;
 let taskDiv;
+let scheduleContentDivEl;
+let scheduleDiv;
 
 
 function newInfo(targetEl, message) {
@@ -100,6 +102,8 @@ function onLoad() {
     logoutContentDivEl = document.getElementById('logout-content');
     profileContentDivEl = document.getElementById('profile-content');
     taskContentDivEl = document.getElementById('tasks-content');
+    scheduleContentDivEl = document.getElementById('schedules-content');
+    taskDiv = document.getElementById("tasks");
 
     const loginButtonEl = document.getElementById('login-button');
     loginButtonEl.addEventListener('click', onLoginButtonClicked);
@@ -109,9 +113,6 @@ function onLoad() {
 
     const logoutButtonEl = document.getElementById('logout-button');
     logoutButtonEl.addEventListener('click', onLogoutButtonClicked);
-
-    taskDiv = document.getElementById("tasks");
-    taskDiv.addEventListener('click',showTasks);
 
     if (hasAuthorization()) {
         onMainPageLoad(getAuthorization());

@@ -67,6 +67,7 @@ function showCreateTask(){
     inputDescript.placeholder = "Description";
     const createTaskButt = document.createElement("button");
     createTaskButt.addEventListener('click',createTask);
+    createTaskButt.textContent = "Create";
     createTaskDiv.appendChild(inputTitle);
     createTaskDiv.appendChild(inputDescript);
     createTaskDiv.appendChild(createTaskButt);

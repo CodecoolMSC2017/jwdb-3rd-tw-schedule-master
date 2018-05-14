@@ -59,12 +59,14 @@
 
     <div id="schedules-content" class="content hidden">
         <h2>Schedules</h2>
-        <p>Welcome <span id="user-welcome"></span>!</p>
+        <div id="schedules">
+            <button id="schedules-button">Schedules</button>
+        </div>
     </div>
 
     <div id="tasks-content" class="content hidden">
         <div id="tasks">
-            <p>Tasks</p>
+            <button id="tasks-button">Tasks</button>
         </div>
 
     </div>
