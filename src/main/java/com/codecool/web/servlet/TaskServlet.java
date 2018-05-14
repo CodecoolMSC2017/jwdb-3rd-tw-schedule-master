@@ -31,7 +31,7 @@ public class TaskServlet extends AbstractServlet {
             ScheduleDao scheduleDao = new DatabaseScheduleDao(connection);
             TaskService taskService = new SimpleTaskService(taskDao);
             ScheduleService scheduleService = new SimpleScheduleService(scheduleDao);
-            User user = (User) req.getSession().getAttribute("user");
+            User user = getUser(req);
             int userId = user.getId();
             String taskTitle = req.getParameter("title");
             String taskDescription = req.getParameter("description");
@@ -55,11 +55,13 @@ public class TaskServlet extends AbstractServlet {
             ScheduleDao scheduleDao = new DatabaseScheduleDao(connection);
             TaskService taskService = new SimpleTaskService(taskDao);
             ScheduleService scheduleService = new SimpleScheduleService(scheduleDao);
-            User user = (User) req.getSession().getAttribute("user");
+            User user = getUser(req);
             int userId = user.getId();
             String taskTitle = req.getParameter("title");
-            String taskDescription = req.getParameter("descripton");
-            taskService.update(userId,taskTitle,taskDescription);
+            String taskDescription = req.getParameter("description");
+            int taskId = Integer.parseInt(req.getParameter("taskId"));
+
+            taskService.update(taskId,taskTitle,taskDescription);
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
             List<Task> tasks = taskService.findAllByUserId(userId);
             UserDto userDto = new UserDto(user, tasks, schedules);
@@ -78,7 +80,7 @@ public class TaskServlet extends AbstractServlet {
             ScheduleDao scheduleDao = new DatabaseScheduleDao(connection);
             TaskService taskService = new SimpleTaskService(taskDao);
             ScheduleService scheduleService = new SimpleScheduleService(scheduleDao);
-            User user = (User) req.getSession().getAttribute("user");
+            User user = getUser(req);
             int userId = user.getId();
             int taskId = Integer.parseInt(req.getParameter("taskId"));
 
