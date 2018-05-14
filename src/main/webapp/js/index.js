@@ -9,6 +9,9 @@ let loginContentDivEl;
 let registerContentDivEl;
 let logoutContentDivEl;
 let profileContentDivEl;
+let taskContentDivEl;
+let taskDiv;
+
 
 function newInfo(targetEl, message) {
     newMessage(targetEl, 'info', message);
@@ -63,21 +66,16 @@ function onNetworkError(response) {
 }
 
 function onMessageResponse(targetEl, xhr) {
-    if (xhr.status === NOT_FOUND) {
-        newError(targetEl, 'Not found');
-        console.error(xhr);
-    } else {
         const json = JSON.parse(xhr.responseText);
         if (xhr.status === INTERNAL_SERVER_ERROR) {
             newError(targetEl, `Server error: ${json.message}`);
-        } else if (xhr.status === UNAUTHORIZED || xhr.status === BAD_REQUEST || xhr.status === CONFLICT) {
+        } else if (xhr.status === UNAUTHORIZED || xhr.status === BAD_REQUEST || xhr.status === CONFLICT || xhr.status === NOT_FOUND) {
             newError(targetEl, json.message);
         } else if (xhr.status === OK) {
             newInfo(targetEl, json.message);
         } else {
             newError(targetEl, `Unknown error: ${json.message}`);
         }
-    }
 }
 
 function hasAuthorization() {
@@ -101,6 +99,7 @@ function onLoad() {
     registerContentDivEl = document.getElementById('register-content');
     logoutContentDivEl = document.getElementById('logout-content');
     profileContentDivEl = document.getElementById('profile-content');
+    taskContentDivEl = document.getElementById('tasks-content');
 
     const loginButtonEl = document.getElementById('login-button');
     loginButtonEl.addEventListener('click', onLoginButtonClicked);
@@ -110,6 +109,9 @@ function onLoad() {
 
     const logoutButtonEl = document.getElementById('logout-button');
     logoutButtonEl.addEventListener('click', onLogoutButtonClicked);
+
+    taskDiv = document.getElementById("tasks");
+    taskDiv.addEventListener('click',showTasks);
 
     if (hasAuthorization()) {
         onMainPageLoad(getAuthorization());
