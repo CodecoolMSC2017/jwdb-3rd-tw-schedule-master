@@ -2,19 +2,20 @@ package com.codecool.web.service;
 
 import com.codecool.web.model.Task;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface TaskService {
 
-    void createTask(int userId, String title, String description);
+    void addTask(int userId, String title, String description) throws SQLException;
 
-    void deleteTask(int taskId);
+    void deleteTask(int taskId) throws SQLException;
 
-    void update(int taskId, String title, String description);
+    void update(int taskId, String title, String description) throws SQLException;
 
-    Task findById(int taskId);
+    Task findById(int taskId) throws SQLException;
 
-    List<Task> findAll();
+    List<Task> findAll() throws SQLException;
 
-    List<Task> findAllByUserId(int userId);
+    List<Task> findAllByUserId(int userId) throws SQLException;
 }
