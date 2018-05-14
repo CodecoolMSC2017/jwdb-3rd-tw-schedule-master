@@ -41,7 +41,7 @@ public class DatabaseTaskDao extends AbstractDao implements TaskDao {
         String sql = "DELETE FROM task WHERE task.id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
-            statement.executeUpdate(sql);
+            statement.executeUpdate();
         } catch (SQLException e) {
             connection.rollback();
             throw e;
@@ -58,7 +58,7 @@ public class DatabaseTaskDao extends AbstractDao implements TaskDao {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, newTitle);
             statement.setInt(2, id);
-            statement.executeUpdate(sql);
+            statement.executeUpdate();
         }  catch (SQLException e) {
             connection.rollback();
             throw e;
@@ -75,7 +75,7 @@ public class DatabaseTaskDao extends AbstractDao implements TaskDao {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, newDescription);
             statement.setInt(2, id);
-            statement.executeUpdate(sql);
+            statement.executeUpdate();
         }  catch (SQLException e) {
             connection.rollback();
             throw e;
