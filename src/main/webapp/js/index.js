@@ -102,8 +102,10 @@ function onLoad() {
     logoutContentDivEl = document.getElementById('logout-content');
     profileContentDivEl = document.getElementById('profile-content');
     taskContentDivEl = document.getElementById('tasks-content');
-    scheduleContentDivEl = document.getElementById('schedules-content');
     taskDiv = document.getElementById("tasks");
+    scheduleContentDivEl = document.getElementById('schedules-content');
+    scheduleDiv = document.getElementById("schedules");
+
 
     const loginButtonEl = document.getElementById('login-button');
     loginButtonEl.addEventListener('click', onLoginButtonClicked);
