@@ -7,8 +7,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseScheduleDao extends AbstractDao implements ScheduleDao {
-    public DatabaseScheduleDao(Connection connection) {
+class DatabaseScheduleDao extends AbstractDaoFactory implements ScheduleDao {
+    DatabaseScheduleDao(Connection connection) {
         super(connection);
     }
 

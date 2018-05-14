@@ -2,6 +2,7 @@ package com.codecool.web.dao.database;
 
 import com.codecool.web.dao.TaskDao;
 import com.codecool.web.model.Task;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,9 +10,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseTaskDao extends AbstractDao implements TaskDao {
+class DatabaseTaskDao extends AbstractDaoFactory implements TaskDao {
 
-    public DatabaseTaskDao(Connection connection) {
+    DatabaseTaskDao(Connection connection) {
         super(connection);
     }
 

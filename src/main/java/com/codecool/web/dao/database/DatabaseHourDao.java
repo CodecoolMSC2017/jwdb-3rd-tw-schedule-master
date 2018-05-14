@@ -7,9 +7,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-public class DatabaseHourDao extends AbstractDao implements HourDao {
+class DatabaseHourDao extends AbstractDaoFactory implements HourDao {
 
-    public DatabaseHourDao(Connection connection) {
+    DatabaseHourDao(Connection connection) {
         super(connection);
     }
 

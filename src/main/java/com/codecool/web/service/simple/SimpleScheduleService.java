@@ -3,24 +3,26 @@ package com.codecool.web.service.simple;
 import com.codecool.web.dao.DayDao;
 import com.codecool.web.dao.HourDao;
 import com.codecool.web.dao.ScheduleDao;
+import com.codecool.web.dao.database.AbstractDaoFactory;
 import com.codecool.web.model.Day;
 import com.codecool.web.model.Hour;
 import com.codecool.web.model.Schedule;
 import com.codecool.web.service.ScheduleService;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
 public class SimpleScheduleService implements ScheduleService {
 
-    ScheduleDao scheduleDao;
-    DayDao dayDao;
-    HourDao hourDao;
+    private final ScheduleDao scheduleDao;
+    private final DayDao dayDao;
+    private final HourDao hourDao;
 
-    public SimpleScheduleService(ScheduleDao scheduleDao, DayDao dayDao, HourDao hourDao) {
-        this.scheduleDao = scheduleDao;
-        this.dayDao = dayDao;
-        this.hourDao = hourDao;
+    public SimpleScheduleService(Connection connection) {
+        scheduleDao = (ScheduleDao) AbstractDaoFactory.getDao("schedule", connection);
+        dayDao = (DayDao) AbstractDaoFactory.getDao("day", connection);
+        hourDao = (HourDao) AbstractDaoFactory.getDao("hour", connection);
     }
 
     @Override

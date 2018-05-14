@@ -4,8 +4,8 @@ import com.codecool.web.dao.TaskHourDao;
 
 import java.sql.Connection;
 
-public class DatabaseTaskHourDao extends AbstractDao implements TaskHourDao {
-    public DatabaseTaskHourDao(Connection connection) {
+class DatabaseTaskHourDao extends AbstractDaoFactory implements TaskHourDao {
+    DatabaseTaskHourDao(Connection connection) {
         super(connection);
     }
 }

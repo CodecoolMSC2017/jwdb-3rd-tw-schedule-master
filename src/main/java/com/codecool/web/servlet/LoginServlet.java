@@ -1,9 +1,4 @@
 package com.codecool.web.servlet;
-
-import com.codecool.web.dao.TaskDao;
-import com.codecool.web.dao.UserDao;
-import com.codecool.web.dao.database.DatabaseTaskDao;
-import com.codecool.web.dao.database.DatabaseUserDao;
 import com.codecool.web.dto.UserDto;
 import com.codecool.web.exception.UserNotFoundException;
 import com.codecool.web.exception.WrongPasswordException;
@@ -29,10 +24,8 @@ public final class LoginServlet extends AbstractServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
-            UserDao userDao = new DatabaseUserDao(connection);
-            UserService userService = new SimpleUserService(userDao);
-            TaskDao taskDao = new DatabaseTaskDao(connection);
-            TaskService taskService = new SimpleTaskService(taskDao);
+            UserService userService = new SimpleUserService(connection);
+            TaskService taskService = new SimpleTaskService(connection);
 
             String email = req.getParameter("email");
             String password = req.getParameter("password");

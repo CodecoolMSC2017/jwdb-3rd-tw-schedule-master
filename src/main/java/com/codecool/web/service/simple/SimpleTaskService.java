@@ -1,18 +1,20 @@
 package com.codecool.web.service.simple;
 
 import com.codecool.web.dao.TaskDao;
+import com.codecool.web.dao.database.AbstractDaoFactory;
 import com.codecool.web.model.Task;
 import com.codecool.web.service.TaskService;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
 public class SimpleTaskService implements TaskService {
 
-    TaskDao taskDao;
+    private final TaskDao taskDao;
 
-    public SimpleTaskService(TaskDao taskDao) throws SQLException {
-        this.taskDao = taskDao;
+    public SimpleTaskService(Connection connection) throws SQLException {
+        taskDao = (TaskDao) AbstractDaoFactory.getDao("task", connection);
     }
 
     @Override

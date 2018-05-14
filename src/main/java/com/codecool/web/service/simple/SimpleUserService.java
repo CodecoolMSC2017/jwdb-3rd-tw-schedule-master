@@ -1,21 +1,23 @@
 package com.codecool.web.service.simple;
 
 import com.codecool.web.dao.UserDao;
+import com.codecool.web.dao.database.AbstractDaoFactory;
 import com.codecool.web.exception.AlreadyRegisteredException;
 import com.codecool.web.exception.UserNotFoundException;
 import com.codecool.web.exception.WrongPasswordException;
 import com.codecool.web.model.User;
 import com.codecool.web.service.UserService;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
 public class SimpleUserService implements UserService {
 
-    UserDao userDao;
+    private final UserDao userDao;
 
-    public SimpleUserService(UserDao userDao) {
-        this.userDao = userDao;
+    public SimpleUserService(Connection connection) {
+        userDao = (UserDao) AbstractDaoFactory.getDao("user", connection);
     }
 
     @Override

@@ -7,10 +7,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseUserDao extends AbstractDao implements UserDao {
+class DatabaseUserDao extends AbstractDaoFactory implements UserDao {
 
 
-    public DatabaseUserDao(Connection connection) {
+    DatabaseUserDao(Connection connection) {
         super(connection);
     }
 

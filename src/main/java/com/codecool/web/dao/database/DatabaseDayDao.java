@@ -7,8 +7,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-public class DatabaseDayDao extends AbstractDao implements DayDao {
-    public DatabaseDayDao(Connection connection) {
+class DatabaseDayDao extends AbstractDaoFactory implements DayDao {
+   DatabaseDayDao(Connection connection) {
         super(connection);
     }
 
