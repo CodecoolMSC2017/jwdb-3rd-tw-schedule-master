@@ -1,11 +1,17 @@
 package com.codecool.web.servlet;
 
+import com.codecool.web.dao.TaskDao;
 import com.codecool.web.dao.UserDao;
+import com.codecool.web.dao.database.DatabaseTaskDao;
 import com.codecool.web.dao.database.DatabaseUserDao;
+import com.codecool.web.dto.UserDto;
 import com.codecool.web.exception.UserNotFoundException;
 import com.codecool.web.exception.WrongPasswordException;
+import com.codecool.web.model.Task;
 import com.codecool.web.model.User;
+import com.codecool.web.service.TaskService;
 import com.codecool.web.service.UserService;
+import com.codecool.web.service.simple.SimpleTaskService;
 import com.codecool.web.service.simple.SimpleUserService;
 
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/login")
 public final class LoginServlet extends AbstractServlet {
@@ -23,6 +31,8 @@ public final class LoginServlet extends AbstractServlet {
         try (Connection connection = getConnection(req.getServletContext())) {
             UserDao userDao = new DatabaseUserDao(connection);
             UserService userService = new SimpleUserService(userDao);
+            TaskDao taskDao = new DatabaseTaskDao(connection);
+            TaskService taskService = new SimpleTaskService(taskDao);
 
             String email = req.getParameter("email");
             String password = req.getParameter("password");
@@ -30,7 +40,9 @@ public final class LoginServlet extends AbstractServlet {
             User user = userService.login(email, password);
             req.getSession().setAttribute("user", user);
 
-            sendMessage(resp, HttpServletResponse.SC_OK, user);
+            List<Task> allTask = taskService.findAllByUserId(user.getId());
+
+            sendMessage(resp, HttpServletResponse.SC_OK, new UserDto(user, allTask, new ArrayList<>()));
         }  catch (SQLException ex) {
             handleSqlError(resp, ex);
         } catch (UserNotFoundException e) {

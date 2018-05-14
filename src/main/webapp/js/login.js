@@ -1,8 +1,8 @@
 function onLoginResponse() {
     if (this.status === OK) {
-        const user = JSON.parse(this.responseText);
-        setAuthorization(user);
-        onMainPageLoad(user);
+        const userDto = JSON.parse(this.responseText);
+        setAuthorization(userDto.user);
+        onMainPageLoad(userDto);
     } else {
         onMessageResponse(loginContentDivEl, this);
     }
