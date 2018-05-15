@@ -44,7 +44,7 @@ public class TaskServlet extends AbstractServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskService taskService = new SimpleTaskService(connection);
             ScheduleService scheduleService = new SimpleScheduleService(connection);
@@ -65,15 +65,15 @@ public class TaskServlet extends AbstractServlet {
     }
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskService taskService = new SimpleTaskService(connection);
             ScheduleService scheduleService = new SimpleScheduleService(connection);
             User user = getUser(req);
             int userId = user.getId();
 
-            StringBuffer jb = new StringBuffer();
-            String line = null;
+            StringBuilder jb = new StringBuilder();
+            String line;
             try {
                 BufferedReader reader = req.getReader();
                 while ((line = reader.readLine()) != null)
@@ -104,7 +104,7 @@ public class TaskServlet extends AbstractServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskService taskService = new SimpleTaskService(connection);
             ScheduleService scheduleService = new SimpleScheduleService(connection);
