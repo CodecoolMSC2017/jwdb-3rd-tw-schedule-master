@@ -63,17 +63,38 @@ public class SimpleScheduleService implements ScheduleService {
 
     @Override
     public Schedule findById(int scheduleId) throws SQLException {
-        return scheduleDao.findById(scheduleId);
+        Schedule schedule = scheduleDao.findById(scheduleId);
+        List<Day> days = dayDao.findDayByScheduleId(scheduleId);
+        for (Day day : days) {
+            day.setHours(hourDao.findHoursByDayId(day.getId()));
+        }
+        schedule.setDays(days);
+        return schedule;
     }
 
     @Override
     public List<Schedule> findAll() throws SQLException {
-        return scheduleDao.findall();
+        List<Schedule> schedules = scheduleDao.findall();
+        schedules = getSchedules(schedules);
+        return schedules;
     }
 
     @Override
     public List<Schedule> findAllByUserId(int userId) throws SQLException {
-        return scheduleDao.findAllByUserId(userId);
+        List<Schedule> schedules = scheduleDao.findAllByUserId(userId);
+        schedules = getSchedules(schedules);
+        return schedules;
+    }
+
+    private List<Schedule> getSchedules(List<Schedule> schedules) throws SQLException {
+        for (Schedule schedule : schedules) {
+            List<Day> days = dayDao.findDayByScheduleId(schedule.getId());
+            for (Day day : days) {
+                day.setHours(hourDao.findHoursByDayId(day.getId()));
+            }
+            schedule.setDays(days);
+        }
+        return schedules;
     }
 
     @Override
