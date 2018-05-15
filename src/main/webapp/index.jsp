@@ -28,40 +28,44 @@
 </head>
 <body>
     <div id="login-content" class="content">
-        <div>
+        <div class="form-div">
             <form id="login-form" name="login" onsubmit="return false;">
                 <div class="input-div">
                     <h2 id="h2">Log in</h2><br>E-mail:<br>
                     <input type="email" name="email">
                     <br> Password:<br>
                         <input type=password name="password"><br>
-                        <input id="login-button" type="submit" value="Login">
+                    <input id="login-button" type="submit" value="Login" class="btn">
                 </div>
             </form>
-            <p><a id="toRegister-button" href="javascript:void(0)" onclick="toRegistration()">Register</a> an account
-            </p>
+            <p id="registration-para" class="register-paragraph">If you don't have an account <a
+                    class="register-link"
+                    href=javascript:void(0); onclick="toRegistration();">register</a>
+                one</p>
         </div>
     </div>
 
     <div id="register-content" class="content hidden">
-        <div>
+        <div class="form-div">
             <form id="register-form" name="register" onsubmit="return false;">
-                <div>
+                <div class="input-div">
                     <h2>Registration</h2>Name:<br>
                     <input type="text" name="name"><br>E-mail:<br>
                     <input type="email" name="email"><br>Password:<br>
                     <input type=password name="password"><br>Confirm Password:<br>
-                    <input type="password" name="password-again">
-                    <input id="register-button" type="submit" value="Register">
+                    <input type="password" name="password-again"><br>
+                    <input id="register-button" type="submit" value="Register" class="btn">
                 </div>
             </form>
-            <p>Already have an account?<a id="toLogin-button" href="javascript:void(0)" onclick="toLogin()">Login</a>
+            <p class="register-paragraph">Already have an account? <a class="register-link"
+                                                                      href=javascript:void(0);
+                                                                      onclick="toLogin();">Login
+                here</a></p>
             </p>
         </div>
     </div>
 
     <div id="schedules-content" class="content hidden">
-        <h2>Schedules</h2>
         <div id="schedules">
             <button id="schedules-button">Schedules</button>
         </div>
@@ -71,7 +75,6 @@
         <div id="tasks">
             <button id="tasks-button">Tasks</button>
         </div>
-
     </div>
 
     <div id="logout-content" class="content hidden">

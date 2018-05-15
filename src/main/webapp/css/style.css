@@ -9,3 +9,65 @@
 .hidden {
     display: none;
 }
+
+body {
+    margin-top: 0;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 1)), url(img/background.jpg);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    font-family: "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+    font-weight: 300;
+    font-size: 20px;
+    color: #fff;
+    text-rendering: optimizeLegibility;
+    text-align: center;
+}
+
+.form-div {
+    text-align: center;
+    margin-top: 120px;
+}
+
+.input-div {
+    color: black;
+    padding-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 30px;
+    border: 3px;
+    border-style: ridge;
+    border-color: darkred;
+    background-color: white;
+    width: 300px;
+}
+
+.btn {
+    color: #fff;
+    margin-top: 10px;
+    padding: 5px 15px;
+    font-weight: 500;
+    border-radius: 100px;
+    border: 2px;
+    border-style: ridge;
+    background-color: darkred;
+    border-color: #8b0000;
+    transition: background-color 1s;
+}
+
+.btn:active,
+.btn:hover {
+    background-color: #460000;
+    cursor: pointer;
+    transition: background-color 1s;
+}
+
+.register-paragraph {
+    font-size: 13px;
+}
+
+.register-link {
+    cursor: pointer;
+    color: #bc0000;
+    text-decoration: underline;
+}
