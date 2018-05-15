@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ScheduleService {
 
-    void createSchedule(String title, String description, int userId)throws SQLException;
+    void createSchedule(String title, String description, int userId, int numOfDays)throws SQLException;
 
     void deleteSchedule(int scheduleId)throws SQLException;
 

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ScheduleDao {
 
-    void addSchedule(int appUserId, String title, String description) throws SQLException;
+    Schedule addSchedule(int appUserId, String title, String description) throws SQLException;
 
     void deleteSchedule(int id) throws SQLException;
 

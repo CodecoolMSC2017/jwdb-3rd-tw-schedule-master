@@ -26,8 +26,11 @@ public class SimpleScheduleService implements ScheduleService {
     }
 
     @Override
-    public void createSchedule(String title, String description, int userId) throws SQLException {
-        scheduleDao.addSchedule(userId,title, description);
+    public void createSchedule(String title, String description, int userId,int numOfDays) throws SQLException {
+        Schedule schedule = scheduleDao.addSchedule(userId,title, description);
+        for(int i = 0; i< numOfDays;i++){
+            addDay(schedule.getId(),"Title");
+        }
 
     }
 

@@ -2,6 +2,7 @@ package com.codecool.web.dao.database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
@@ -105,5 +106,19 @@ public abstract class AbstractDaoFactory {
         } finally {
             connection.setAutoCommit(autoCommit);
         }
+    }
+
+    int fetchGeneratedId(PreparedStatement statement) throws SQLException {
+        int id;
+        try (ResultSet resultSet = statement.getGeneratedKeys()) {
+            if (resultSet.next()) {
+                id = resultSet.getInt(1);
+            } else {
+                connection.rollback();
+                throw new SQLException("Expected 1 result");
+            }
+        }
+        connection.commit();
+        return id;
     }
 }
