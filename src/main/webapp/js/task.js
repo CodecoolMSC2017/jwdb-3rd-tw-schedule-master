@@ -17,10 +17,10 @@ function hideTasks(){
 function updateTask(e) {
     const buttonEl = e.target;
     const liEl = buttonEl.parentElement;
-    const spanTask = liEl.firstChild;
-    const descParEl = spanTask.firstChild;
+    const spanTask = liEl.firstElementChild;
+    const descParEl = spanTask.firstElementChild;
 
-    const oldTitle = spanTask.textContent;
+    const oldTitle = spanTask.id;
     const oldDesc = descParEl.textContent;
 
     spanTask.remove();
@@ -46,15 +46,12 @@ function applyTaskUpdates(e) {
     const liEl = e.target.parentElement;
     const titleInputField = liEl.firstChild;
     const descInputField = liEl.children.item(1);
-    console.log(liEl);
+
 
     const title = titleInputField.value;
     const desc = descInputField.value;
     const id = liEl.id;
 
-    console.log(title);
-    console.log(id);
-    console.log(desc);
 
     const params = new URLSearchParams();
     params.append('taskId', id);
@@ -169,5 +166,13 @@ function onDeleteTaskResponse() {
     } else {
         onMessageResponse(taskContentDivEl, this);
     }
+}
+
+function onGobackClicked() {
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onLoginResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('GET', 'protected/task');
+    xhr.send();
 }
 

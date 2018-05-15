@@ -3,9 +3,15 @@ let taskButtonEl;
 function onMainPageLoad(userDto) {
     clearMessages();
     showContents(['schedules-content', 'logout-content', 'tasks-content']);
+
     const taskULEl = document.getElementById("tasksUl");
     if (taskULEl !== null) {
         taskULEl.remove();
+    }
+
+    const createTaskEl = document.getElementById("create-task");
+    if (createTaskEl !== null) {
+        createTaskEl.remove();
     }
     createTaskDiv(userDto);
     taskButtonEl = document.getElementById('tasks-button');
@@ -23,6 +29,7 @@ function createTaskDiv(userDto) {
 
         let taskSpan = document.createElement("span");
         taskSpan.textContent = userDto.tasks[i].title;
+        taskSpan.setAttribute("id", userDto.tasks[i].title);
         taskSpan.addEventListener('click', showTaskDescription);
 
         let taskDesc = document.createElement("p");
@@ -48,14 +55,22 @@ function createTaskDiv(userDto) {
 
     const taskCreateLiEl = document.createElement("li");
     const createButton = document.createElement("button");
+    const goBackButton = document.createElement("button");
 
     createButton.addEventListener('click',showCreateTask);
     createButton.setAttribute("id", "to-createTask-button");
     createButton.textContent = "Create Task";
 
+    goBackButton.addEventListener('click', onGobackClicked);
+    goBackButton.setAttribute("id", "go-back-button");
+    goBackButton.textContent = "Revert Changes";
+
+
     taskCreateLiEl.appendChild(createButton);
+    taskCreateLiEl.appendChild(goBackButton);
     taskEl.appendChild(taskCreateLiEl);
     taskDiv.appendChild(taskEl);
+
 }
 
 function createScheduleDiv(userDto){
