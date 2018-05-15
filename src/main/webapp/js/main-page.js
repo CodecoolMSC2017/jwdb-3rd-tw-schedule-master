@@ -96,10 +96,10 @@ function createScheduleDiv(userDto){
         scheduleLi.setAttribute("id",userDto.schedules[i].id);
 
         let scheduleSpan = document.createElement("span");
-        scheduleSpan.textContent = userDto.schedule[i].title;
+        scheduleSpan.textContent = userDto.schedules[i].title;
         //add eventListener
 
-        let deleteScheduleButt = ducoment.createElement("button");
+        let deleteScheduleButt = document.createElement("button");
         deleteScheduleButt.addEventListener('click',removeSchedule);
         deleteScheduleButt.textContent = "Remove";
 

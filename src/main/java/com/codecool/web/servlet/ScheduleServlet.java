@@ -82,5 +82,27 @@ public class ScheduleServlet extends AbstractServlet {
         } catch (Exception e) {
             sendMessage(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.toString());
         }
+
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try (Connection connection = getConnection(req.getServletContext())) {
+            TaskService taskService = new SimpleTaskService(connection);
+            ScheduleService scheduleService = new SimpleScheduleService(connection);
+            User user = getUser(req);
+            int userId = user.getId();
+            int scheduleId = Integer.parseInt(req.getParameter("scheduleId"));
+
+            scheduleService.deleteSchedule(scheduleId);
+            List<Schedule> schedules = scheduleService.findAllByUserId(userId);
+            List<Task> tasks = taskService.findAllByUserId(userId);
+            UserDto userDto = new UserDto(user, tasks, schedules);
+
+            sendMessage(resp, HttpServletResponse.SC_OK, userDto);
+
+        } catch (SQLException e) {
+            handleSqlError(resp, e);
+        }
     }
 }
