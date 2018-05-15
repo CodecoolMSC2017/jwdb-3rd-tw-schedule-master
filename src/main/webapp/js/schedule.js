@@ -78,14 +78,15 @@ function removeSchedule(e) {
     const liEL = e.target.parentElement;
     const id = liEL.id;
 
-    const params = new URLSearchParams();
-    params.append('scheduleId', id);
+    const data = JSON.stringify({"schedule": id});
+
 
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onDeleteScheduleResponse);
     xhr.addEventListener('error', onNetworkError);
     xhr.open('DELETE', 'protected/schedule');
-    xhr.send(params);
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.send(data);
 }
 
 function onDeleteScheduleResponse() {

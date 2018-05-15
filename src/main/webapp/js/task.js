@@ -52,9 +52,18 @@ function applyTaskUpdates(e) {
     const descInputField = liEl.children.item(1);
 
 
-    const title = titleInputField.value;
-    const desc = descInputField.value;
+    let title = titleInputField.value;
+    const oldTitle = titleInputField.placeholder;
+    let desc = descInputField.value;
+    const oldDesc = descInputField.placeholder;
     const id = liEl.id;
+
+    if (title == null || title === "" || title === " ") {
+        title = oldTitle;
+    }
+    if (desc == null || desc === "" || desc === " ") {
+        desc = oldDesc;
+    }
 
     const data = JSON.stringify({"taskId": id, "description": desc, "title": title});
 
@@ -148,14 +157,15 @@ function removeTask(e) {
     const liEL = e.target.parentElement;
     const id = liEL.id;
 
-    const params = new URLSearchParams();
-    params.append('taskId', id);
+    const data = JSON.stringify({"taskId": id});
+
 
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onDeleteTaskResponse);
     xhr.addEventListener('error', onNetworkError);
     xhr.open('DELETE', 'protected/task');
-    xhr.send(params);
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.send(data);
 }
 
 function onDeleteTaskResponse() {
