@@ -3,7 +3,10 @@ package com.codecool.web.dao.database;
 import com.codecool.web.dao.HourDao;
 import com.codecool.web.model.Hour;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +18,7 @@ class DatabaseHourDao extends AbstractDaoFactory implements HourDao {
 
     @Override
     public void addHour(int dayId, int value) throws SQLException {
-        String sql = "INSERT INTO hour (dayId,value)VALUES(?,?);";
+        String sql = "INSERT INTO hour (day_id,value)VALUES(?,?);";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, dayId);
             statement.setInt(2, value);
