@@ -22,7 +22,6 @@ import java.sql.SQLException;
 import java.util.List;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.*;
 
 @WebServlet("/protected/task")
 public class TaskServlet extends AbstractServlet {
