@@ -45,9 +45,9 @@ class DatabaseHourDao extends AbstractDaoFactory implements HourDao {
     @Override
     public List<Hour> findHoursByDayId(int dayId) throws SQLException {
         List<Hour> hours = new ArrayList<>();
-        String sql = "SELECT * FROM hour;";
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(sql)) {
+        String sql = "SELECT * FROM hour WHERE day_id = ?;";
+        try (PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 hours.add(fetchHour(resultSet));
             }
