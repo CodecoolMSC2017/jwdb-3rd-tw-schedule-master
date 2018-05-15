@@ -10,8 +10,11 @@ function showTasks(){
 function hideTasks(){
     const taskEl = document.getElementById("tasksUl");
     taskEl.classList.add('hidden');
-    document.getElementById("create-task").remove();
+    const taskRem = document.getElementById("create-task");
     taskButtonEl.removeEventListener('click', hideTasks);
+    if(taskRem !== null) {
+        taskRem.remove();
+    }
     taskButtonEl.addEventListener('click', showTasks);
 }
 

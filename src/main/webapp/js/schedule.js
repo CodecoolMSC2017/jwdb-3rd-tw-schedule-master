@@ -10,8 +10,11 @@ function showSchedule(){
 function hideSchedule(){
     const scheduleEl = document.getElementById("schedulesUl");
     scheduleEl.classList.add('hidden');
+    const sched = document.getElementById("create-schedule");
     scheduleButtonEl.removeEventListener('click',hideSchedule);
-    document.getElementById("create-schedule").remove();
+    if(sched !== null) {
+         sched.remove();
+    }
     scheduleButtonEl.addEventListener('click',showSchedule);
 }
 
