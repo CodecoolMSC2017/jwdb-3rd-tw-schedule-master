@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface DayDao {
 
-    void addDay(int scheduleId, String title) throws SQLException;
+    Day addDay(int scheduleId, String title) throws SQLException;
 
     void deleteDay(int id) throws SQLException;
 

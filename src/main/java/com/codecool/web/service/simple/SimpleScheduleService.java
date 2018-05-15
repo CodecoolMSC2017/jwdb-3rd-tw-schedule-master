@@ -29,7 +29,10 @@ public class SimpleScheduleService implements ScheduleService {
     public void createSchedule(String title, String description, int userId,int numOfDays) throws SQLException {
         Schedule schedule = scheduleDao.addSchedule(userId,title, description);
         for(int i = 0; i< numOfDays;i++){
-            addDay(schedule.getId(),"Title");
+            Day day = addDay(schedule.getId(),"Title");
+            for (int j = 0; j < 24; j++) {
+                hourDao.addHour(day.getId(),j);
+            }
         }
 
     }
@@ -72,8 +75,8 @@ public class SimpleScheduleService implements ScheduleService {
     }
 
     @Override
-    public void addDay(int scheduleId, String title) throws SQLException {
-        dayDao.addDay(scheduleId,title);
+    public Day addDay(int scheduleId, String title) throws SQLException {
+        return dayDao.addDay(scheduleId,title);
     }
 
     @Override
