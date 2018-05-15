@@ -15,12 +15,13 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import com.fasterxml.jackson.*;
-import com.fasterxml.jackson.databind.util.JSONPObject;
+
+import org.json.*;
 
 @WebServlet("/protected/task")
 public class TaskServlet extends AbstractServlet {
@@ -71,13 +72,26 @@ public class TaskServlet extends AbstractServlet {
             User user = getUser(req);
             int userId = user.getId();
 
-            int taskId = Integer.parseInt(req.getParameter("taskId"));
-            String taskTitle = req.getParameter("title");
-            String taskDescription = req.getParameter("description");
+            StringBuffer jb = new StringBuffer();
+            String line = null;
+            try {
+                BufferedReader reader = req.getReader();
+                while ((line = reader.readLine()) != null)
+                    jb.append(line);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-            taskService.update(taskId, taskTitle, taskDescription);
+            System.out.println(jb.toString());
+            JSONObject jsonObject = new JSONObject(jb.toString());
+            int taskId = Integer.parseInt(jsonObject.getString("taskId"));
+            String taskTitle = jsonObject.getString("title");
+            String taskDescription = jsonObject.getString("description");
+
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
+            taskService.update(taskId, taskTitle, taskDescription);
             List<Task> tasks = taskService.findAllByUserId(userId);
+
             UserDto userDto = new UserDto(user, tasks, schedules);
 
             sendMessage(resp, HttpServletResponse.SC_OK, userDto);
