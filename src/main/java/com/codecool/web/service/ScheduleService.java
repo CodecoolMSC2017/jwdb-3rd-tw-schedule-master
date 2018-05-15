@@ -21,7 +21,7 @@ public interface ScheduleService {
 
     List<Schedule> findAllByUserId(int userId)throws SQLException;
 
-    void addDay(int scheduleId, String title)throws SQLException;
+    Day addDay(int scheduleId, String title)throws SQLException;
 
     void updateDay(int dayId, String title)throws SQLException;
 

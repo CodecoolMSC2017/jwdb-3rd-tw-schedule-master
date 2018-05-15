@@ -7,9 +7,13 @@ import java.util.List;
 
 public interface DayDao {
 
-    void addDay(int scheduleId, String title) throws SQLException;
+    Day addDay(int scheduleId, String title) throws SQLException;
 
     void deleteDay(int id) throws SQLException;
+
+    void deleteHourByDayId(int dayId)throws SQLException;
+
+    void deleteDayByScheduleId(int scheduleId)throws SQLException;
 
     void updateDay(int id, String newTitle) throws SQLException;
 

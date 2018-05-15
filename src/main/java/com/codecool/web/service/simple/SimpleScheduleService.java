@@ -26,16 +26,23 @@ public class SimpleScheduleService implements ScheduleService {
     }
 
     @Override
-    public void createSchedule(String title, String description, int userId,int numOfDays) throws SQLException {
-        Schedule schedule = scheduleDao.addSchedule(userId,title, description);
-        for(int i = 0; i< numOfDays;i++){
-            addDay(schedule.getId(),"Title");
+    public void createSchedule(String title, String description, int userId, int numOfDays) throws SQLException {
+        Schedule schedule = scheduleDao.addSchedule(userId, title, description);
+        for (int i = 0; i < numOfDays; i++) {
+            Day day = addDay(schedule.getId(), "Title");
+            for (int j = 0; j < 24; j++) {
+                hourDao.addHour(day.getId(), j);
+            }
         }
-
     }
 
     @Override
     public void deleteSchedule(int scheduleId) throws SQLException {
+        for (Day day : findDayByScheduleId(scheduleId)) {
+            dayDao.deleteHourByDayId(day.getId());
+        }
+        dayDao.deleteDayByScheduleId(scheduleId);
+
         scheduleDao.deleteSchedule(scheduleId);
     }
 
@@ -44,41 +51,60 @@ public class SimpleScheduleService implements ScheduleService {
         Schedule schedule = scheduleDao.findById(scheduleId);
         String scheduleTile = schedule.getTitle();
         String scheduleDescription = schedule.getDescription();
-        if(scheduleTile.equals(title) && !scheduleDescription.equals(description)){
-            scheduleDao.updateDescription(scheduleId,description);
-        }
-        else if(!scheduleTile.equals(title) && scheduleDescription.equals(description)){
+        if (scheduleTile.equals(title) && !scheduleDescription.equals(description)) {
+            scheduleDao.updateDescription(scheduleId, description);
+        } else if (!scheduleTile.equals(title) && scheduleDescription.equals(description)) {
             scheduleDao.updateTitle(scheduleId, title);
-        }
-        else if(!scheduleTile.equals(title) && !scheduleDescription.equals(description)){
+        } else if (!scheduleTile.equals(title) && !scheduleDescription.equals(description)) {
             scheduleDao.updateTitle(scheduleId, title);
-            scheduleDao.updateDescription(scheduleId,description);
+            scheduleDao.updateDescription(scheduleId, description);
         }
     }
 
     @Override
     public Schedule findById(int scheduleId) throws SQLException {
-        return scheduleDao.findById(scheduleId);
+        Schedule schedule = scheduleDao.findById(scheduleId);
+        List<Day> days = dayDao.findDayByScheduleId(scheduleId);
+        for (Day day : days) {
+            day.setHours(hourDao.findHoursByDayId(day.getId()));
+        }
+        schedule.setDays(days);
+        return schedule;
     }
 
     @Override
     public List<Schedule> findAll() throws SQLException {
-        return scheduleDao.findall();
+        List<Schedule> schedules = scheduleDao.findall();
+        schedules = getSchedules(schedules);
+        return schedules;
     }
 
     @Override
     public List<Schedule> findAllByUserId(int userId) throws SQLException {
-        return scheduleDao.findAllByUserId(userId);
+        List<Schedule> schedules = scheduleDao.findAllByUserId(userId);
+        schedules = getSchedules(schedules);
+        return schedules;
+    }
+
+    private List<Schedule> getSchedules(List<Schedule> schedules) throws SQLException {
+        for (Schedule schedule : schedules) {
+            List<Day> days = dayDao.findDayByScheduleId(schedule.getId());
+            for (Day day : days) {
+                day.setHours(hourDao.findHoursByDayId(day.getId()));
+            }
+            schedule.setDays(days);
+        }
+        return schedules;
     }
 
     @Override
-    public void addDay(int scheduleId, String title) throws SQLException {
-        dayDao.addDay(scheduleId,title);
+    public Day addDay(int scheduleId, String title) throws SQLException {
+        return dayDao.addDay(scheduleId, title);
     }
 
     @Override
     public void updateDay(int dayId, String title) throws SQLException {
-        dayDao.updateDay(dayId,title);
+        dayDao.updateDay(dayId, title);
     }
 
     @Override

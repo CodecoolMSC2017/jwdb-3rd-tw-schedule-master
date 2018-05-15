@@ -1,9 +1,12 @@
 package com.codecool.web.model;
 
+import java.util.List;
+
 public class Day extends AbstractModel {
 
     private int scheduleId;
     private String title ;
+    private List<Hour> hours;
 
     public Day(int id, int scheduleId, String title) {
         super(id);
@@ -17,5 +20,13 @@ public class Day extends AbstractModel {
 
     public String getTitle() {
         return title;
+    }
+
+    public List<Hour> getHours() {
+        return hours;
+    }
+
+    public void setHours(List<Hour> hours) {
+        this.hours = hours;
     }
 }

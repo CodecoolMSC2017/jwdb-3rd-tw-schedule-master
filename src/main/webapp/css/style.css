@@ -3,7 +3,7 @@
 }
 
 .info {
-    color: blue;
+    color: green;
 }
 
 .hidden {
@@ -68,6 +68,14 @@ body {
 
 .register-link {
     cursor: pointer;
-    color: #bc0000;
     text-decoration: underline;
+    color: #fff;
+    transition: color 1s;
+}
+
+.register-link:hover,
+.register-link:active {
+    text-decoration: none;
+    color: red;
+    transition: color 1s;
 }
