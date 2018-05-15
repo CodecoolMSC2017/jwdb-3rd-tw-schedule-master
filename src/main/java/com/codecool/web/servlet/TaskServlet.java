@@ -102,7 +102,8 @@ public class TaskServlet extends AbstractServlet {
             int userId = user.getId();
 
             BufferedReader reader = req.getReader();
-            int taskId = Integer.parseInt(jsonToString(reader));
+            JSONObject jsonObject = new JSONObject(jsonToString(reader));
+            int taskId = Integer.parseInt(jsonObject.getString("taskId"));
 
             taskService.deleteTask(taskId);
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
