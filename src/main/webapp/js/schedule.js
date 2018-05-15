@@ -97,7 +97,7 @@ function removeSchedule(e) {
     const liEL = e.target.parentElement;
     const id = liEL.id;
 
-    const data = JSON.stringify({"schedule": id});
+    const data = JSON.stringify({"scheduleId": id});
 
 
     const xhr = new XMLHttpRequest();

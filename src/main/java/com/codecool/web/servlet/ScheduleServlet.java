@@ -8,12 +8,15 @@ import com.codecool.web.service.ScheduleService;
 import com.codecool.web.service.TaskService;
 import com.codecool.web.service.simple.SimpleScheduleService;
 import com.codecool.web.service.simple.SimpleTaskService;
+import org.json.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -22,7 +25,7 @@ import java.util.List;
 public class ScheduleServlet extends AbstractServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             ScheduleService scheduleService = new SimpleScheduleService(connection);
             TaskService taskService = new SimpleTaskService(connection);
@@ -39,12 +42,13 @@ public class ScheduleServlet extends AbstractServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             ScheduleService scheduleService = new SimpleScheduleService(connection);
             TaskService taskService = new SimpleTaskService(connection);
             User user = getUser(req);
             int userId = user.getId();
+
             String scheduleTitle = req.getParameter("title");
             String scheduleDescription = req.getParameter("description");
             int scheduleDays = Integer.parseInt(req.getParameter("days"));
@@ -61,15 +65,18 @@ public class ScheduleServlet extends AbstractServlet {
     }
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             ScheduleService scheduleService = new SimpleScheduleService(connection);
             TaskService taskService = new SimpleTaskService(connection);
             User user = getUser(req);
             int userId = user.getId();
-            int scheduleId = Integer.parseInt(req.getParameter("create-schedule"));
-            String scheduleTitle = req.getParameter("title");
-            String scheduleDescription = req.getParameter("description");
+
+            BufferedReader reader = req.getReader();
+            JSONObject jsonObject = new JSONObject(jsonToString(reader));
+            int scheduleId = Integer.parseInt(jsonObject.getString("scheduleId"));
+            String scheduleTitle = jsonObject.getString("title");
+            String scheduleDescription = jsonObject.getString("description");
 
             scheduleService.updateSchedule(scheduleId, scheduleTitle, scheduleDescription);
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
@@ -87,13 +94,16 @@ public class ScheduleServlet extends AbstractServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskService taskService = new SimpleTaskService(connection);
             ScheduleService scheduleService = new SimpleScheduleService(connection);
             User user = getUser(req);
             int userId = user.getId();
-            int scheduleId = Integer.parseInt(req.getParameter("scheduleId"));
+
+            BufferedReader reader = req.getReader();
+            JSONObject jsonObject = new JSONObject(jsonToString(reader));
+            int scheduleId = Integer.parseInt(jsonObject.getString("scheduleId"));
 
             scheduleService.deleteSchedule(scheduleId);
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
