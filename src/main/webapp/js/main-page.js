@@ -1,4 +1,5 @@
 let taskButtonEl;
+let scheduleButtonEl;
 
 function onMainPageLoad(userDto) {
     clearMessages();
@@ -13,10 +14,23 @@ function onMainPageLoad(userDto) {
     if (createTaskEl !== null) {
         createTaskEl.remove();
     }
+
+    const scheduleULEl = document.getElementById("schedulesUl");
+    if (scheduleULEl !== null) {
+        scheduleULEl.remove();
+    }
+
+    const createScheduleEl = document.getElementById("create-schedule");
+    if (createScheduleEl !== null) {
+        createScheduleEl.remove();
+    }
     createTaskDiv(userDto);
     taskButtonEl = document.getElementById('tasks-button');
     taskButtonEl.addEventListener('click', hideTasks);
-    //createScheduleDiv(userDto);
+
+    createScheduleDiv(userDto);
+    scheduleButtonEl = document.getElementById('schedules-button');
+    scheduleButtonEl.addEventListener('click', hideSchedule);
 
 }
 
@@ -75,23 +89,41 @@ function createTaskDiv(userDto) {
 
 function createScheduleDiv(userDto){
     const scheduleEl = document.createElement("ul");
-    scheduleEl.setAttribute("id","scheduleUl");
-    scheduleEl.classList.add('hidden');
+    scheduleEl.setAttribute("id","schedulesUl");
+
     for (let i = 0; i < userDto.schedules.length ; i++) {
         let scheduleLi = document.createElement("li");
+        scheduleLi.setAttribute("id",userDto.schedules[i].id);
+
         let scheduleSpan = document.createElement("span");
         scheduleSpan.textContent = userDto.schedule[i].title;
-        let scheduleButt = document.createElement("button");
-        scheduleButt.addEventListener('click',renameScheduleTitle);
+        //add eventListener
+
+        let deleteScheduleButt = ducoment.createElement("button");
+        deleteScheduleButt.addEventListener('click',removeSchedule);
+        deleteScheduleButt.textContent = "Remove";
+
         scheduleLi.appendChild(scheduleSpan);
-        scheduleLi.appendChild(scheduleButt);
+        scheduleLi.appendChild(deleteScheduleButt);
         scheduleEl.appendChild(scheduleLi);
     }
-    scheduleDiv.appendChild(scheduleEl);
-    const createButton = document.createElement("button");
+
+    const scheduleCreateLiEl = document.createElement('li');
+    const createButton = document.createButton("button");
+    const goBackButton = document.createElement("button");
+
     createButton.addEventListener('click',showCreateSchedule);
+    createButton.setAttribute("id","to-createSchedule-button");
     createButton.textContent = "Create Schedule";
-    scheduleDiv.appendChild(createButton);
-    const scheduleButtonEl = document.getElementById('schedule-button');
-    scheduleButtonEl.addEventListener('click',showSchedule);
+
+    goBackButton.addEventListener('click',onGobackClicked);
+    goBackButton.setAttribute("id","go-schedule-back-button");
+    goBackButton.textContent = "Revert Changes";
+
+
+
+    scheduleCreateLiEl.appendChild(createButton);
+    scheduleCreateLiEl.appendChild(goBackButton);
+    scheduleEl.appendChild(scheduleCreateLiEl);
+    scheduleDiv.appendChild(scheduleEl);
 }

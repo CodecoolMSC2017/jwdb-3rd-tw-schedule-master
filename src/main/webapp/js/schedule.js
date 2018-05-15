@@ -1,79 +1,49 @@
-let scheduleEl;
+
 
 function showSchedule(){
-    scheduleEl = document.getElementById("scheduleUl");
+    scheduleEl = document.getElementById("schedulesUl");
     scheduleEl.classList.remove('hidden');
-    scheduleDiv.removeEventListener('click',showschedule);
-    scheduleDiv.addEventListener('click',hideschedule);
+    scheduleDiv.removeEventListener('click',showSchedule);
+    scheduleDiv.addEventListener('click',hideSchedule);
 }
 
 function hideSchedule(){
-    scheduleEl = document.getElementById("scheduleUl");
+    scheduleEl = document.getElementById("schedulesUl");
     scheduleEl.classList.add('hidden');
     scheduleDiv.removeEventListener('click',hideSchedule);
     scheduleDiv.addEventListener('click',showSchedule);
 }
 
-function renameScheduleTitle(e){
-    const liEl = e.source.parentElement;
-    const buttonEl = e.source;
-    const spanSchedule = e.source.parentElement.firstChild;
-    liEl.remove(spanSchedule);
-    const inputField = document.createElement("INPUT");
-    inputField.setAttribute("type","text");
-    buttonEl.removeEventListener('click',renameScheduleTitle);
-    buttonEl.addEventListener('click',setScheduleTitle)
-    liEl.insertBefore(inputField,buttonEl);
-}
-
-function setScheduleTitle(e){
-    const liEl = e.source.parentElement;
-    const buttonEl = e.source;
-    const inputField = e.source.parentElement.firstChild;
-    const title = inputField.value;
-    const params = new URLSearchParams();
-    params.append('title',title);
-
-    const xhr = new XMLHttpRequest();
-    xhr.addEventListener('load',onRenameScheduleResponse);
-    xhr.addEventListener('error', onNetworkError);
-    xhr.open('PUT','protected/schedule');
-    xhr.send(params);
-}
-
-function onRenameScheduleResponse(){
-    if(this.status === OK){
-        const userDto = JSON.parse(this.responseText);
-        taskEl = document.getElementById("scheduleUl");
-        const parentEl = taskEl.parentElement;
-        parentEl.remove(taskEl);
-        onMainPageLoad(userDto);
-    }else{
-        onMessageResponse(scheduleContentDivEl,this);
-    }
-}
-
 function showCreateSchedule(){
+    const toCreateScheduleButt = document.getElementById("to-createSchedule-button");
+    toCreateScheduleButt.removeEventListener('click',showCreateSchedule);
+
     const createScheduleDiv= document.createElement("div");
     createScheduleDiv.setAttribute("id","create-schedule");
+
     const inputTitle = document.createElement("INPUT");
     inputTitle.setAttribute("type","text");
     inputTitle.setAttribute("id", "schedule-title");
     inputTitle.placeholder = "Title";
-    const inputDescript = document.createElement("INPUT");
-    inputDescript.setAttribute("type","text");
-    inputDescript.setAttribute("id","schedule-desc");
-    inputDescript.placeholder = "Description";
+
+    const inputDesc = document.createElement("INPUT");
+    inputDesc.setAttribute("type","text");
+    inputDesc.setAttribute("id", "schedule-desc");
+    inputDesc.placeholder = "Description";
+
     const createScheduleButt = document.createElement("button");
     createScheduleButt.addEventListener('click',createSchedule);
     createScheduleButt.textContent = "Create";
+
     createScheduleDiv.appendChild(inputTitle);
-    createScheduleDiv.appendChild(inputDescript);
+    createSchedule.appendChild(inputDesc);
     createScheduleDiv.appendChild(createScheduleButt);
     scheduleContentDivEl.appendChild(createScheduleDiv);
 }
 
 function createSchedule(){
+    const toCreateScheduleButt = document.getElementById("to-createSchedule-button");
+    toCreateScheduleButt.addEventListener('click', showCreateSchedule);
     const scheduleTitleInputEl = document.getElementById("schedule-title");
     const scheduleDescInputEl = document.getElementById("schedule-desc");
     const title = scheduleTitleInputEl.value;
@@ -92,11 +62,34 @@ function createSchedule(){
 function onCreateScheduleResponse(){
     if(this.status === OK){
         const userDto = JSON.parse(this.responseText);
-        scheduleEl = document.getElementById("create-schedule");
-        const parentEl = scheduleEl.parentElement;
-        parentEl.remove(scheduleEl);
-        onMainPageLoad(userDto);
+        document.getElementById("create-schedule").remove();
+        document.getElementById("schedulesUl").remove();
+        createScheduleDiv(userDto);
     }else{
         onMessageResponse(scheduleContentDivEl,this);
+    }
+}
+
+function removeSchedule(e) {
+    const liEL = e.target.parentElement;
+    const id = liEL.id;
+
+    const params = new URLSearchParams();
+    params.append('scheduleId', id);
+
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onDeleteScheduleResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('DELETE', 'protected/schedule');
+    xhr.send(params);
+}
+
+function onDeleteScheduleResponse() {
+    if (this.status === OK) {
+        const userDto = JSON.parse(this.responseText);
+        document.getElementById("schedulesUl").remove();
+        createScheduleDiv(userDto);
+    } else {
+        onMessageResponse(scheduleContentDivEl, this);
     }
 }
