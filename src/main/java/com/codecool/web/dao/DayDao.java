@@ -11,6 +11,10 @@ public interface DayDao {
 
     void deleteDay(int id) throws SQLException;
 
+    void deleteHourByDayId(int dayId)throws SQLException;
+
+    void deleteDayByScheduleId(int scheduleId)throws SQLException;
+
     void updateDay(int id, String newTitle) throws SQLException;
 
     Day findDayById(int id) throws SQLException;

@@ -99,7 +99,7 @@
                 <configuration>
                     <url>http://localhost:8080/manager/text</url>
                     <username>admin</username>
-                    <password>admin</password>
+                    <password>password</password>
                 </configuration>
             </plugin>
         </plugins>
