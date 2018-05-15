@@ -37,53 +37,22 @@ class DatabaseTaskDao extends AbstractDaoFactory implements TaskDao {
 
     @Override
     public void deleteTask(int id) throws SQLException {
-        boolean autoCommit = connection.getAutoCommit();
-        connection.setAutoCommit(false);
         String sql = "DELETE FROM task WHERE task.id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, id);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            connection.rollback();
-            throw e;
-        } finally {
-            connection.setAutoCommit(autoCommit);
-        }
+        delete(id, sql);
     }
 
     @Override
     public void updateTaskTitle(int id, String newTitle) throws SQLException {
-        boolean autoCommit = connection.getAutoCommit();
-        connection.setAutoCommit(false);
         String sql = "UPDATE task SET title = ? WHERE id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, newTitle);
-            statement.setInt(2, id);
-            statement.executeUpdate();
-        }  catch (SQLException e) {
-            connection.rollback();
-            throw e;
-        } finally {
-            connection.setAutoCommit(autoCommit);
-        }
+        update(id, newTitle, sql);
     }
 
     @Override
     public void updateTaskDescription(int id, String newDescription) throws SQLException {
-        boolean autoCommit = connection.getAutoCommit();
-        connection.setAutoCommit(false);
         String sql = "UPDATE task SET description = ? WHERE id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, newDescription);
-            statement.setInt(2, id);
-            statement.executeUpdate();
-        }  catch (SQLException e) {
-            connection.rollback();
-            throw e;
-        } finally {
-            connection.setAutoCommit(autoCommit);
-        }
+        update(id, newDescription, sql);
     }
+
 
     @Override
     public Task findTaskById(int id) throws SQLException {
