@@ -35,12 +35,21 @@ function showCreateSchedule(){
     inputDesc.setAttribute("id", "schedule-desc");
     inputDesc.placeholder = "Description";
 
+    const inputNumberOfDays = document.createElement("INPUT");
+    inputNumberOfDays.setAttribute("type","number");
+    inputNumberOfDays.setAttribute("id", "schedule-days");
+    inputNumberOfDays.placeholder ="Number of Days";
+    inputNumberOfDays.max = 7;
+    inputNumberOfDays.min = 1;
+    inputNumberOfDays.value = 3;
+
     const createScheduleButt = document.createElement("button");
     createScheduleButt.addEventListener('click',createSchedule);
     createScheduleButt.textContent = "Create";
 
     createScheduleDiv.appendChild(inputTitle);
     createScheduleDiv.appendChild(inputDesc);
+    createScheduleDiv.appendChild(inputNumberOfDays);
     createScheduleDiv.appendChild(createScheduleButt);
     scheduleContentDivEl.appendChild(createScheduleDiv);
 }
@@ -48,19 +57,29 @@ function showCreateSchedule(){
 function createSchedule(){
     const toCreateScheduleButt = document.getElementById("to-createSchedule-button");
     toCreateScheduleButt.addEventListener('click', showCreateSchedule);
+
     const scheduleTitleInputEl = document.getElementById("schedule-title");
     const scheduleDescInputEl = document.getElementById("schedule-desc");
+    const scheduleNumberOfDays = document.getElementById("schedule-days");
+
     const title = scheduleTitleInputEl.value;
     const description = scheduleDescInputEl.value;
-    const params = new URLSearchParams();
-    params.append('title',title);
-    params.append('description',description);
+    const days = scheduleNumberOfDays.value;
 
-    const xhr = new XMLHttpRequest();
-    xhr.addEventListener('load',onCreateScheduleResponse);
-    xhr.addEventListener('error', onNetworkError);
-    xhr.open('POST','protected/schedule');
-    xhr.send(params)
+    if(title !== "" && description !== ""){
+        const params = new URLSearchParams();
+        params.append('title',title);
+        params.append('description',description);
+        params.append('days',days);
+
+        const xhr = new XMLHttpRequest();
+        xhr.addEventListener('load',onCreateScheduleResponse);
+        xhr.addEventListener('error', onNetworkError);
+        xhr.open('POST','protected/schedule');
+        xhr.send(params)
+    }else{
+        newError(scheduleContentDivEl,"Please fill all the fields");
+    }
 }
 
 function onCreateScheduleResponse(){
