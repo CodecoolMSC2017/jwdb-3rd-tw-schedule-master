@@ -42,7 +42,7 @@ abstract class AbstractServlet extends HttpServlet {
         ex.printStackTrace();
     }
 
-    String readJSONtoString(BufferedReader reader) throws IOException {
+    String jsonToString(BufferedReader reader) throws IOException {
         StringBuilder jb = new StringBuilder();
         String line;
         while ((line = reader.readLine()) != null) {

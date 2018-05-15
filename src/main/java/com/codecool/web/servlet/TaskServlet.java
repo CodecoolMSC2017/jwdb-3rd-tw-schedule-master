@@ -73,7 +73,7 @@ public class TaskServlet extends AbstractServlet {
             int userId = user.getId();
 
             BufferedReader reader = req.getReader();
-            JSONObject jsonObject = new JSONObject(readJSONtoString(reader));
+            JSONObject jsonObject = new JSONObject(jsonToString(reader));
             int taskId = Integer.parseInt(jsonObject.getString("taskId"));
             String taskTitle = jsonObject.getString("title");
             String taskDescription = jsonObject.getString("description");
@@ -100,7 +100,9 @@ public class TaskServlet extends AbstractServlet {
             ScheduleService scheduleService = new SimpleScheduleService(connection);
             User user = getUser(req);
             int userId = user.getId();
-            int taskId = Integer.parseInt(req.getParameter("taskId"));
+
+            BufferedReader reader = req.getReader();
+            int taskId = Integer.parseInt(jsonToString(reader));
 
             taskService.deleteTask(taskId);
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
