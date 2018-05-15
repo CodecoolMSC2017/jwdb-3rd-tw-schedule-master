@@ -73,10 +73,7 @@ public class ScheduleServlet extends AbstractServlet {
             User user = getUser(req);
             int userId = user.getId();
 
-            BufferedReader reader = req.getReader();
-            String json = jsonToString(reader);
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(json);
+            JsonNode jsonNode = createJsonNodeFromRequest(req);
 
             int scheduleId = Integer.parseInt(jsonNode.get("scheduleId").textValue());
             String scheduleTitle = jsonNode.get("scheduleId").textValue();
@@ -105,10 +102,7 @@ public class ScheduleServlet extends AbstractServlet {
             User user = getUser(req);
             int userId = user.getId();
 
-            BufferedReader reader = req.getReader();
-            String json = jsonToString(reader);
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(json);
+            JsonNode jsonNode = createJsonNodeFromRequest(req);
 
             int scheduleId = Integer.parseInt(jsonNode.get("scheduleId").textValue());
 

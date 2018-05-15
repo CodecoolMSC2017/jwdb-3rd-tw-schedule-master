@@ -72,11 +72,7 @@ public class TaskServlet extends AbstractServlet {
             User user = getUser(req);
             int userId = user.getId();
 
-            BufferedReader reader = req.getReader();
-            String json = jsonToString(reader);
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(json);
-
+            JsonNode jsonNode = createJsonNodeFromRequest(req);
 
             int taskId = Integer.parseInt(jsonNode.get("taskId").textValue());
             String taskTitle = jsonNode.get("title").textValue();
@@ -105,10 +101,7 @@ public class TaskServlet extends AbstractServlet {
             User user = getUser(req);
             int userId = user.getId();
 
-            BufferedReader reader = req.getReader();
-            String json = jsonToString(reader);
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(json);
+            JsonNode jsonNode = createJsonNodeFromRequest(req);
 
             int taskId = Integer.parseInt(jsonNode.get("taskId").textValue());
 
