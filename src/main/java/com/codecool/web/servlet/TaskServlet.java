@@ -26,6 +26,23 @@ import com.fasterxml.jackson.databind.util.JSONPObject;
 public class TaskServlet extends AbstractServlet {
 
     @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try (Connection connection = getConnection(req.getServletContext())) {
+            TaskService taskService = new SimpleTaskService(connection);
+            ScheduleService scheduleService = new SimpleScheduleService(connection);
+            User user = getUser(req);
+            int userId = user.getId();
+            List<Schedule> schedules = scheduleService.findAllByUserId(userId);
+            List<Task> tasks = taskService.findAllByUserId(userId);
+            UserDto userDto = new UserDto(user, tasks, schedules);
+            sendMessage(resp, HttpServletResponse.SC_OK, userDto);
+
+        } catch (SQLException ex) {
+            handleSqlError(resp, ex);
+        }
+    }
+
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskService taskService = new SimpleTaskService(connection);
