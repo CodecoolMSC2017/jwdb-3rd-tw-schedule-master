@@ -72,18 +72,8 @@ public class TaskServlet extends AbstractServlet {
             User user = getUser(req);
             int userId = user.getId();
 
-            StringBuilder jb = new StringBuilder();
-            String line;
-            try {
-                BufferedReader reader = req.getReader();
-                while ((line = reader.readLine()) != null)
-                    jb.append(line);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            System.out.println(jb.toString());
-            JSONObject jsonObject = new JSONObject(jb.toString());
+            BufferedReader reader = req.getReader();
+            JSONObject jsonObject = new JSONObject(readJSONtoString(reader));
             int taskId = Integer.parseInt(jsonObject.getString("taskId"));
             String taskTitle = jsonObject.getString("title");
             String taskDescription = jsonObject.getString("description");

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -39,6 +40,15 @@ abstract class AbstractServlet extends HttpServlet {
     void handleSqlError(HttpServletResponse resp, SQLException ex) throws IOException {
         sendMessage(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage());
         ex.printStackTrace();
+    }
+
+    String readJSONtoString(BufferedReader reader) throws IOException {
+        StringBuilder jb = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            jb.append(line);
+        }
+        return jb.toString();
     }
 }
 
