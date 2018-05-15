@@ -13,11 +13,14 @@
     <c:url value="/js/register.js" var="registerScriptUrl"/>
     <c:url value="/js/main-page.js" var="mainPageScriptUrl"/>
     <c:url value="/js/task.js" var="taskScriptUrl"/>
+    <c:url value="/js/schedule.js" var="scheduleScriptUrl"/>
+
     <link rel="stylesheet" type="text/css" href="${styleUrl}">
     <script src="${indexScriptUrl}"></script>
     <script src="${loginScriptUrl}"></script>
     <script src="${logoutScriptUrl}"></script>
     <script src="${registerScriptUrl}"></script>
+    <script src="${scheduleScriptUrl}"></script>
     <script src="${taskScriptUrl}"></script>
     <script src="${mainPageScriptUrl}"></script>
     <link rel="shortcut icon" type="image/png" href="icons/favicon.png"/>

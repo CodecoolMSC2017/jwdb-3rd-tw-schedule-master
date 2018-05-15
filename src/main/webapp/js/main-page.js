@@ -109,7 +109,7 @@ function createScheduleDiv(userDto){
     }
 
     const scheduleCreateLiEl = document.createElement('li');
-    const createButton = document.createButton("button");
+    const createButton = document.createElement("button");
     const goBackButton = document.createElement("button");
 
     createButton.addEventListener('click',showCreateSchedule);

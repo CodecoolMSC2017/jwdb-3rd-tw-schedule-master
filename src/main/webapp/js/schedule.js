@@ -1,17 +1,18 @@
 
 
 function showSchedule(){
-    scheduleEl = document.getElementById("schedulesUl");
+    const scheduleEl = document.getElementById("schedulesUl");
     scheduleEl.classList.remove('hidden');
-    scheduleDiv.removeEventListener('click',showSchedule);
-    scheduleDiv.addEventListener('click',hideSchedule);
+    scheduleButtonEl.removeEventListener('click',showSchedule);
+    scheduleButtonEl.addEventListener('click',hideSchedule);
 }
 
 function hideSchedule(){
-    scheduleEl = document.getElementById("schedulesUl");
+    const scheduleEl = document.getElementById("schedulesUl");
     scheduleEl.classList.add('hidden');
-    scheduleDiv.removeEventListener('click',hideSchedule);
-    scheduleDiv.addEventListener('click',showSchedule);
+    scheduleButtonEl.removeEventListener('click',hideSchedule);
+    document.getElementById("create-schedule").remove();
+    scheduleButtonEl.addEventListener('click',showSchedule);
 }
 
 function showCreateSchedule(){
@@ -36,7 +37,7 @@ function showCreateSchedule(){
     createScheduleButt.textContent = "Create";
 
     createScheduleDiv.appendChild(inputTitle);
-    createSchedule.appendChild(inputDesc);
+    createScheduleDiv.appendChild(inputDesc);
     createScheduleDiv.appendChild(createScheduleButt);
     scheduleContentDivEl.appendChild(createScheduleDiv);
 }
