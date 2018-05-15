@@ -4,8 +4,10 @@ import com.codecool.web.dto.UserDto;
 import com.codecool.web.model.Schedule;
 import com.codecool.web.model.Task;
 import com.codecool.web.model.User;
+import com.codecool.web.service.FormService;
 import com.codecool.web.service.ScheduleService;
 import com.codecool.web.service.TaskService;
+import com.codecool.web.service.simple.SimpleFormService;
 import com.codecool.web.service.simple.SimpleScheduleService;
 import com.codecool.web.service.simple.SimpleTaskService;
 
@@ -17,6 +19,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import com.fasterxml.jackson.*;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 
 @WebServlet("/protected/task")
 public class TaskServlet extends AbstractServlet {
@@ -49,9 +53,10 @@ public class TaskServlet extends AbstractServlet {
             ScheduleService scheduleService = new SimpleScheduleService(connection);
             User user = getUser(req);
             int userId = user.getId();
+
+            int taskId = Integer.parseInt(req.getParameter("taskId"));
             String taskTitle = req.getParameter("title");
             String taskDescription = req.getParameter("description");
-            int taskId = Integer.parseInt(req.getParameter("taskId"));
 
             taskService.update(taskId, taskTitle, taskDescription);
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
