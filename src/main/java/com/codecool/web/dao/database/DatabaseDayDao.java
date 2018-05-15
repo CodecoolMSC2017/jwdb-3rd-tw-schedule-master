@@ -76,8 +76,8 @@ class DatabaseDayDao extends AbstractDaoFactory implements DayDao {
 
     private Day fetchDay(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("id");
-        int sheduleId = resultSet.getInt("schedule_id");
+        int scheduleId = resultSet.getInt("schedule_id");
         String title = resultSet.getString("title");
-        return new Day(id, sheduleId, title);
+        return new Day(id, scheduleId, title);
     }
 }
