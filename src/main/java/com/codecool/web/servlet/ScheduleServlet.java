@@ -8,6 +8,8 @@ import com.codecool.web.service.ScheduleService;
 import com.codecool.web.service.TaskService;
 import com.codecool.web.service.simple.SimpleScheduleService;
 import com.codecool.web.service.simple.SimpleTaskService;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -51,8 +53,8 @@ public class ScheduleServlet extends AbstractServlet {
 
             String scheduleTitle = req.getParameter("title");
             String scheduleDescription = req.getParameter("description");
-
-            scheduleService.createSchedule(scheduleTitle, scheduleDescription, userId);
+            int numberOfDays = 0;
+            scheduleService.createSchedule(scheduleTitle, scheduleDescription, userId, numberOfDays);
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
             List<Task> tasks = taskService.findAllByUserId(userId);
             UserDto userDto = new UserDto(user, tasks, schedules);
@@ -72,10 +74,13 @@ public class ScheduleServlet extends AbstractServlet {
             int userId = user.getId();
 
             BufferedReader reader = req.getReader();
-            JSONObject jsonObject = new JSONObject(jsonToString(reader));
-            int scheduleId = Integer.parseInt(jsonObject.getString("scheduleId"));
-            String scheduleTitle = jsonObject.getString("title");
-            String scheduleDescription = jsonObject.getString("description");
+            String json = jsonToString(reader);
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(json);
+
+            int scheduleId = Integer.parseInt(jsonNode.get("scheduleId").textValue());
+            String scheduleTitle = jsonNode.get("scheduleId").textValue();
+            String scheduleDescription = jsonNode.get("description").textValue();
 
             scheduleService.updateSchedule(scheduleId, scheduleTitle, scheduleDescription);
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
@@ -101,8 +106,11 @@ public class ScheduleServlet extends AbstractServlet {
             int userId = user.getId();
 
             BufferedReader reader = req.getReader();
-            JSONObject jsonObject = new JSONObject(jsonToString(reader));
-            int scheduleId = Integer.parseInt(jsonObject.getString("scheduleId"));
+            String json = jsonToString(reader);
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(json);
+
+            int scheduleId = Integer.parseInt(jsonNode.get("scheduleId").textValue());
 
             scheduleService.deleteSchedule(scheduleId);
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);

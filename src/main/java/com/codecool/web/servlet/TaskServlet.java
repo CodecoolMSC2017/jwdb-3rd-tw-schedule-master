@@ -4,10 +4,8 @@ import com.codecool.web.dto.UserDto;
 import com.codecool.web.model.Schedule;
 import com.codecool.web.model.Task;
 import com.codecool.web.model.User;
-import com.codecool.web.service.FormService;
 import com.codecool.web.service.ScheduleService;
 import com.codecool.web.service.TaskService;
-import com.codecool.web.service.simple.SimpleFormService;
 import com.codecool.web.service.simple.SimpleScheduleService;
 import com.codecool.web.service.simple.SimpleTaskService;
 
@@ -20,7 +18,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.*;
 
 @WebServlet("/protected/task")
@@ -73,10 +72,14 @@ public class TaskServlet extends AbstractServlet {
             int userId = user.getId();
 
             BufferedReader reader = req.getReader();
-            JSONObject jsonObject = new JSONObject(jsonToString(reader));
-            int taskId = Integer.parseInt(jsonObject.getString("taskId"));
-            String taskTitle = jsonObject.getString("title");
-            String taskDescription = jsonObject.getString("description");
+            String json = jsonToString(reader);
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(json);
+
+
+            int taskId = Integer.parseInt(jsonNode.get("taskId").textValue());
+            String taskTitle = jsonNode.get("title").textValue();
+            String taskDescription = jsonNode.get("description").textValue();
 
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
             taskService.update(taskId, taskTitle, taskDescription);
@@ -102,8 +105,11 @@ public class TaskServlet extends AbstractServlet {
             int userId = user.getId();
 
             BufferedReader reader = req.getReader();
-            JSONObject jsonObject = new JSONObject(jsonToString(reader));
-            int taskId = Integer.parseInt(jsonObject.getString("taskId"));
+            String json = jsonToString(reader);
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(json);
+
+            int taskId = Integer.parseInt(jsonNode.get("taskId").textValue());
 
             taskService.deleteTask(taskId);
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
