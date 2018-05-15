@@ -10,6 +10,7 @@ function showTasks(){
 function hideTasks(){
     const taskEl = document.getElementById("tasksUl");
     taskEl.classList.add('hidden');
+    document.getElementById("create-task").remove();
     taskButtonEl.removeEventListener('click', hideTasks);
     taskButtonEl.addEventListener('click', showTasks);
 }
@@ -52,18 +53,14 @@ function applyTaskUpdates(e) {
     const desc = descInputField.value;
     const id = liEl.id;
 
-
-    const params = new URLSearchParams();
-    params.append('taskId', id);
-    params.append('description', desc);
-    params.append('title',title);
-
+    const data = JSON.stringify({"taskId": id, "description": desc, "title": title});
 
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onUpdateTaskResponse);
     xhr.addEventListener('error', onNetworkError);
     xhr.open('PUT','protected/task');
-    xhr.send(params);
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.send(data);
 }
 
 function onUpdateTaskResponse() {
