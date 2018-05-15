@@ -4,8 +4,10 @@ import com.codecool.web.dto.UserDto;
 import com.codecool.web.model.Schedule;
 import com.codecool.web.model.Task;
 import com.codecool.web.model.User;
+import com.codecool.web.service.FormService;
 import com.codecool.web.service.ScheduleService;
 import com.codecool.web.service.TaskService;
+import com.codecool.web.service.simple.SimpleFormService;
 import com.codecool.web.service.simple.SimpleScheduleService;
 import com.codecool.web.service.simple.SimpleTaskService;
 
@@ -13,10 +15,13 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+
+import org.json.*;
 
 @WebServlet("/protected/task")
 public class TaskServlet extends AbstractServlet {
@@ -39,7 +44,7 @@ public class TaskServlet extends AbstractServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskService taskService = new SimpleTaskService(connection);
             ScheduleService scheduleService = new SimpleScheduleService(connection);
@@ -60,19 +65,33 @@ public class TaskServlet extends AbstractServlet {
     }
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskService taskService = new SimpleTaskService(connection);
             ScheduleService scheduleService = new SimpleScheduleService(connection);
             User user = getUser(req);
             int userId = user.getId();
-            String taskTitle = req.getParameter("title");
-            String taskDescription = req.getParameter("description");
-            int taskId = Integer.parseInt(req.getParameter("taskId"));
 
-            taskService.update(taskId, taskTitle, taskDescription);
+            StringBuilder jb = new StringBuilder();
+            String line;
+            try {
+                BufferedReader reader = req.getReader();
+                while ((line = reader.readLine()) != null)
+                    jb.append(line);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            System.out.println(jb.toString());
+            JSONObject jsonObject = new JSONObject(jb.toString());
+            int taskId = Integer.parseInt(jsonObject.getString("taskId"));
+            String taskTitle = jsonObject.getString("title");
+            String taskDescription = jsonObject.getString("description");
+
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
+            taskService.update(taskId, taskTitle, taskDescription);
             List<Task> tasks = taskService.findAllByUserId(userId);
+
             UserDto userDto = new UserDto(user, tasks, schedules);
 
             sendMessage(resp, HttpServletResponse.SC_OK, userDto);
@@ -85,7 +104,7 @@ public class TaskServlet extends AbstractServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskService taskService = new SimpleTaskService(connection);
             ScheduleService scheduleService = new SimpleScheduleService(connection);
