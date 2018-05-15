@@ -1,73 +1,105 @@
-let taskEl;
+
 
 function showTasks(){
-    taskEl = document.getElementById("tasksUl");
+    const taskEl = document.getElementById("tasksUl");
     taskEl.classList.remove('hidden');
-    taskDiv.removeEventListener('click',showTasks);
-    taskDiv.addEventListener('click',hideTasks);
+    taskButtonEl.removeEventListener('click', showTasks);
+    taskButtonEl.addEventListener('click', hideTasks);
 }
 
 function hideTasks(){
-    taskEl = document.getElementById("tasksUl");
+    const taskEl = document.getElementById("tasksUl");
     taskEl.classList.add('hidden');
-    taskDiv.removeEventListener('click',hideTasks);
-    taskDiv.addEventListener('click',showTasks);
+    taskButtonEl.removeEventListener('click', hideTasks);
+    taskButtonEl.addEventListener('click', showTasks);
 }
 
-function renameTaskTitle(e){
-    const liEl = e.source.parentElement;
-    const buttonEl = e.source;
-    const spanTask = e.source.parentElement.firstChild;
-    liEl.remove(spanTask);
-    const inputField = document.createElement("INPUT");
-    inputField.setAttribute("type","text");
-    buttonEl.removeEventListener('click',renameTaskTitle);
-    buttonEl.addEventListener('click',setTaskTitle)
-    liEl.insertBefore(inputField,buttonEl);
+function updateTask(e) {
+    const buttonEl = e.target;
+    const liEl = buttonEl.parentElement;
+    const spanTask = liEl.firstChild;
+    const descParEl = spanTask.firstChild;
+
+    const oldTitle = spanTask.textContent;
+    const oldDesc = descParEl.textContent;
+
+    spanTask.remove();
+    descParEl.remove();
+
+    const titleInputEl = document.createElement("INPUT");
+    titleInputEl.setAttribute("type", "text");
+    titleInputEl.placeholder = oldTitle;
+
+    const descInputEl = document.createElement("INPUT");
+    descInputEl.setAttribute("type", "text");
+    descInputEl.placeholder = oldDesc;
+
+    buttonEl.removeEventListener('click', updateTask);
+    buttonEl.addEventListener('click', applyTaskUpdates);
+
+    liEl.insertBefore(titleInputEl, buttonEl);
+    liEl.insertBefore(descInputEl, buttonEl);
 
 }
 
-function setTaskTitle(e){
-    const liEl = e.source.parentElement;
-    const buttonEl = e.source;
-    const inputField = e.source.parentElement.firstChild;
-    const title = inputField.value;
+function applyTaskUpdates(e) {
+    const liEl = e.target.parentElement;
+    const titleInputField = liEl.firstChild;
+    const descInputField = liEl.children.item(1);
+    console.log(liEl);
+
+    const title = titleInputField.value;
+    const desc = descInputField.value;
+    const id = liEl.id;
+
+    console.log(title);
+    console.log(id);
+    console.log(desc);
+
     const params = new URLSearchParams();
+    params.append('taskId', id);
+    params.append('description', desc);
     params.append('title',title);
 
+
     const xhr = new XMLHttpRequest();
-    xhr.addEventListener('load',onRenameResponse);
+    xhr.addEventListener('load', onUpdateTaskResponse);
     xhr.addEventListener('error', onNetworkError);
     xhr.open('PUT','protected/task');
     xhr.send(params);
 }
 
-function onRenameResponse(){
+function onUpdateTaskResponse() {
     if(this.status === OK){
         const userDto = JSON.parse(this.responseText);
-        taskEl = document.getElementById("tasksUl");
-        const parentEl = taskEl.parentElement;
-        parentEl.remove(taskEl);
-        onMainPageLoad(userDto);
+        document.getElementById("tasksUl").remove();
+        createTaskDiv(userDto);
     }else{
         onMessageResponse(taskContentDivEl,this);
     }
 }
 
 function showCreateTask(){
+    const toCreateTaskButt = document.getElementById("to-createTask-button");
+    toCreateTaskButt.removeEventListener('click', showCreateTask);
+
     const createTaskDiv= document.createElement("div");
     createTaskDiv.setAttribute("id","create-task");
+
     const inputTitle = document.createElement("INPUT");
     inputTitle.setAttribute("type","text");
     inputTitle.setAttribute("id", "task-title");
     inputTitle.placeholder = "Title";
+
     const inputDescript = document.createElement("INPUT");
     inputDescript.setAttribute("type","text");
     inputDescript.setAttribute("id","task-desc");
     inputDescript.placeholder = "Description";
+
     const createTaskButt = document.createElement("button");
     createTaskButt.addEventListener('click',createTask);
     createTaskButt.textContent = "Create";
+
     createTaskDiv.appendChild(inputTitle);
     createTaskDiv.appendChild(inputDescript);
     createTaskDiv.appendChild(createTaskButt);
@@ -75,6 +107,8 @@ function showCreateTask(){
 }
 
 function createTask(){
+    const toCreateTaskButt = document.getElementById("to-createTask-button");
+    toCreateTaskButt.addEventListener('click', showCreateTask);
     const taskTitleInputEl = document.getElementById("task-title");
     const taskDescInputEl = document.getElementById("task-desc");
     const title = taskTitleInputEl.value;
@@ -93,11 +127,47 @@ function createTask(){
 function onCreateTaskResponse(){
     if(this.status === OK){
         const userDto = JSON.parse(this.responseText);
-        taskEl = document.getElementById("create-task");
-        const parentEl = taskEl.parentElement;
-        parentEl.remove(taskEl);
-        onMainPageLoad(userDto);
+        document.getElementById("create-task").remove();
+        document.getElementById("tasksUl").remove();
+        createTaskDiv(userDto);
     }else{
         onMessageResponse(taskContentDivEl,this);
     }
 }
+
+function showTaskDescription(e) {
+    e.target.firstElementChild.classList.remove("hidden");
+    e.target.removeEventListener('click', showTaskDescription);
+    e.target.addEventListener('click', hideTaskDescription);
+}
+
+function hideTaskDescription(e) {
+    e.target.firstElementChild.classList.add("hidden");
+    e.target.removeEventListener('click', hideTaskDescription);
+    e.target.addEventListener('click', showTaskDescription);
+}
+
+function removeTask(e) {
+    const liEL = e.target.parentElement;
+    const id = liEL.id;
+
+    const params = new URLSearchParams();
+    params.append('taskId', id);
+
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onDeleteTaskResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('DELETE', 'protected/task');
+    xhr.send(params);
+}
+
+function onDeleteTaskResponse() {
+    if (this.status === OK) {
+        const userDto = JSON.parse(this.responseText);
+        document.getElementById("tasksUl").remove();
+        createTaskDiv(userDto);
+    } else {
+        onMessageResponse(taskContentDivEl, this);
+    }
+}
+

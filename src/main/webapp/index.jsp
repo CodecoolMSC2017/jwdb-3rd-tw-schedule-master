@@ -18,8 +18,8 @@
     <script src="${loginScriptUrl}"></script>
     <script src="${logoutScriptUrl}"></script>
     <script src="${registerScriptUrl}"></script>
-    <script src="${mainPageScriptUrl}"></script>
     <script src="${taskScriptUrl}"></script>
+    <script src="${mainPageScriptUrl}"></script>
     <link rel="shortcut icon" type="image/png" href="icons/favicon.png"/>
     <title>Schedule Master</title>
 </head>

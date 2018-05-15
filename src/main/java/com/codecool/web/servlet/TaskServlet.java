@@ -1,4 +1,5 @@
 package com.codecool.web.servlet;
+
 import com.codecool.web.dto.UserDto;
 import com.codecool.web.model.Schedule;
 import com.codecool.web.model.Task;
@@ -52,7 +53,7 @@ public class TaskServlet extends AbstractServlet {
             String taskDescription = req.getParameter("description");
             int taskId = Integer.parseInt(req.getParameter("taskId"));
 
-            taskService.update(taskId,taskTitle,taskDescription);
+            taskService.update(taskId, taskTitle, taskDescription);
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
             List<Task> tasks = taskService.findAllByUserId(userId);
             UserDto userDto = new UserDto(user, tasks, schedules);
@@ -60,7 +61,9 @@ public class TaskServlet extends AbstractServlet {
             sendMessage(resp, HttpServletResponse.SC_OK, userDto);
 
         } catch (SQLException e) {
-            handleSqlError(resp,e);
+            handleSqlError(resp, e);
+        } catch (Exception e) {
+            sendMessage(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.toString());
         }
     }
 
@@ -81,7 +84,7 @@ public class TaskServlet extends AbstractServlet {
             sendMessage(resp, HttpServletResponse.SC_OK, userDto);
 
         } catch (SQLException e) {
-            handleSqlError(resp,e);
+            handleSqlError(resp, e);
         }
     }
 }

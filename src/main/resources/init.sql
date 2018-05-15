@@ -48,7 +48,7 @@ CREATE TABLE task_hour (
     schedule_id INTEGER,
     hour_ids TEXT,
     PRIMARY KEY (task_id, schedule_id),
-	FOREIGN KEY (task_id) REFERENCES task("id"),
+	  FOREIGN KEY (task_id) REFERENCES task("id"),
     FOREIGN KEY (schedule_id) REFERENCES schedule("id")
 );
 
