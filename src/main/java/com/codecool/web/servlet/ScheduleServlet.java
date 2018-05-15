@@ -51,8 +51,9 @@ public class ScheduleServlet extends AbstractServlet {
 
             String scheduleTitle = req.getParameter("title");
             String scheduleDescription = req.getParameter("description");
+            int scheduleDays = Integer.parseInt(req.getParameter("days"));
 
-            scheduleService.createSchedule(scheduleTitle, scheduleDescription, userId);
+            scheduleService.createSchedule(scheduleTitle, scheduleDescription, userId, scheduleDays);
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
             List<Task> tasks = taskService.findAllByUserId(userId);
             UserDto userDto = new UserDto(user, tasks, schedules);
