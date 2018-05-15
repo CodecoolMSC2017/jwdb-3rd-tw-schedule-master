@@ -115,19 +115,25 @@ function showCreateTask(){
 function createTask(){
     const toCreateTaskButt = document.getElementById("to-createTask-button");
     toCreateTaskButt.addEventListener('click', showCreateTask);
+
     const taskTitleInputEl = document.getElementById("task-title");
     const taskDescInputEl = document.getElementById("task-desc");
+
     const title = taskTitleInputEl.value;
     const description = taskDescInputEl.value;
-    const params = new URLSearchParams();
-    params.append('title',title);
-    params.append('description',description);
+    if(title !== "" && description !== ""){
+        const params = new URLSearchParams();
+        params.append('title',title);
+        params.append('description',description);
 
-    const xhr = new XMLHttpRequest();
-    xhr.addEventListener('load',onCreateTaskResponse);
-    xhr.addEventListener('error', onNetworkError);
-    xhr.open('POST','protected/task');
-    xhr.send(params)
+        const xhr = new XMLHttpRequest();
+        xhr.addEventListener('load',onCreateTaskResponse);
+        xhr.addEventListener('error', onNetworkError);
+        xhr.open('POST','protected/task');
+        xhr.send(params)
+    }else{
+         newError(scheduleContentDivEl,"Please fill all the fields");
+     }
 }
 
 function onCreateTaskResponse(){

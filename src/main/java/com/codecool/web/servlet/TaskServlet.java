@@ -72,18 +72,8 @@ public class TaskServlet extends AbstractServlet {
             User user = getUser(req);
             int userId = user.getId();
 
-            StringBuilder jb = new StringBuilder();
-            String line;
-            try {
-                BufferedReader reader = req.getReader();
-                while ((line = reader.readLine()) != null)
-                    jb.append(line);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            System.out.println(jb.toString());
-            JSONObject jsonObject = new JSONObject(jb.toString());
+            BufferedReader reader = req.getReader();
+            JSONObject jsonObject = new JSONObject(jsonToString(reader));
             int taskId = Integer.parseInt(jsonObject.getString("taskId"));
             String taskTitle = jsonObject.getString("title");
             String taskDescription = jsonObject.getString("description");
@@ -110,7 +100,10 @@ public class TaskServlet extends AbstractServlet {
             ScheduleService scheduleService = new SimpleScheduleService(connection);
             User user = getUser(req);
             int userId = user.getId();
-            int taskId = Integer.parseInt(req.getParameter("taskId"));
+
+            BufferedReader reader = req.getReader();
+            JSONObject jsonObject = new JSONObject(jsonToString(reader));
+            int taskId = Integer.parseInt(jsonObject.getString("taskId"));
 
             taskService.deleteTask(taskId);
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
