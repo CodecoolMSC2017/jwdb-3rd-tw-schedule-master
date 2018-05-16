@@ -121,12 +121,14 @@ function onDeleteScheduleResponse() {
 function listingSchedules(e){
     const idSchedule = e.target.parentElement.id;
     const xhr = new XMLHttpRequest();
+
     const params = new URLSearchParams();
     params.append("scheduleId",idSchedule);
+
     xhr.addEventListener('load', onListingResponse);
     xhr.addEventListener('error', onNetworkError);
-    xhr.open('GET', 'protected/schedule');
-    xhr.send(params);
+    xhr.open('GET', 'protected/schedule?' + params.toString());
+    xhr.send();
 }
 
 function onListingResponse(){
@@ -141,8 +143,9 @@ function onListingResponse(){
 function listingDays(userDto){
     const table = document.createElement("table");
     let tr = document.createElement("tr");
+    let td;
     for(let i = 0; i < userDto.schedule.days.length ; i++){
-        let td = document.createElement("td");
+        td = document.createElement("td");
         let hoursTable = document.createElement("table");
         td.textContent = userDto.schedule.days[i].title;
         for(let j = 0; j < userDto.schedule.days[i].hours.length ; j++){

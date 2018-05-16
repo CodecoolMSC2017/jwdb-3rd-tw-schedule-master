@@ -70,7 +70,7 @@
             <button id="schedules-button">Schedules</button>
         </div>
     </div>
-    <div id="days-content" class="content hidden">
+    <div id="days-content" class="content">
         <div id="days">
         </div>
     </div>
