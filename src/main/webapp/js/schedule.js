@@ -1,50 +1,48 @@
-
-
 function showSchedule() {
     const scheduleEl = document.getElementById("schedulesUl");
     scheduleEl.classList.remove('hidden');
-    scheduleButtonEl.removeEventListener('click',showSchedule);
-    scheduleButtonEl.addEventListener('click',hideSchedule);
+    scheduleButtonEl.removeEventListener('click', showSchedule);
+    scheduleButtonEl.addEventListener('click', hideSchedule);
 }
 
 function hideSchedule() {
     const scheduleEl = document.getElementById("schedulesUl");
     scheduleEl.classList.add('hidden');
     const sched = document.getElementById("create-schedule");
-    scheduleButtonEl.removeEventListener('click',hideSchedule);
-    if(sched !== null) {
-         sched.remove();
+    scheduleButtonEl.removeEventListener('click', hideSchedule);
+    if (sched !== null) {
+        sched.remove();
     }
-    scheduleButtonEl.addEventListener('click',showSchedule);
+    scheduleButtonEl.addEventListener('click', showSchedule);
 }
 
 function showCreateSchedule() {
     const toCreateScheduleButt = document.getElementById("to-createSchedule-button");
-    toCreateScheduleButt.removeEventListener('click',showCreateSchedule);
+    toCreateScheduleButt.removeEventListener('click', showCreateSchedule);
 
-    const createScheduleDiv= document.createElement("div");
-    createScheduleDiv.setAttribute("id","create-schedule");
+    const createScheduleDiv = document.createElement("div");
+    createScheduleDiv.setAttribute("id", "create-schedule");
 
     const inputTitle = document.createElement("INPUT");
-    inputTitle.setAttribute("type","text");
+    inputTitle.setAttribute("type", "text");
     inputTitle.setAttribute("id", "schedule-title");
     inputTitle.placeholder = "Title";
 
     const inputDesc = document.createElement("INPUT");
-    inputDesc.setAttribute("type","text");
+    inputDesc.setAttribute("type", "text");
     inputDesc.setAttribute("id", "schedule-desc");
     inputDesc.placeholder = "Description";
 
     const inputNumberOfDays = document.createElement("INPUT");
-    inputNumberOfDays.setAttribute("type","number");
+    inputNumberOfDays.setAttribute("type", "number");
     inputNumberOfDays.setAttribute("id", "schedule-days");
-    inputNumberOfDays.placeholder ="Number of Days";
+    inputNumberOfDays.placeholder = "Number of Days";
     inputNumberOfDays.max = 7;
     inputNumberOfDays.min = 1;
     inputNumberOfDays.value = 3;
 
     const createScheduleButt = document.createElement("button");
-    createScheduleButt.addEventListener('click',createSchedule);
+    createScheduleButt.addEventListener('click', createSchedule);
     createScheduleButt.textContent = "Create";
 
     createScheduleDiv.appendChild(inputTitle);
@@ -54,7 +52,7 @@ function showCreateSchedule() {
     scheduleContentDivEl.appendChild(createScheduleDiv);
 }
 
-function createSchedule(){
+function createSchedule() {
     const toCreateScheduleButt = document.getElementById("to-createSchedule-button");
     toCreateScheduleButt.addEventListener('click', showCreateSchedule);
 
@@ -66,30 +64,30 @@ function createSchedule(){
     const description = scheduleDescInputEl.value;
     const days = scheduleNumberOfDays.value;
 
-    if(title !== "" && description !== ""){
+    if (title !== "" && description !== "") {
         const params = new URLSearchParams();
-        params.append('title',title);
-        params.append('description',description);
-        params.append('days',days);
+        params.append('title', title);
+        params.append('description', description);
+        params.append('days', days);
 
         const xhr = new XMLHttpRequest();
-        xhr.addEventListener('load',onCreateScheduleResponse);
+        xhr.addEventListener('load', onCreateScheduleResponse);
         xhr.addEventListener('error', onNetworkError);
-        xhr.open('POST','protected/schedule');
+        xhr.open('POST', 'protected/schedule');
         xhr.send(params)
-    }else{
-        newError(scheduleContentDivEl,"Please fill all the fields");
+    } else {
+        newError(scheduleContentDivEl, "Please fill all the fields");
     }
 }
 
-function onCreateScheduleResponse(){
-    if(this.status === OK){
+function onCreateScheduleResponse() {
+    if (this.status === OK) {
         const userDto = JSON.parse(this.responseText);
         document.getElementById("create-schedule").remove();
         document.getElementById("schedulesUl").remove();
         createScheduleDiv(userDto);
-    }else{
-        onMessageResponse(scheduleContentDivEl,this);
+    } else {
+        onMessageResponse(scheduleContentDivEl, this);
     }
 }
 
@@ -118,14 +116,14 @@ function onDeleteScheduleResponse() {
     }
 }
 
-function listingSchedules(e){
+function listingSchedules(e) {
     e.target.removeEventListener('click', listingSchedules);
     e.target.addEventListener('click', hideListingSchedules);
     const idSchedule = e.target.parentElement.id;
     const xhr = new XMLHttpRequest();
 
     const params = new URLSearchParams();
-    params.append("scheduleId",idSchedule);
+    params.append("scheduleId", idSchedule);
 
     xhr.addEventListener('load', onListingResponse);
     xhr.addEventListener('error', onNetworkError);
@@ -133,7 +131,7 @@ function listingSchedules(e){
     xhr.send();
 }
 
-function onListingResponse(){
+function onListingResponse() {
     if (this.status === OK) {
         const userDto = JSON.parse(this.responseText);
         listingDays(userDto);
@@ -142,11 +140,12 @@ function onListingResponse(){
     }
 }
 
-function listingDays(userDto){
+function listingDays(userDto) {
     const table = document.createElement("table");
     table.setAttribute("id", "schedule-table");
 
     const titleRow = document.createElement("tr");
+    titleRow.setAttribute("id", userDto.schedule.id);
     const descriptionRow = document.createElement("tr");
 
     const titleTd = document.createElement("td");
@@ -162,17 +161,24 @@ function listingDays(userDto){
     table.appendChild(descriptionRow);
 
     let tr = document.createElement("tr");
-    for(let i = 0; i < userDto.schedule.days.length ; i++){
+    for (let i = 0; i < userDto.schedule.days.length; i++) {
+
         let td = document.createElement("td");
         let hoursTable = document.createElement("table");
-        td.textContent = userDto.schedule.days[i].title;
-        td.setAttribute("id",userDto.schedule.days[i].id);
-        let buttonTd = document.createElement("td");
+
+        let titleSpan = document.createElement("span");
+        titleSpan.textContent = userDto.schedule.days[i].title;
+        titleSpan.setAttribute("id", userDto.schedule.days[i].id);
+        td.appendChild(titleSpan);
+
         let renameButt = document.createElement("button");
-        renameButt.setAttribute("id",userDto.schedule.days[i].title);
+        renameButt.setAttribute("id", userDto.schedule.days[i].title);
         renameButt.textContent = "Rename Day";
         renameButt.addEventListener('click', renameDay);
-        for(let j = 0; j < userDto.schedule.days[i].hours.length ; j++){
+        td.appendChild(renameButt);
+
+
+        for (let j = 0; j < userDto.schedule.days[i].hours.length; j++) {
             let hoursTr = document.createElement("tr");
             let hoursTd = document.createElement("td");
             hoursTd.textContent = userDto.schedule.days[i].hours[j].value;
@@ -182,7 +188,6 @@ function listingDays(userDto){
         }
         td.appendChild(hoursTable);
         tr.appendChild(td);
-        tr.appendChild(renameButt);
     }
     table.appendChild(tr);
     daysDiv.appendChild(table);
@@ -194,58 +199,63 @@ function hideListingSchedules(e) {
     removeAllChildren(daysDiv);
 }
 
-function renameDay(e){
+function renameDay(e) {
     const buttonEl = e.target;
-    const trEl = buttonEl.parentElement;
+    const tdEl = buttonEl.parentElement;
 
-    const titleEl = trEl.firstChild;
-    const oldTitle = titleEl.textContent;
+    const titleEl = tdEl.firstChild;
+    const oldTitle = buttonEl.id;
 
-    const tdEl = document.createElement("td");
 
-    const id = buttonEl.id;
+    const id = titleEl.id;
     titleEl.remove();
 
     const newTitle = document.createElement("INPUT");
-    newTitle.setAttribute("type","text");
+    newTitle.setAttribute("type", "text");
     newTitle.placeholder = oldTitle;
     newTitle.setAttribute("id", id);
-    tdEl.appendChild(newTitle);
-
 
     buttonEl.removeEventListener('click', renameDay);
     buttonEl.addEventListener('click', applyDayUpdates);
 
-    trEl.insertBefore(tdEl,buttonEl);
+    tdEl.insertBefore(newTitle, buttonEl);
 
 }
 
-function applyDayUpdates(e){
-    const trEl = e.target.parentElement;
-    const titleInputField = trEl.firstChild;
+function applyDayUpdates(e) {
+    const tdEl = e.target.parentElement;
+    const titleInputField = tdEl.firstChild;
+    const scheduleTitleField = tdEl.parentElement.parentElement.firstChild;
 
     let title = titleInputField.value;
-    const oldTitle =titleInputField.placeholder;
+    const oldTitle = titleInputField.placeholder;
     const id = titleInputField.id;
+    const scheduleId = scheduleTitleField.id;
 
-    if(title === "" || title === " "){
+    if (title === "" || title === " ") {
         title = oldTitle;
     }
 
-    const data = JSON.stringify({"dayId":id,"title":title});
+    const data = JSON.stringify({"dayId": id, "title": title, "scheduleId": scheduleId});
     const xhr = new XMLHttpRequest();
-    xhr.addEventListener('load',onUpdateDayResponse);
-    xhr.addEventListener('error',onNetworkError);
-    xhr.open('PUT','protected/day');
-    xhr.setRequestHeader("Content-type","application/json");
+    xhr.addEventListener('load', onUpdateDayResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('PUT', 'protected/day');
+    xhr.setRequestHeader("Content-type", "application/json");
     xhr.send(data);
 }
 
-function onUpdateDayResponse(){
-    if(this.status === OK){
+function onUpdateDayResponse() {
+    if (this.status === OK) {
         const userDto = JSON.parse(this.responseText);
-        onMainPageLoad(userDto);
-    }else {
-         onMessageResponse(daysContentDivEl, this);
-     }
+        removeAllChildren(daysDiv);
+        listingDays(userDto);
+    }
+    else {
+        onMessageResponse(daysContentDivEl, this);
+    }
+}
+
+function createDaysDiv() {
+
 }
