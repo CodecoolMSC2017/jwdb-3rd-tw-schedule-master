@@ -106,6 +106,7 @@ function onLoad() {
     scheduleContentDivEl = document.getElementById('schedules-content');
     scheduleDiv = document.getElementById("schedules");
 
+    loadUserCredentials();
 
     const loginButtonEl = document.getElementById('login-button');
     loginButtonEl.addEventListener('click', onLoginButtonClicked);
@@ -118,6 +119,23 @@ function onLoad() {
 
     if (hasAuthorization()) {
         onMainPageLoad(getAuthorization());
+    }
+}
+
+function loadUserCredentials() {
+    if (localStorage.getItem('email') != null) {
+        const email = localStorage.getItem('email');
+        const password = localStorage.getItem('password');
+        const params = new URLSearchParams();
+
+        params.append('email', email);
+        params.append('password', password);
+
+        const xhr = new XMLHttpRequest();
+        xhr.addEventListener('load', onLoginResponse);
+        xhr.addEventListener('error', onNetworkError);
+        xhr.open('POST', 'login');
+        xhr.send(params);
     }
 }
 
