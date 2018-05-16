@@ -97,7 +97,7 @@ function createScheduleDiv(userDto){
 
         let scheduleSpan = document.createElement("span");
         scheduleSpan.textContent = userDto.schedules[i].title;
-        //add eventListener
+        scheduleSpan.addEventListener('click',listingSchedules);
 
         let deleteScheduleButt = document.createElement("button");
         deleteScheduleButt.addEventListener('click',removeSchedule);

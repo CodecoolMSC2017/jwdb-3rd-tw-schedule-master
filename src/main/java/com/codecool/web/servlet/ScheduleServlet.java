@@ -10,15 +10,11 @@ import com.codecool.web.service.TaskService;
 import com.codecool.web.service.simple.SimpleScheduleService;
 import com.codecool.web.service.simple.SimpleTaskService;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.Buffer;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -36,6 +32,13 @@ public class ScheduleServlet extends AbstractServlet {
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
             List<Task> tasks = taskService.findAllByUserId(userId);
             UserDto userDto = new UserDto(user, tasks, schedules);
+
+            if (req.getParameter("scheduleId") != null) {
+                int scheduleId = Integer.parseInt(req.getParameter("scheduleId"));
+                Schedule schedule = scheduleService.findById(scheduleId);
+                userDto.setSchedule(schedule);
+            }
+
             sendMessage(resp, HttpServletResponse.SC_OK, userDto);
 
         } catch (SQLException ex) {

@@ -10,6 +10,7 @@ public class UserDto {
     private User user;
     private List<Task> tasks;
     private List<Schedule> schedules;
+    private Schedule schedule;
 
 
     public UserDto(User user, List<Task> tasks, List<Schedule> schedules) {
@@ -30,4 +31,13 @@ public class UserDto {
     public List<Schedule> getSchedules() {
         return schedules;
     }
+
+    public Schedule getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
+    }
+
 }
