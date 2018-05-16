@@ -70,6 +70,10 @@
             <button id="schedules-button">Schedules</button>
         </div>
     </div>
+    <div id="days-content" class="content hidden">
+        <div id="days">
+        </div>
+    </div>
 
     <div id="tasks-content" class="content hidden">
         <div id="tasks">

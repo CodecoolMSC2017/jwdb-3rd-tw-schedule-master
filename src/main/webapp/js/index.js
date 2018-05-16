@@ -13,6 +13,9 @@ let taskContentDivEl;
 let taskDiv;
 let scheduleContentDivEl;
 let scheduleDiv;
+let daysContentDivEl;
+let daysDiv;
+
 
 
 function newInfo(targetEl, message) {
@@ -105,6 +108,8 @@ function onLoad() {
     taskDiv = document.getElementById("tasks");
     scheduleContentDivEl = document.getElementById('schedules-content');
     scheduleDiv = document.getElementById("schedules");
+    daysContentDivEl = document.getElementById("days-content");
+    daysDiv = document.getElementById("days");
 
     loadUserCredentials();
 

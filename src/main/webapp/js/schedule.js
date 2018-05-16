@@ -1,13 +1,13 @@
 
 
-function showSchedule(){
+function showSchedule() {
     const scheduleEl = document.getElementById("schedulesUl");
     scheduleEl.classList.remove('hidden');
     scheduleButtonEl.removeEventListener('click',showSchedule);
     scheduleButtonEl.addEventListener('click',hideSchedule);
 }
 
-function hideSchedule(){
+function hideSchedule() {
     const scheduleEl = document.getElementById("schedulesUl");
     scheduleEl.classList.add('hidden');
     const sched = document.getElementById("create-schedule");
@@ -18,7 +18,7 @@ function hideSchedule(){
     scheduleButtonEl.addEventListener('click',showSchedule);
 }
 
-function showCreateSchedule(){
+function showCreateSchedule() {
     const toCreateScheduleButt = document.getElementById("to-createSchedule-button");
     toCreateScheduleButt.removeEventListener('click',showCreateSchedule);
 
@@ -116,4 +116,44 @@ function onDeleteScheduleResponse() {
     } else {
         onMessageResponse(scheduleContentDivEl, this);
     }
+}
+
+function listingSchedules(e){
+    const idSchedule = e.target.parentElement.id;
+    const xhr = new XMLHttpRequest();
+    const params = new URLSearchParams();
+    params.append("scheduleId",idSchedule);
+    xhr.addEventListener('load', onListingResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('GET', 'protected/schedule');
+    xhr.send(params);
+}
+
+function onListingResponse(){
+    if (this.status === OK) {
+        const userDto = JSON.parse(this.responseText);
+        listingDays(userDto);
+    } else {
+        onMessageResponse(daysContentDivEl, this);
+    }
+}
+
+function listingDays(userDto){
+    const table = document.createElement("table");
+    let tr = document.createElement("tr");
+    for(let i = 0; i < userDto.schedule.days.length ; i++){
+        let td = document.createElement("td");
+        let hoursTable = document.createElement("table");
+        td.textContent = userDto.schedule.days[i].title;
+        for(let j = 0; j < userDto.schedule.days[i].hours.length ; j++){
+            let hoursTr = document.createElement("tr");
+            let hoursTd = document.createElement("td");
+            hoursTd.textContent = userDto.schedule.days[i].hours[j].value;
+            hoursTr.appendChild(hoursTd);
+            hoursTable.appendChild(hoursTr);
+        }
+        td.appendChild(hoursTable);
+    }
+    tr.appendChild(td);
+    table.appendChild(tr);
 }
