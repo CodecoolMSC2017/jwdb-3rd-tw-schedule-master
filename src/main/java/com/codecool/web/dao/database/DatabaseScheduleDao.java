@@ -14,6 +14,8 @@ class DatabaseScheduleDao extends AbstractDaoFactory implements ScheduleDao {
 
     @Override
     public Schedule add(int appUserId, String title, String description) throws SQLException {
+        boolean autoCommit = connection.getAutoCommit();
+        connection.setAutoCommit(false);
         String sql = "INSERT INTO schedule (app_user_id, title, description) VALUES (?,?,?)";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, appUserId);
@@ -22,6 +24,8 @@ class DatabaseScheduleDao extends AbstractDaoFactory implements ScheduleDao {
             executeInsert(statement);
             int id = fetchGeneratedId(statement);
             return new Schedule(id,appUserId,title,description);
+        }finally {
+            connection.setAutoCommit(autoCommit);
         }
     }
 

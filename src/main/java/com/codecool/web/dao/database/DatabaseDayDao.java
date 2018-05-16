@@ -14,6 +14,8 @@ class DatabaseDayDao extends AbstractDaoFactory implements DayDao {
 
     @Override
     public Day add(int scheduleId, String title) throws SQLException {
+        boolean autoCommit = connection.getAutoCommit();
+        connection.setAutoCommit(false);
         String sql = "INSERT INTO day (schedule_id, title) VALUES (?,?)";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, scheduleId);
@@ -23,6 +25,8 @@ class DatabaseDayDao extends AbstractDaoFactory implements DayDao {
             return new Day(id, scheduleId, title);
         } catch (SQLException ex) {
             throw ex;
+        }finally {
+            connection.setAutoCommit(autoCommit);
         }
     }
 

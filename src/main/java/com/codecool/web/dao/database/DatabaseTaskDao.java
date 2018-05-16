@@ -18,6 +18,8 @@ class DatabaseTaskDao extends AbstractDaoFactory implements TaskDao {
 
     @Override
     public void add(int userId, String title, String description) throws SQLException {
+        boolean autoCommit = connection.getAutoCommit();
+        connection.setAutoCommit(false);
         String sql = "INSERT INTO task (app_user_id, title, description)\n" +
                 "\tVALUES (?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -25,6 +27,8 @@ class DatabaseTaskDao extends AbstractDaoFactory implements TaskDao {
             statement.setString(2, title);
             statement.setString(3, description);
             executeInsert(statement);
+        }finally {
+            connection.setAutoCommit(autoCommit);
         }
     }
 
