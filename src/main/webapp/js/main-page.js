@@ -3,7 +3,7 @@ let scheduleButtonEl;
 
 function onMainPageLoad(userDto) {
     clearMessages();
-    showContents(['schedules-content', 'logout-content', 'tasks-content']);
+    showContents(['schedules-content', 'logout-content', 'tasks-content', 'days-content']);
 
     const taskULEl = document.getElementById("tasksUl");
     if (taskULEl !== null) {
