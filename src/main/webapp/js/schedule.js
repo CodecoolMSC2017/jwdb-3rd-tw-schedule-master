@@ -145,11 +145,33 @@ function onListingResponse(){
 function listingDays(userDto){
     const table = document.createElement("table");
     table.setAttribute("id", "schedule-table");
+
+    const titleRow = document.createElement("tr");
+    const descriptionRow = document.createElement("tr");
+
+    const titleTd = document.createElement("td");
+    const descriptionTd = document.createElement("td");
+
+    titleTd.textContent = userDto.schedule.title;
+    descriptionTd.textContent = userDto.schedule.description;
+
+    titleRow.appendChild(titleTd);
+    descriptionRow.appendChild(descriptionTd);
+
+    table.appendChild(titleRow);
+    table.appendChild(descriptionRow);
+
     let tr = document.createElement("tr");
     for(let i = 0; i < userDto.schedule.days.length ; i++){
         let td = document.createElement("td");
         let hoursTable = document.createElement("table");
         td.textContent = userDto.schedule.days[i].title;
+        td.setAttribute("id",userDto.schedule.days[i].id);
+        let buttonTd = document.createElement("td");
+        let renameButt = document.createElement("button");
+        renameButt.setAttribute("id",userDto.schedule.days[i].title);
+        renameButt.textContent = "Rename Day";
+        renameButt.addEventListener('click', renameDay);
         for(let j = 0; j < userDto.schedule.days[i].hours.length ; j++){
             let hoursTr = document.createElement("tr");
             let hoursTd = document.createElement("td");
@@ -160,6 +182,7 @@ function listingDays(userDto){
         }
         td.appendChild(hoursTable);
         tr.appendChild(td);
+        tr.appendChild(renameButt);
     }
     table.appendChild(tr);
     daysDiv.appendChild(table);
@@ -169,4 +192,60 @@ function hideListingSchedules(e) {
     e.target.removeEventListener('click', hideListingSchedules);
     e.target.addEventListener('click', listingSchedules);
     removeAllChildren(daysDiv);
+}
+
+function renameDay(e){
+    const buttonEl = e.target;
+    const trEl = buttonEl.parentElement;
+
+    const titleEl = trEl.firstChild;
+    const oldTitle = titleEl.textContent;
+
+    const tdEl = document.createElement("td");
+
+    const id = buttonEl.id;
+    titleEl.remove();
+
+    const newTitle = document.createElement("INPUT");
+    newTitle.setAttribute("type","text");
+    newTitle.placeholder = oldTitle;
+    newTitle.setAttribute("id", id);
+    tdEl.appendChild(newTitle);
+
+
+    buttonEl.removeEventListener('click', renameDay);
+    buttonEl.addEventListener('click', applyDayUpdates);
+
+    trEl.insertBefore(tdEl,buttonEl);
+
+}
+
+function applyDayUpdates(e){
+    const trEl = e.target.parentElement;
+    const titleInputField = trEl.firstChild;
+
+    let title = titleInputField.value;
+    const oldTitle =titleInputField.placeholder;
+    const id = titleInputField.id;
+
+    if(title === "" || title === " "){
+        title = oldTitle;
+    }
+
+    const data = JSON.stringify({"dayId":id,"title":title});
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load',onUpdateDayResponse);
+    xhr.addEventListener('error',onNetworkError);
+    xhr.open('PUT','protected/day');
+    xhr.setRequestHeader("Content-type","application/json");
+    xhr.send(data);
+}
+
+function onUpdateDayResponse(){
+    if(this.status === OK){
+        const userDto = JSON.parse(this.responseText);
+        onMainPageLoad(userDto);
+    }else {
+         onMessageResponse(daysContentDivEl, this);
+     }
 }
