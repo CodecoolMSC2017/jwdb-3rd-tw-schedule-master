@@ -23,7 +23,7 @@ public class SimpleUserService implements UserService {
     @Override
     public void register(String userName, String password, String email) throws SQLException, AlreadyRegisteredException {
         if (userDao.find(email) == null) {
-            userDao.insertUser(email, userName, password, "user");
+            userDao.insert(email, userName, password, "user");
         } else {
             throw new AlreadyRegisteredException();
         }
