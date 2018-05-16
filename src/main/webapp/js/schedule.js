@@ -96,7 +96,7 @@ function onCreateScheduleResponse(){
 function removeSchedule(e) {
     const liEL = e.target.parentElement;
     const id = liEL.id;
-
+    removeAllChildren(daysDiv);
     const data = JSON.stringify({"scheduleId": id});
 
 
@@ -119,6 +119,8 @@ function onDeleteScheduleResponse() {
 }
 
 function listingSchedules(e){
+    e.target.removeEventListener('click', listingSchedules);
+    e.target.addEventListener('click', hideListingSchedules);
     const idSchedule = e.target.parentElement.id;
     const xhr = new XMLHttpRequest();
 
@@ -142,10 +144,10 @@ function onListingResponse(){
 
 function listingDays(userDto){
     const table = document.createElement("table");
+    table.setAttribute("id", "schedule-table");
     let tr = document.createElement("tr");
-    let td;
     for(let i = 0; i < userDto.schedule.days.length ; i++){
-        td = document.createElement("td");
+        let td = document.createElement("td");
         let hoursTable = document.createElement("table");
         td.textContent = userDto.schedule.days[i].title;
         for(let j = 0; j < userDto.schedule.days[i].hours.length ; j++){
@@ -154,9 +156,17 @@ function listingDays(userDto){
             hoursTd.textContent = userDto.schedule.days[i].hours[j].value;
             hoursTr.appendChild(hoursTd);
             hoursTable.appendChild(hoursTr);
+
         }
         td.appendChild(hoursTable);
+        tr.appendChild(td);
     }
-    tr.appendChild(td);
     table.appendChild(tr);
+    daysDiv.appendChild(table);
+}
+
+function hideListingSchedules(e) {
+    e.target.removeEventListener('click', hideListingSchedules);
+    e.target.addEventListener('click', listingSchedules);
+    removeAllChildren(daysDiv);
 }

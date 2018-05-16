@@ -18,11 +18,15 @@ class DatabaseHourDao extends AbstractDaoFactory implements HourDao {
 
     @Override
     public void add(int dayId, int value) throws SQLException {
+        boolean autoCommit = connection.getAutoCommit();
+        connection.setAutoCommit(false);
         String sql = "INSERT INTO hour (day_id,value)VALUES(?,?);";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, dayId);
             statement.setInt(2, value);
             executeInsert(statement);
+        }finally {
+            connection.setAutoCommit(autoCommit);
         }
     }
 
