@@ -61,7 +61,6 @@
                                                                       href=javascript:void(0);
                                                                       onclick="toLogin();">Login
                 here</a></p>
-            </p>
         </div>
     </div>
 
