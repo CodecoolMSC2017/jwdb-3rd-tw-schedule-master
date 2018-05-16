@@ -15,9 +15,7 @@ class DatabaseUserDao extends AbstractDaoFactory implements UserDao {
     }
 
     @Override
-    public void insertUser(String email, String userName, String password, String role) throws SQLException {
-        boolean autoCommit = connection.getAutoCommit();
-        connection.setAutoCommit(false);
+    public void insert(String email, String userName, String password, String role) throws SQLException {
         String sql = "INSERT INTO app_user(email, user_name, password, role) VALUES (?,?,?,?)";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, email);
@@ -25,11 +23,6 @@ class DatabaseUserDao extends AbstractDaoFactory implements UserDao {
             statement.setString(3, password);
             statement.setString(4, role);
             executeInsert(statement);
-        } catch (SQLException ex) {
-            connection.rollback();
-            throw ex;
-        } finally {
-            connection.setAutoCommit(autoCommit);
         }
     }
 
@@ -40,7 +33,7 @@ class DatabaseUserDao extends AbstractDaoFactory implements UserDao {
             statement.setString(1, email);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    return fetchUser(resultSet);
+                    return fetch(resultSet);
                 }
             }
         }
@@ -55,7 +48,7 @@ class DatabaseUserDao extends AbstractDaoFactory implements UserDao {
             statement.setString(2, password);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    return fetchUser(resultSet);
+                    return fetch(resultSet);
                 }
             }
         }
@@ -69,13 +62,13 @@ class DatabaseUserDao extends AbstractDaoFactory implements UserDao {
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
-                users.add(fetchUser(resultSet));
+                users.add(fetch(resultSet));
             }
         }
         return users;
     }
 
-    private User fetchUser(ResultSet resultSet) throws SQLException {
+    private User fetch(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("id");
         String email = resultSet.getString("email");
         String userName = resultSet.getString("user_name");

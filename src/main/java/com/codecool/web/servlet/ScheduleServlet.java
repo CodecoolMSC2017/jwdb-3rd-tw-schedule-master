@@ -1,6 +1,7 @@
 package com.codecool.web.servlet;
 
 import com.codecool.web.dto.UserDto;
+import com.codecool.web.exception.TooManyDaysException;
 import com.codecool.web.model.Schedule;
 import com.codecool.web.model.Task;
 import com.codecool.web.model.User;
@@ -62,6 +63,8 @@ public class ScheduleServlet extends AbstractServlet {
 
         } catch (SQLException ex) {
             handleSqlError(resp, ex);
+        } catch (TooManyDaysException e) {
+            sendMessage(resp,HttpServletResponse.SC_BAD_REQUEST,e.getMessage());
         }
     }
 

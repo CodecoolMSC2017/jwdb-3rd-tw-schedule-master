@@ -7,17 +7,15 @@ import java.util.List;
 
 public interface DayDao {
 
-    Day addDay(int scheduleId, String title) throws SQLException;
+    Day add(int scheduleId, String title) throws SQLException;
 
-    void deleteDay(int id) throws SQLException;
+    void delete(int id) throws SQLException;
 
-    void deleteHourByDayId(int dayId)throws SQLException;
+    void deleteByScheduleId(int scheduleId)throws SQLException;
 
-    void deleteDayByScheduleId(int scheduleId)throws SQLException;
+    void update(int id, String newTitle) throws SQLException;
 
-    void updateDay(int id, String newTitle) throws SQLException;
+    Day findById(int id) throws SQLException;
 
-    Day findDayById(int id) throws SQLException;
-
-    List<Day> findDayByScheduleId(int scheduleId) throws SQLException;
+    List<Day> findByScheduleId(int scheduleId) throws SQLException;
 }

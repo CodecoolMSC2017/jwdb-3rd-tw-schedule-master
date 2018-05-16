@@ -1,5 +1,7 @@
 package com.codecool.web.dao.database;
 
+import com.codecool.web.model.Task;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -120,5 +122,13 @@ public abstract class AbstractDaoFactory {
         }
         connection.commit();
         return id;
+    }
+
+    public Task fetchTask(ResultSet resultSet) throws SQLException {
+        int id = resultSet.getInt("id");
+        int userId = resultSet.getInt("app_user_id");
+        String title = resultSet.getString("title");
+        String description = resultSet.getString("description");
+        return new Task(id, userId, title, description);
     }
 }

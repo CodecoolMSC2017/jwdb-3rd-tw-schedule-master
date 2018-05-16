@@ -13,9 +13,7 @@ class DatabaseDayDao extends AbstractDaoFactory implements DayDao {
     }
 
     @Override
-    public Day addDay(int scheduleId, String title) throws SQLException {
-        boolean autoCommit = connection.getAutoCommit();
-        connection.setAutoCommit(false);
+    public Day add(int scheduleId, String title) throws SQLException {
         String sql = "INSERT INTO day (schedule_id, title) VALUES (?,?)";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, scheduleId);
@@ -24,39 +22,30 @@ class DatabaseDayDao extends AbstractDaoFactory implements DayDao {
             int id = fetchGeneratedId(statement);
             return new Day(id, scheduleId, title);
         } catch (SQLException ex) {
-            connection.rollback();
             throw ex;
-        } finally {
-            connection.setAutoCommit(autoCommit);
         }
     }
 
     @Override
-    public void deleteDay(int id) throws SQLException {
+    public void delete(int id) throws SQLException {
         String sql = "DELETE FROM day WHERE id = ?";
         delete(id, sql);
     }
 
     @Override
-    public void deleteHourByDayId(int dayId) throws SQLException {
-        String sql = "DELETE FROM hour WHERE day_id = ?";
-        delete(dayId, sql);
-    }
-
-    @Override
-    public void deleteDayByScheduleId(int scheduleId) throws SQLException {
+    public void deleteByScheduleId(int scheduleId) throws SQLException {
         String sql = "DELETE FROM day WHERE schedule_id = ?";
         delete(scheduleId, sql);
     }
 
     @Override
-    public void updateDay(int id, String newTitle) throws SQLException {
-        String sql = "DELETE FROM task WHERE task.id = ?";
+    public void update(int id, String newTitle) throws SQLException {
+        String sql = "UPDATE day SET title = ? WHERE day.id = ?";
         update(id, newTitle, sql);
     }
 
     @Override
-    public Day findDayById(int id) throws SQLException {
+    public Day findById(int id) throws SQLException {
         String sql = "SELECT * FROM task WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
@@ -70,7 +59,7 @@ class DatabaseDayDao extends AbstractDaoFactory implements DayDao {
     }
 
     @Override
-    public List<Day> findDayByScheduleId(int scheduleId) throws SQLException {
+    public List<Day> findByScheduleId(int scheduleId) throws SQLException {
         List<Day> days = new ArrayList<>();
         String sql = "SELECT * FROM day WHERE schedule_id = ? ";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {

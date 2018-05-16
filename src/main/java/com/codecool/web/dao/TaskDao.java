@@ -7,17 +7,17 @@ import java.util.List;
 
 public interface TaskDao {
 
-    void addTask(int userId, String title, String description) throws SQLException;
+    void add(int userId, String title, String description) throws SQLException;
 
-    void deleteTask(int id) throws SQLException;
+    void delete(int id) throws SQLException;
 
-    void updateTaskTitle(int id, String newTitle) throws SQLException;
+    void updateTitle(int id, String newTitle) throws SQLException;
 
-    void updateTaskDescription(int id, String newDescription) throws SQLException;
+    void updateDescription(int id, String newDescription) throws SQLException;
 
-    Task findTaskById(int id) throws SQLException;
+    Task findById(int id) throws SQLException;
 
-    List<Task> findTaskByUserId(int userId) throws SQLException;
+    List<Task> findByUserId(int userId) throws SQLException;
 
-    List<Task> findAllTask() throws SQLException;
+    List<Task> findAll() throws SQLException;
 }

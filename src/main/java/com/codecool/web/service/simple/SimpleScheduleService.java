@@ -3,7 +3,9 @@ package com.codecool.web.service.simple;
 import com.codecool.web.dao.DayDao;
 import com.codecool.web.dao.HourDao;
 import com.codecool.web.dao.ScheduleDao;
+import com.codecool.web.dao.TaskHourDao;
 import com.codecool.web.dao.database.AbstractDaoFactory;
+import com.codecool.web.exception.TooManyDaysException;
 import com.codecool.web.model.Day;
 import com.codecool.web.model.Hour;
 import com.codecool.web.model.Schedule;
@@ -18,20 +20,25 @@ public class SimpleScheduleService implements ScheduleService {
     private final ScheduleDao scheduleDao;
     private final DayDao dayDao;
     private final HourDao hourDao;
+    private final TaskHourDao taskHourDao;
 
     public SimpleScheduleService(Connection connection) {
         scheduleDao = (ScheduleDao) AbstractDaoFactory.getDao("schedule", connection);
         dayDao = (DayDao) AbstractDaoFactory.getDao("day", connection);
         hourDao = (HourDao) AbstractDaoFactory.getDao("hour", connection);
+        taskHourDao = (TaskHourDao) AbstractDaoFactory.getDao("taskHour",connection);
     }
 
     @Override
-    public void createSchedule(String title, String description, int userId, int numOfDays) throws SQLException {
-        Schedule schedule = scheduleDao.addSchedule(userId, title, description);
+    public void createSchedule(String title, String description, int userId, int numOfDays) throws SQLException, TooManyDaysException {
+        if(numOfDays > 7 ){
+            throw new TooManyDaysException();
+        }
+        Schedule schedule = scheduleDao.add(userId, title, description);
         for (int i = 0; i < numOfDays; i++) {
             Day day = addDay(schedule.getId(), "Title");
             for (int j = 0; j < 24; j++) {
-                hourDao.addHour(day.getId(), j);
+                hourDao.add(day.getId(), j);
             }
         }
     }
@@ -39,11 +46,11 @@ public class SimpleScheduleService implements ScheduleService {
     @Override
     public void deleteSchedule(int scheduleId) throws SQLException {
         for (Day day : findDayByScheduleId(scheduleId)) {
-            dayDao.deleteHourByDayId(day.getId());
+            hourDao.deleteByDayId(day.getId());
         }
-        dayDao.deleteDayByScheduleId(scheduleId);
-
-        scheduleDao.deleteSchedule(scheduleId);
+        dayDao.deleteByScheduleId(scheduleId);
+        taskHourDao.deleteByScheduleId(scheduleId);
+        scheduleDao.delete(scheduleId);
     }
 
     @Override
@@ -64,9 +71,9 @@ public class SimpleScheduleService implements ScheduleService {
     @Override
     public Schedule findById(int scheduleId) throws SQLException {
         Schedule schedule = scheduleDao.findById(scheduleId);
-        List<Day> days = dayDao.findDayByScheduleId(scheduleId);
+        List<Day> days = dayDao.findByScheduleId(scheduleId);
         for (Day day : days) {
-            day.setHours(hourDao.findHoursByDayId(day.getId()));
+            day.setHours(hourDao.findByDayId(day.getId()));
         }
         schedule.setDays(days);
         return schedule;
@@ -74,7 +81,7 @@ public class SimpleScheduleService implements ScheduleService {
 
     @Override
     public List<Schedule> findAll() throws SQLException {
-        List<Schedule> schedules = scheduleDao.findall();
+        List<Schedule> schedules = scheduleDao.findAll();
         schedules = getSchedules(schedules);
         return schedules;
     }
@@ -88,9 +95,9 @@ public class SimpleScheduleService implements ScheduleService {
 
     private List<Schedule> getSchedules(List<Schedule> schedules) throws SQLException {
         for (Schedule schedule : schedules) {
-            List<Day> days = dayDao.findDayByScheduleId(schedule.getId());
+            List<Day> days = dayDao.findByScheduleId(schedule.getId());
             for (Day day : days) {
-                day.setHours(hourDao.findHoursByDayId(day.getId()));
+                day.setHours(hourDao.findByDayId(day.getId()));
             }
             schedule.setDays(days);
         }
@@ -99,32 +106,32 @@ public class SimpleScheduleService implements ScheduleService {
 
     @Override
     public Day addDay(int scheduleId, String title) throws SQLException {
-        return dayDao.addDay(scheduleId, title);
+        return dayDao.add(scheduleId, title);
     }
 
     @Override
     public void updateDay(int dayId, String title) throws SQLException {
-        dayDao.updateDay(dayId, title);
+        dayDao.update(dayId, title);
     }
 
     @Override
     public Day findDayById(int id) throws SQLException {
-        return dayDao.findDayById(id);
+        return dayDao.findById(id);
     }
 
     @Override
     public List<Day> findDayByScheduleId(int scheduleId) throws SQLException {
-        return dayDao.findDayByScheduleId(scheduleId);
+        return dayDao.findByScheduleId(scheduleId);
     }
 
     @Override
     public Hour findHourById(int id) throws SQLException {
-        return hourDao.findHourById(id);
+        return hourDao.findById(id);
     }
 
     @Override
     public List<Hour> findHoursByDayId(int dayId) throws SQLException {
-        return hourDao.findHoursByDayId(dayId);
+        return hourDao.findByDayId(dayId);
     }
 }
 

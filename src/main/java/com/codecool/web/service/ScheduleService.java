@@ -1,5 +1,6 @@
 package com.codecool.web.service;
 
+import com.codecool.web.exception.TooManyDaysException;
 import com.codecool.web.model.Day;
 import com.codecool.web.model.Hour;
 import com.codecool.web.model.Schedule;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public interface ScheduleService {
 
-    void createSchedule(String title, String description, int userId, int numOfDays)throws SQLException;
+    void createSchedule(String title, String description, int userId, int numOfDays) throws SQLException, TooManyDaysException;
 
     void deleteSchedule(int scheduleId)throws SQLException;
 

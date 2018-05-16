@@ -17,7 +17,7 @@ class DatabaseHourDao extends AbstractDaoFactory implements HourDao {
     }
 
     @Override
-    public void addHour(int dayId, int value) throws SQLException {
+    public void add(int dayId, int value) throws SQLException {
         String sql = "INSERT INTO hour (day_id,value)VALUES(?,?);";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, dayId);
@@ -27,33 +27,40 @@ class DatabaseHourDao extends AbstractDaoFactory implements HourDao {
     }
 
     @Override
-    public void deleteHour(int id) throws SQLException {
+    public void delete(int id) throws SQLException {
         String sql = "DELETE FROM hour WHERE id = ?;";
         delete(id, sql);
 
     }
 
     @Override
-    public Hour findHourById(int id) throws SQLException {
+    public void deleteByDayId(int dayId) throws SQLException {
+        String sql = "DELETE FROM hour WHERE day_id = ?";
+        delete(dayId, sql);
+    }
+
+
+    @Override
+    public Hour findById(int id) throws SQLException {
         String sql = "SELECT * FROM hour WHERE id = ?;";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
-                return fetchHour(resultSet);
+                return fetch(resultSet);
             }
         }
 
     }
 
     @Override
-    public List<Hour> findHoursByDayId(int dayId) throws SQLException {
+    public List<Hour> findByDayId(int dayId) throws SQLException {
         List<Hour> hours = new ArrayList<>();
         String sql = "SELECT * FROM hour WHERE day_id = ?;";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, dayId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    hours.add(fetchHour(resultSet));
+                    hours.add(fetch(resultSet));
                 }
             }
         }
@@ -61,8 +68,7 @@ class DatabaseHourDao extends AbstractDaoFactory implements HourDao {
 
     }
 
-
-    private Hour fetchHour(ResultSet resultSet) throws SQLException {
+    private Hour fetch(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("id");
         int dayId = resultSet.getInt("day_id");
         int value = resultSet.getInt("value");

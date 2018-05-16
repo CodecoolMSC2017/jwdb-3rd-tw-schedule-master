@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface ScheduleDao {
 
-    Schedule addSchedule(int appUserId, String title, String description) throws SQLException;
+    Schedule add(int appUserId, String title, String description) throws SQLException;
 
-    void deleteSchedule(int id) throws SQLException;
+    void delete(int id) throws SQLException;
 
     void updateTitle(int id, String title) throws SQLException;
 
@@ -20,7 +20,7 @@ public interface ScheduleDao {
 
     List<Schedule> findAllByUserId(int userId) throws SQLException;
 
-    List<Schedule> findall() throws SQLException;
+    List<Schedule> findAll() throws SQLException;
 
 
 }

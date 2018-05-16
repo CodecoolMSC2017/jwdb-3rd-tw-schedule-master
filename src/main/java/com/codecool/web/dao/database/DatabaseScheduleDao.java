@@ -13,9 +13,7 @@ class DatabaseScheduleDao extends AbstractDaoFactory implements ScheduleDao {
     }
 
     @Override
-    public Schedule addSchedule(int appUserId, String title, String description) throws SQLException {
-        boolean autoCommit = connection.getAutoCommit();
-        connection.setAutoCommit(false);
+    public Schedule add(int appUserId, String title, String description) throws SQLException {
         String sql = "INSERT INTO schedule (app_user_id, title, description) VALUES (?,?,?)";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, appUserId);
@@ -24,23 +22,17 @@ class DatabaseScheduleDao extends AbstractDaoFactory implements ScheduleDao {
             executeInsert(statement);
             int id = fetchGeneratedId(statement);
             return new Schedule(id,appUserId,title,description);
-        } catch (SQLException ex) {
-            connection.rollback();
-            throw ex;
-        } finally {
-            connection.setAutoCommit(autoCommit);
         }
     }
 
     @Override
-    public void deleteSchedule(int id) throws SQLException {
+    public void delete(int id) throws SQLException {
         String sql = "Delete from schedule\n" +
                 " where id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, id);
             statement.executeUpdate();
         }
-
     }
 
     @Override
@@ -77,7 +69,7 @@ class DatabaseScheduleDao extends AbstractDaoFactory implements ScheduleDao {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    return fetchSchedule(resultSet);
+                    return fetch(resultSet);
                 }
             }
         }
@@ -93,7 +85,7 @@ class DatabaseScheduleDao extends AbstractDaoFactory implements ScheduleDao {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    schedules.add(fetchSchedule(resultSet));
+                    schedules.add(fetch(resultSet));
                 }
             }
         }
@@ -101,19 +93,19 @@ class DatabaseScheduleDao extends AbstractDaoFactory implements ScheduleDao {
     }
 
     @Override
-    public List<Schedule> findall() throws SQLException {
+    public List<Schedule> findAll() throws SQLException {
         List<Schedule> schedules = new ArrayList<>();
         String sql = "Select * from schedule";
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
-                schedules.add(fetchSchedule(resultSet));
+                schedules.add(fetch(resultSet));
             }
         }
         return schedules;
     }
 
-    private Schedule fetchSchedule(ResultSet resultSet) throws SQLException {
+    private Schedule fetch(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("id");
         int userID = resultSet.getInt("app_user_id");
         String title = resultSet.getString("title");
