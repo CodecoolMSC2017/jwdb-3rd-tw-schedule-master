@@ -162,12 +162,12 @@ function listingDays(userDto) {
 
     const updateButt = document.createElement("button");
     updateButt.addEventListener('click',updateScheduleFields);
-    updateButt.setAttribute("class","change-schedule-fields");
+    updateButt.setAttribute("class", "change-btn");
+    updateButt.rowSpan = "2";
 
     const titleRow = document.createElement("tr");
     titleRow.setAttribute("id", userDto.schedule.id);
     titleRow.setAttribute("class", "name-row");
-    titleRow.appendChild(updateButt);
     titleRow.colSpan = userDto.schedule.days.length;
 
     const descriptionRow = document.createElement("tr");
@@ -181,6 +181,7 @@ function listingDays(userDto) {
     descriptionTd.textContent = userDto.schedule.description;
 
     titleRow.appendChild(titleTd);
+    titleRow.appendChild(updateButt);
     descriptionRow.appendChild(descriptionTd);
 
     table.appendChild(titleRow);
@@ -300,7 +301,7 @@ function updateScheduleFields(e){
     const trEl = scheduleUpdateButt.parentElement;
     const table = trEl.parentElement;
 
-    const titleEl = e.target.parentElement.firstChild;
+    const titleEl = trEl.firstChild;
     const descEl = table.children.item(1).firstChild;
 
     const oldTitle = titleEl.textContent;
@@ -325,5 +326,51 @@ function updateScheduleFields(e){
     trEl.insertBefore(titleInputEl,scheduleUpdateButt);
     table.children.item(1).appendChild(descInputEl);
 
+
+}
+
+function applyScheduleUpdates(e) {
+    const scheduleUpdateButt = e.target;
+    const trEl = scheduleUpdateButt.parentElement;
+    const table = trEl.parentElement;
+
+    const titleInputEl = e.target.parentElement.firstChild;
+    const descInputEl = table.children.item(1).firstChild;
+
+    const id = table.id;
+
+    let title = titleInputEl.value;
+    const oldTitle = titleInputEl.placeholder;
+
+    let desc = descInputEl.value;
+    const oldDesc = descInputEl.placeholder;
+
+    if (title == null || title === "" || title === " ") {
+        title = oldTitle;
+    }
+    if (desc == null || desc === "" || desc === " ") {
+        desc = oldDesc;
+    }
+
+    const data = JSON.stringify({"scheduleId": id, "description": desc, "title": title});
+
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onUpdateScheduleResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('PUT', 'protected/schedule');
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.send(data);
+}
+
+function onUpdateScheduleResponse() {
+    if (this.status === OK) {
+        const userDto = JSON.parse(this.responseText);
+        removeAllChildren(daysDiv);
+        document.getElementById("schedulesUl").remove();
+        createScheduleDiv(userDto);
+        listingDays(userDto);
+    } else {
+        onMessageResponse(mainDiv, this);
+    }
 
 }
