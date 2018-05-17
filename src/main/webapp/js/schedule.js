@@ -1,11 +1,7 @@
 function showSchedule() {
     const scheduleEl = document.getElementById("schedulesUl");
     scheduleEl.classList.remove('hidden');
-    const btnList = document.getElementsByClassName("show-task-btn");
-    for (let i = 0; i < btnList.length; i++) {
-        btnList[i].removeEventListener('click', hideSchedule);
-        btnList[i].addEventListener('click', showSchedule);
-    }
+    scheduleButtonEl.removeEventListener('click', showSchedule);
     scheduleButtonEl.addEventListener('click', hideSchedule);
 }
 
@@ -138,6 +134,11 @@ function onDeleteScheduleResponse() {
 function listingSchedules(e) {
     e.target.removeEventListener('click', listingSchedules);
     e.target.addEventListener('click', hideListingSchedules);
+    const btnList = document.getElementsByClassName("show-schedule-span");
+    for (let i = 0; i < btnList.length; i++) {
+        btnList[i].removeEventListener('click', hideListingSchedules);
+        btnList[i].addEventListener('click', listingSchedules);
+    }
     const idSchedule = e.target.parentElement.id;
     const xhr = new XMLHttpRequest();
 

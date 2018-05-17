@@ -63,6 +63,7 @@ ul {
 li {
     border: 2px solid black;
     border-radius: 3px;
+    font-size: 16px;
     display: block;
     background-color: white;
     width: 220px;
@@ -263,17 +264,23 @@ li {
 }
 
 .delete-btn {
-    background: white url(img/remove.png) center;
-    width: 40px;
-    height: 40px;
+    background: white url(img/remove-mini.png) center;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 25px;
+    height: 25px;
     margin: 5px;
+    display: inline;
+
 }
 
 .change-btn {
-    background: white url(img/update.png) center;
-    width: 40px;
-    height: 40px;
+    background: white url(img/update-mini.png) center;
+    width: 25px;
+    height: 25px;
     margin: 5px;
+    display: inline;
 }
 
 .create-min-btn {
@@ -420,7 +427,7 @@ li {
     width: 100%;
  }
 
-.hours-row {
+.hours-td {
     border-bottom: 1px solid dimgrey;
 }
 
