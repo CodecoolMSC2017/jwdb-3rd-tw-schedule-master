@@ -77,7 +77,7 @@ public class ScheduleServlet extends AbstractServlet {
             int userId = user.getId();
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
             List<Task> tasks = taskService.findAllByUserId(userId);
-            UserDto userDto = new UserDto(user, tasks, schedules);
+
 
             JsonNode jsonNode = createJsonNodeFromRequest(req);
 
@@ -86,7 +86,9 @@ public class ScheduleServlet extends AbstractServlet {
             String scheduleDescription = jsonNode.get("description").textValue();
 
             scheduleService.updateSchedule(scheduleId, scheduleTitle, scheduleDescription);
+            schedules = scheduleService.findAllByUserId(userId);
             Schedule schedule = scheduleService.findById(scheduleId);
+            UserDto userDto = new UserDto(user, tasks, schedules);
             userDto.setSchedule(schedule);
             sendMessage(resp, 200, userDto);
         } catch (SQLException e) {
