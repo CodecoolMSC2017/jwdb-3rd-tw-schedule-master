@@ -4,7 +4,6 @@
    ******************
  */
 
-
 .error {
     color: red;
 }
@@ -72,7 +71,11 @@ li {
     margin-left: auto;
     margin-right: auto;
     position: relative;
-    vertical-align : center;
+    vertical-align: center;
+}
+
+li:first-child {
+    margin-top: 4px;
 }
 
 #logout-button {
@@ -263,6 +266,16 @@ li {
     margin: 5px;
 }
 
+.close-btn-min {
+    background: white url(img/back-mini.png) center;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 25px;
+    height: 25px;
+    margin: 5px;
+}
+
 .delete-btn {
     background: white url(img/remove-mini.png) center;
     position: absolute;
@@ -276,6 +289,14 @@ li {
 }
 
 .change-btn {
+    background: white url(img/update.png) center;
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    display: inline;
+}
+
+.change-btn-min {
     background: white url(img/update-mini.png) center;
     width: 25px;
     height: 25px;
@@ -378,62 +399,64 @@ li {
    ******************
  */
 
- .schedule-table {
-     border-collapse: collapse;
-     margin-right: auto;
-     margin-left: auto;
-     max-width: 95%;
- }
+.schedule-table {
+    border-collapse: collapse;
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 95%;
+}
 
- .day-td{
+.day-td {
     background-color: gray;
     color: black;
+    border-top: 2px solid black;
     border-right: 2px solid black;
     border-left: 2px solid black;
-     min-width: 150px;
- }
+    min-width: 150px;
+}
 
- .name-row {
-     text-align: center;
-     background-color: #d62c1a;
-     color: #FFF;
-     border-left: 2px solid black;
-     border-top: 2px solid black;
-     border-right: 2px solid black;
-     font-size : 25px;
-     font-weight: 600;
-     width: 100%;
+.name-row {
+    text-align: center;
+    background-color: #d62c1a;
+    color: #FFF;
+    border-left: 2px solid black;
+    border-top: 2px solid black;
+    border-right: 2px solid black;
+    font-size: 25px;
+    font-weight: 600;
+    width: 100%;
 
- }
+}
 
- .desc-row {
-     text-align: center;
-     background-color: #d62c1a;
-     border-left: 2px solid black;
-     border-right: 2px solid black;
-     color: #FFF;
-     font-size : 25px;
-     font-weight: 600;
-     width: 100%;
+.desc-row {
+    text-align: center;
+    background-color: #d62c1a;
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+    color: #FFF;
+    font-size: 25px;
+    font-weight: 600;
+    width: 100%;
 
- }
+}
 
- .day-row {
-     text-align: center;
- }
- .hours-table{
+.day-row {
+    text-align: center;
+}
+
+.hours-table {
     background-color: white;
     text-align: center;
     width: 100%;
- }
+}
 
 .hours-td {
     border-bottom: 1px solid dimgrey;
 }
 
- .change-sched-fields{
+.change-sched-fields {
     background-color: #d62c1a;
- }
+}
 
 
 
