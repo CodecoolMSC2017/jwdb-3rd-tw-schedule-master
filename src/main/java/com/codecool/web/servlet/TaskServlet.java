@@ -9,7 +9,6 @@ import com.codecool.web.service.TaskService;
 import com.codecool.web.service.simple.SimpleScheduleService;
 import com.codecool.web.service.simple.SimpleTaskService;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +22,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class TaskServlet extends AbstractServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskService taskService = new SimpleTaskService(connection);
             ScheduleService scheduleService = new SimpleScheduleService(connection);
@@ -43,17 +42,13 @@ public class TaskServlet extends AbstractServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskService taskService = new SimpleTaskService(connection);
-            ScheduleService scheduleService = new SimpleScheduleService(connection);
             User user = getUser(req);
             int userId = user.getId();
             String taskTitle = req.getParameter("title");
             String taskDescription = req.getParameter("description");
 
             taskService.addTask(userId, taskTitle, taskDescription);
-            List<Schedule> schedules = scheduleService.findAllByUserId(userId);
-            List<Task> tasks = taskService.findAllByUserId(userId);
-            UserDto userDto = new UserDto(user, tasks, schedules);
-            sendMessage(resp, HttpServletResponse.SC_OK, userDto);
+            doGet(req,resp);
 
         } catch (SQLException ex) {
             handleSqlError(resp, ex);
@@ -74,13 +69,8 @@ public class TaskServlet extends AbstractServlet {
             String taskTitle = jsonNode.get("title").textValue();
             String taskDescription = jsonNode.get("description").textValue();
 
-            List<Schedule> schedules = scheduleService.findAllByUserId(userId);
             taskService.update(taskId, taskTitle, taskDescription);
-            List<Task> tasks = taskService.findAllByUserId(userId);
-
-            UserDto userDto = new UserDto(user, tasks, schedules);
-
-            sendMessage(resp, HttpServletResponse.SC_OK, userDto);
+            doGet(req,resp);
 
         } catch (SQLException e) {
             handleSqlError(resp, e);
@@ -93,20 +83,12 @@ public class TaskServlet extends AbstractServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskService taskService = new SimpleTaskService(connection);
-            ScheduleService scheduleService = new SimpleScheduleService(connection);
-            User user = getUser(req);
-            int userId = user.getId();
-
             JsonNode jsonNode = createJsonNodeFromRequest(req);
 
             int taskId = Integer.parseInt(jsonNode.get("taskId").textValue());
 
             taskService.deleteTask(taskId);
-            List<Schedule> schedules = scheduleService.findAllByUserId(userId);
-            List<Task> tasks = taskService.findAllByUserId(userId);
-            UserDto userDto = new UserDto(user, tasks, schedules);
-
-            sendMessage(resp, HttpServletResponse.SC_OK, userDto);
+            doGet(req,resp);
 
         } catch (SQLException e) {
             handleSqlError(resp, e);
