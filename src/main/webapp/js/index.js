@@ -30,7 +30,7 @@ function newError(targetEl, message) {
 function newMessage(targetEl, cssClass, message) {
     clearMessages();
 
-    const pEl = document.createElement('h2');
+    const pEl = document.createElement('h3');
     pEl.classList.add('message');
     pEl.classList.add(cssClass);
     pEl.textContent = message;

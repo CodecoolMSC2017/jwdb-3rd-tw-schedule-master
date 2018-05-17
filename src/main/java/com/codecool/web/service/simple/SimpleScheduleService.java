@@ -31,7 +31,7 @@ public class SimpleScheduleService implements ScheduleService {
 
     @Override
     public void createSchedule(String title, String description, int userId, int numOfDays) throws SQLException, TooManyDaysException {
-        if(numOfDays > 7 ){
+        if(numOfDays > 7 || numOfDays == 0){
             throw new TooManyDaysException();
         }
         Schedule schedule = scheduleDao.add(userId, title, description);

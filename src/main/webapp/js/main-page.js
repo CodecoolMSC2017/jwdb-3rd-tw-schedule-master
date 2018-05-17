@@ -58,13 +58,11 @@ function createTaskDiv(userDto) {
 
         let renameTaskButt = document.createElement("button");
         renameTaskButt.addEventListener('click', updateTask);
-        renameTaskButt.textContent = "Update";
         renameTaskButt.setAttribute("class", "change-btn");
 
 
         let deleteTaskButt = document.createElement("button");
         deleteTaskButt.addEventListener('click', removeTask);
-        deleteTaskButt.textContent = "Remove";
         deleteTaskButt.setAttribute("class", "delete-btn");
 
 
@@ -81,7 +79,7 @@ function createTaskDiv(userDto) {
 
     createButton.addEventListener('click',showCreateTask);
     createButton.setAttribute("id", "to-createTask-button");
-    createButton.textContent = "Create Task";
+    createButton.setAttribute("class", "create-min-btn");
 
     taskCreateLiEl.appendChild(createButton);
     taskEl.appendChild(taskCreateLiEl);
@@ -105,7 +103,6 @@ function createScheduleDiv(userDto){
 
         let deleteScheduleButt = document.createElement("button");
         deleteScheduleButt.addEventListener('click',removeSchedule);
-        deleteScheduleButt.textContent = "Remove";
         deleteScheduleButt.setAttribute("class", "delete-btn");
 
 
@@ -119,7 +116,7 @@ function createScheduleDiv(userDto){
 
     createButton.addEventListener('click',showCreateSchedule);
     createButton.setAttribute("id","to-createSchedule-button");
-    createButton.textContent = "Create Schedule";
+    createButton.setAttribute("class", "create-min-btn");
 
     scheduleCreateLiEl.appendChild(createButton);
     scheduleEl.appendChild(scheduleCreateLiEl);

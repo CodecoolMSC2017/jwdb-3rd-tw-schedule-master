@@ -4,6 +4,6 @@ public class TooManyDaysException extends Exception{
 
 
     public TooManyDaysException() {
-        super("Number of days can not be more than 7");
+        super("Number of days can not be more than 7 or less than 1");
     }
 }
