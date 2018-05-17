@@ -228,7 +228,7 @@ li {
 
 .create-div {
     margin-top: 20px;
-    min-height: 200px;
+    min-height: 250px;
     width: 245px;
     border: 2px solid black;
     border-radius: 3px;
@@ -270,6 +270,13 @@ li {
 
 .change-btn {
     background: white url(img/update.png) center;
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+}
+
+.create-min-btn {
+    background: white url(img/create.png) center;
     width: 40px;
     height: 40px;
     margin: 5px;
@@ -356,6 +363,66 @@ li {
 .task-li {
     color: #24A83C;
 }
+
+/*
+   ******************
+         DAYS
+   ******************
+ */
+
+ .schedule-table {
+     border-collapse: collapse;
+     margin-right: auto;
+     margin-left: auto;
+     width: 95%;
+ }
+
+ .name-row {
+     text-align: center;
+     background-color: blue;
+     color: #FFF;
+     padding: 4px 30px 4px 8px;
+     width: 100%;
+ }
+
+ .desc-row {
+     text-align: center;
+     background-color: green;
+     color: #FFF;
+     padding: 4px 30px 4px 8px;
+     width: 100%;
+
+ }
+
+ .day-row {
+     text-align: center;
+     background-color: #3a6070;
+     color: #FFF;
+     padding: 4px 30px 4px 8px;
+     width: 100%;
+
+ }
+
+ .hours-row{
+     text-align: center;
+     background-color: #3a6070;
+     color: #FFF;
+     padding: 4px 30px 4px 8px;
+     width: 100%;
+ }
+
+ .hours-td{
+    border: 1px solid #e3e3e3;
+    padding: 4px 8px;
+ }
+
+
+ .title-span{
+    text-align: center;
+    width: 100%;
+    background-color: red;
+ }
+
 
 
 
