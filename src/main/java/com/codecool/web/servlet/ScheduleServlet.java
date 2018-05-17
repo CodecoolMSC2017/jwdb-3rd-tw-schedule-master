@@ -49,7 +49,6 @@ public class ScheduleServlet extends AbstractServlet {
             }
 
             sendMessage(resp, HttpServletResponse.SC_OK, userDto);
-
         } catch (SQLException ex) {
             handleSqlError(resp, ex);
         }
@@ -67,8 +66,8 @@ public class ScheduleServlet extends AbstractServlet {
             int scheduleDays = Integer.parseInt(req.getParameter("days"));
 
             scheduleService.createSchedule(scheduleTitle, scheduleDescription, userId, scheduleDays);
-            doGet(req, resp);
 
+            doGet(req, resp);
         } catch (SQLException ex) {
             handleSqlError(resp, ex);
         } catch (TooManyDaysException e) {
@@ -88,8 +87,8 @@ public class ScheduleServlet extends AbstractServlet {
             String scheduleDescription = jsonNode.get("description").textValue();
 
             scheduleService.updateSchedule(scheduleId, scheduleTitle, scheduleDescription);
-            doGet(req, resp);
 
+            doGet(req, resp);
         } catch (SQLException e) {
             handleSqlError(resp, e);
         } catch (Exception e) {
@@ -108,8 +107,8 @@ public class ScheduleServlet extends AbstractServlet {
             int scheduleId = Integer.parseInt(jsonNode.get("scheduleId").textValue());
 
             scheduleService.deleteSchedule(scheduleId);
-            doGet(req, resp);
 
+            doGet(req, resp);
         } catch (SQLException e) {
             handleSqlError(resp, e);
         }

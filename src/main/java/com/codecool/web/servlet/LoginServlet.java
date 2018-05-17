@@ -31,7 +31,6 @@ public final class LoginServlet extends AbstractServlet {
             TaskService taskService = new SimpleTaskService(connection);
             ScheduleService scheduleService = new SimpleScheduleService(connection);
 
-
             String email = req.getParameter("email");
             String password = req.getParameter("password");
 

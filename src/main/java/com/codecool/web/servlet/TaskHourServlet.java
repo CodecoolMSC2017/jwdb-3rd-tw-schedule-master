@@ -34,8 +34,8 @@ public class TaskHourServlet extends AbstractServlet {
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
             List<Task> tasks = taskService.findAllByUserId(userId);
             UserDto userDto = new UserDto(user, tasks, schedules);
-            sendMessage(resp, HttpServletResponse.SC_OK, userDto);
 
+            sendMessage(resp, HttpServletResponse.SC_OK, userDto);
         } catch (SQLException ex) {
             handleSqlError(resp, ex);
         }
@@ -48,14 +48,13 @@ public class TaskHourServlet extends AbstractServlet {
             int scheduleId = Integer.parseInt(req.getParameter("scheduleId"));
             int taskId = Integer.parseInt(req.getParameter("taskId"));
             String[] hourIds = req.getParameter("hourIds").split(",");
+
             taskHourService.connectTaskToSchedule(scheduleId, taskId, hourIds);
+
             doGet(req, resp);
         } catch (SQLException e) {
-
             handleSqlError(resp, e);
-
         } catch (InvalidArgumentException e) {
-
             sendMessage(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         }
     }
@@ -67,14 +66,13 @@ public class TaskHourServlet extends AbstractServlet {
             int scheduleId = Integer.parseInt(req.getParameter("scheduleId"));
             int taskId = Integer.parseInt(req.getParameter("taskId"));
             String[] newHourIds = req.getParameter("hourIds").split(",");
+
             taskHourService.updateHours(scheduleId, taskId, newHourIds);
+
             doGet(req,resp);
         } catch (SQLException e) {
-
             handleSqlError(resp, e);
-
         } catch (InvalidArgumentException e) {
-
             sendMessage(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         }
     }
@@ -86,11 +84,10 @@ public class TaskHourServlet extends AbstractServlet {
             JsonNode jsonNode = createJsonNodeFromRequest(req);
             int id = Integer.parseInt(jsonNode.get("id").textValue());
             String disconnectType = jsonNode.get("disconnectType").textValue();
+
             taskHourService.disconnect(disconnectType, id);
         } catch (SQLException e) {
-
-                handleSqlError(resp, e);
-
+            handleSqlError(resp, e);
         }
     }
 }

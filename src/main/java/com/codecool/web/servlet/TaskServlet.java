@@ -28,11 +28,12 @@ public class TaskServlet extends AbstractServlet {
             ScheduleService scheduleService = new SimpleScheduleService(connection);
             User user = getUser(req);
             int userId = user.getId();
+
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
             List<Task> tasks = taskService.findAllByUserId(userId);
             UserDto userDto = new UserDto(user, tasks, schedules);
-            sendMessage(resp, HttpServletResponse.SC_OK, userDto);
 
+            sendMessage(resp, HttpServletResponse.SC_OK, userDto);
         } catch (SQLException ex) {
             handleSqlError(resp, ex);
         }
@@ -48,8 +49,8 @@ public class TaskServlet extends AbstractServlet {
             String taskDescription = req.getParameter("description");
 
             taskService.addTask(userId, taskTitle, taskDescription);
-            doGet(req,resp);
 
+            doGet(req,resp);
         } catch (SQLException ex) {
             handleSqlError(resp, ex);
         }
@@ -71,7 +72,6 @@ public class TaskServlet extends AbstractServlet {
 
             taskService.update(taskId, taskTitle, taskDescription);
             doGet(req,resp);
-
         } catch (SQLException e) {
             handleSqlError(resp, e);
         } catch (Exception e) {
@@ -88,8 +88,8 @@ public class TaskServlet extends AbstractServlet {
             int taskId = Integer.parseInt(jsonNode.get("taskId").textValue());
 
             taskService.deleteTask(taskId);
-            doGet(req,resp);
 
+            doGet(req,resp);
         } catch (SQLException e) {
             handleSqlError(resp, e);
         }
