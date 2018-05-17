@@ -162,6 +162,7 @@ function onListingResponse() {
 }
 
 function listingDays(userDto) {
+    clearMessages();
     const table = document.createElement("table");
     table.setAttribute("class", "schedule-table");
     table.setAttribute("id",userDto.schedule.id);

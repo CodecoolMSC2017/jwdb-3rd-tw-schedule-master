@@ -38,6 +38,7 @@ function onMainPageLoad(userDto) {
 }
 
 function createTaskDiv(userDto) {
+    clearMessages();
     const taskEl = document.createElement("ul");
     taskEl.setAttribute("id","tasksUl");
     for (let i = 0; i < userDto.tasks.length; i++) {
@@ -88,6 +89,7 @@ function createTaskDiv(userDto) {
 }
 
 function createScheduleDiv(userDto){
+    clearMessages();
     const scheduleEl = document.createElement("ul");
     scheduleEl.setAttribute("id","schedulesUl");
 
