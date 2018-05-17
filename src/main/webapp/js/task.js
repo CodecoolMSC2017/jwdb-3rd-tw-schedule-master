@@ -33,7 +33,9 @@ function updateTask(e) {
 
     const closeTaskButt = document.createElement("button");
     closeTaskButt.addEventListener('click', closeChangeTask);
-    closeTaskButt.setAttribute("class", "close-btn");
+    closeTaskButt.setAttribute("class", "close-btn-min");
+
+    const breakEl = document.createElement("br");
 
 
     const descInputEl = document.createElement("INPUT");
@@ -44,9 +46,12 @@ function updateTask(e) {
     buttonEl.removeEventListener('click', updateTask);
     buttonEl.addEventListener('click', applyTaskUpdates);
 
+
+    liEl.insertBefore(breakEl, buttonEl);
     liEl.insertBefore(titleInputEl, buttonEl);
     liEl.insertBefore(descInputEl, buttonEl);
     liEl.insertBefore(closeTaskButt, buttonEl);
+    liEl.insertBefore(breakEl, buttonEl);
 
 }
 

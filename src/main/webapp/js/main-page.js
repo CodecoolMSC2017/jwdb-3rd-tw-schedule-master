@@ -58,7 +58,7 @@ function createTaskDiv(userDto) {
 
         let renameTaskButt = document.createElement("button");
         renameTaskButt.addEventListener('click', updateTask);
-        renameTaskButt.setAttribute("class", "change-btn");
+        renameTaskButt.setAttribute("class", "change-btn-min");
 
 
         let deleteTaskButt = document.createElement("button");

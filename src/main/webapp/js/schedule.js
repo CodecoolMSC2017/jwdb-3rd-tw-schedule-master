@@ -132,13 +132,13 @@ function onDeleteScheduleResponse() {
 }
 
 function listingSchedules(e) {
-    e.target.removeEventListener('click', listingSchedules);
-    e.target.addEventListener('click', hideListingSchedules);
     const btnList = document.getElementsByClassName("show-schedule-span");
     for (let i = 0; i < btnList.length; i++) {
         btnList[i].removeEventListener('click', hideListingSchedules);
         btnList[i].addEventListener('click', listingSchedules);
     }
+    e.target.removeEventListener('click', listingSchedules);
+    e.target.addEventListener('click', hideListingSchedules);
     const idSchedule = e.target.parentElement.id;
     const xhr = new XMLHttpRequest();
 
@@ -225,7 +225,7 @@ function listingDays(userDto) {
 
         let renameButt = document.createElement("button");
         renameButt.setAttribute("id", userDto.schedule.days[i].title);
-        renameButt.setAttribute("class","change-btn");
+        renameButt.setAttribute("class", "change-btn-min");
         renameButt.addEventListener('click', renameDay);
         td.appendChild(renameButt);
 
