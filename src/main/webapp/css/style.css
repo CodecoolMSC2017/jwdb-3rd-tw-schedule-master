@@ -375,57 +375,48 @@ li {
      border-collapse: collapse;
      margin-right: auto;
      margin-left: auto;
-     width: 95%;
+     max-width: 95%;
+ }
+
+ .day-td{
+    background-color: gray;
+    color: black;
+    border-right: 2px solid black;
+    border-left: 2px solid black;
+    min-width: 300px;
+    border-bottom: 1px solid gray;
  }
 
  .name-row {
      text-align: center;
-     background-color: blue;
+     background-color: #d62c1a;
      color: #FFF;
-     padding: 4px 30px 4px 8px;
+     font-size : 25px;
+     font-weight: 600;
      width: 100%;
  }
 
  .desc-row {
      text-align: center;
-     background-color: green;
+     background-color: #d62c1a;
      color: #FFF;
-     padding: 4px 30px 4px 8px;
+     font-size : 25px;
+     font-weight: 600;
      width: 100%;
 
  }
 
  .day-row {
      text-align: center;
-     background-color: #3a6070;
-     color: #FFF;
-     padding: 4px 30px 4px 8px;
-     width: 100%;
-
  }
-
- .hours-row{
-     text-align: center;
-     background-color: #3a6070;
-     color: #FFF;
-     padding: 4px 30px 4px 8px;
-     width: 100%;
- }
-
- .hours-td{
-    border: 1px solid #e3e3e3;
-    padding: 4px 8px;
- }
-
-
- .title-span{
+ .hours-table{
+    background-color: white;
     text-align: center;
     width: 100%;
-    background-color: red;
  }
 
  .change-sched-fields{
-    background-color: black;
+    background-color: #d62c1a;
  }
 
 
