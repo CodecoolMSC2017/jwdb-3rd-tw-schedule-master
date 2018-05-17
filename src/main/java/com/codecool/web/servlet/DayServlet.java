@@ -33,12 +33,15 @@ public class DayServlet extends AbstractServlet {
 
             int dayId = Integer.parseInt(jsonNode.get("dayId").textValue());
             String dayTitle = jsonNode.get("title").textValue();
+            int scheduleId = Integer.parseInt(jsonNode.get("scheduleId").textValue());
 
             scheduleService.updateDay(dayId, dayTitle);
+            Schedule schedule = scheduleService.findById(scheduleId);
 
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
             List<Task> tasks = taskService.findAllByUserId(userId);
             UserDto userDto = new UserDto(user, tasks, schedules);
+            userDto.setSchedule(schedule);
 
             sendMessage(resp, HttpServletResponse.SC_OK, userDto);
         } catch (SQLException e) {

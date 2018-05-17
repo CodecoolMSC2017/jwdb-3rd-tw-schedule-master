@@ -10,11 +10,7 @@ function showTasks(){
 function hideTasks(){
     const taskEl = document.getElementById("tasksUl");
     taskEl.classList.add('hidden');
-    const taskRem = document.getElementById("create-task");
     taskButtonEl.removeEventListener('click', hideTasks);
-    if(taskRem !== null) {
-        taskRem.remove();
-    }
     taskButtonEl.addEventListener('click', showTasks);
 }
 
@@ -32,17 +28,25 @@ function updateTask(e) {
 
     const titleInputEl = document.createElement("INPUT");
     titleInputEl.setAttribute("type", "text");
+    titleInputEl.setAttribute("class", "input-min");
     titleInputEl.placeholder = oldTitle;
+
+    const closeTaskButt = document.createElement("button");
+    closeTaskButt.addEventListener('click', closeChangeTask);
+    closeTaskButt.setAttribute("class", "close-btn");
+
 
     const descInputEl = document.createElement("INPUT");
     descInputEl.setAttribute("type", "text");
     descInputEl.placeholder = oldDesc;
+    descInputEl.setAttribute("class", "input-min");
 
     buttonEl.removeEventListener('click', updateTask);
     buttonEl.addEventListener('click', applyTaskUpdates);
 
     liEl.insertBefore(titleInputEl, buttonEl);
     liEl.insertBefore(descInputEl, buttonEl);
+    liEl.insertBefore(closeTaskButt, buttonEl);
 
 }
 
@@ -81,7 +85,7 @@ function onUpdateTaskResponse() {
         document.getElementById("tasksUl").remove();
         createTaskDiv(userDto);
     }else{
-        onMessageResponse(taskContentDivEl,this);
+        onMessageResponse(mainDiv, this);
     }
 }
 
@@ -91,23 +95,36 @@ function showCreateTask(){
 
     const createTaskDiv= document.createElement("div");
     createTaskDiv.setAttribute("id","create-task");
+    createTaskDiv.setAttribute("class", "create-div");
+
+    const closeTaskButt = document.createElement("button");
+    closeTaskButt.addEventListener('click', closeCreateTask);
+    closeTaskButt.setAttribute("class", "close-btn");
 
     const inputTitle = document.createElement("INPUT");
     inputTitle.setAttribute("type","text");
     inputTitle.setAttribute("id", "task-title");
+    inputTitle.setAttribute("class", "input-min");
     inputTitle.placeholder = "Title";
 
     const inputDescript = document.createElement("INPUT");
     inputDescript.setAttribute("type","text");
     inputDescript.setAttribute("id","task-desc");
+    inputDescript.setAttribute("class", "input-min");
     inputDescript.placeholder = "Description";
+
+    const breakEl = document.createElement("br");
 
     const createTaskButt = document.createElement("button");
     createTaskButt.addEventListener('click',createTask);
+    createTaskButt.setAttribute('id', 'task-create-btn');
+    createTaskButt.setAttribute("class", "create-btn");
     createTaskButt.textContent = "Create";
 
     createTaskDiv.appendChild(inputTitle);
+    createTaskDiv.appendChild(closeTaskButt);
     createTaskDiv.appendChild(inputDescript);
+    createTaskDiv.appendChild(breakEl);
     createTaskDiv.appendChild(createTaskButt);
     taskContentDivEl.appendChild(createTaskDiv);
 }
@@ -132,7 +149,7 @@ function createTask(){
         xhr.open('POST','protected/task');
         xhr.send(params)
     }else{
-         newError(scheduleContentDivEl,"Please fill all the fields");
+        newError(mainDiv, "Please fill all the fields");
      }
 }
 
@@ -143,7 +160,7 @@ function onCreateTaskResponse(){
         document.getElementById("tasksUl").remove();
         createTaskDiv(userDto);
     }else{
-        onMessageResponse(taskContentDivEl,this);
+        onMessageResponse(mainDiv, this);
     }
 }
 
@@ -180,13 +197,19 @@ function onDeleteTaskResponse() {
         document.getElementById("tasksUl").remove();
         createTaskDiv(userDto);
     } else {
-        onMessageResponse(taskContentDivEl, this);
+        onMessageResponse(mainDiv, this);
     }
 }
 
-function onGobackClicked() {
+function closeCreateTask() {
+    document.getElementById("create-task").remove();
+    const toCreateTaskButt = document.getElementById("to-createTask-button");
+    toCreateTaskButt.addEventListener('click', showCreateTask);
+}
+
+function closeChangeTask() {
     const xhr = new XMLHttpRequest();
-    xhr.addEventListener('load', onLoginResponse);
+    xhr.addEventListener('load', onDeleteTaskResponse);
     xhr.addEventListener('error', onNetworkError);
     xhr.open('GET', 'protected/task');
     xhr.send();
