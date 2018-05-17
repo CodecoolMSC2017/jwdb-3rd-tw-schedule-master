@@ -71,7 +71,7 @@ class DatabaseTaskHourDao extends AbstractDaoFactory implements TaskHourDao {
     @Override
     public List<Task> findTaskByScheduleId(int scheduleId) throws SQLException {
         List<Task> tasks = new ArrayList<>();
-        String sql = "SELECT id,app_user_id,title,description FROM task WHERE id IN(SELECT task_id FROM task_hour WHERE schedule_id = ?);";
+        String sql = "SELECT id,app_user_id,title,description FROM task WHERE id IN(SELECT task_id FROM task_hour WHERE schedule_id = ?) ORDER BY id ASC;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, scheduleId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -82,6 +82,7 @@ class DatabaseTaskHourDao extends AbstractDaoFactory implements TaskHourDao {
             return tasks;
         }
     }
+
 
     private String join(String... ids) throws InvalidArgumentException {
         String idString = "";
