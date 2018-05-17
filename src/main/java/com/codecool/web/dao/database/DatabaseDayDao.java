@@ -23,8 +23,6 @@ class DatabaseDayDao extends AbstractDaoFactory implements DayDao {
             executeInsert(statement);
             int id = fetchGeneratedId(statement);
             return new Day(id, scheduleId, title);
-        } catch (SQLException ex) {
-            throw ex;
         }finally {
             connection.setAutoCommit(autoCommit);
         }
