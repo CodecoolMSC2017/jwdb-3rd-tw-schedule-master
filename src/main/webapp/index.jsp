@@ -32,9 +32,9 @@
             <form id="login-form" name="login" onsubmit="return false;">
                 <div class="input-div">
                     <h2 id="h2">Log in</h2><br>E-mail:<br>
-                    <input type="email" name="email">
+                    <input type="email" name="email" class="input">
                     <br> Password:<br>
-                        <input type=password name="password"><br>
+                    <input type=password name="password" class="input"><br>
                     <input id="login-button" type="submit" value="Login" class="btn">
                 </div>
             </form>
@@ -50,10 +50,10 @@
             <form id="register-form" name="register" onsubmit="return false;">
                 <div class="input-div">
                     <h2>Registration</h2>Name:<br>
-                    <input type="text" name="name"><br>E-mail:<br>
-                    <input type="email" name="email"><br>Password:<br>
-                    <input type=password name="password"><br>Confirm Password:<br>
-                    <input type="password" name="password-again"><br>
+                    <input type="text" name="name" class="input"><br>E-mail:<br>
+                    <input type="email" name="email" class="input"><br>Password:<br>
+                    <input type=password name="password" class="input"><br>Confirm Password:<br>
+                    <input type="password" name="password-again" class="input"><br>
                     <input id="register-button" type="submit" value="Register" class="btn">
                 </div>
             </form>
@@ -65,25 +65,49 @@
         </div>
     </div>
 
-    <div id="schedules-content" class="content hidden">
-        <div id="schedules">
-            <button id="schedules-button">Schedules</button>
+    <div class="main-div">
+        <div id="name-logout-content" class="content hidden">
+            <table id="name-logout-table">
+                <tr>
+                    <td id="name-td">
+                        <h2 id="name-field"></h2>
+                    </td>
+                    <td id="logout-td">
+                        <div id="logout-content" class="content hidden">
+                            <img id="logout-button" src="css/img/logout.png" alt="logout"/>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
-    </div>
-    <div id="days-content" class="content">
-        <div id="days">
-        </div>
+
+        <table class="content-table">
+            <tr>
+                <td valign="top" class="wing-td">
+                    <div id="schedules-content" class="content hidden">
+                        <div id="schedules">
+                            <button id="schedules-button" class="container">Schedules</button>
+                        </div>
+                    </div>
+                </td>
+                <td class="middle-td" valign="top">
+                    <div id="days-content" class="content hidden">
+                        <div id="days">
+                        </div>
+                    </div>
+                </td>
+                <td valign="top" class="wing-td">
+                    <div id="tasks-content" class="content hidden">
+                        <div id="tasks">
+                            <button id="tasks-button" class="container">Tasks</button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
     </div>
 
-    <div id="tasks-content" class="content hidden">
-        <div id="tasks">
-            <button id="tasks-button">Tasks</button>
-        </div>
-    </div>
-
-    <div id="logout-content" class="content hidden">
-        <button id="logout-button">Logout</button>
-    </div>
 
 </body>
 </html>

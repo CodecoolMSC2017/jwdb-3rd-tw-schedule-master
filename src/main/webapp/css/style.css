@@ -1,13 +1,36 @@
+/*
+   ******************
+        COMMON
+   ******************
+ */
+
+
 .error {
     color: red;
 }
 
 .info {
-    color: green;
+    color: #3498db;
 }
 
 .hidden {
     display: none;
+}
+
+.message {
+    border-radius: 30px;
+    border: 3px;
+    border-style: ridge;
+    border-color: #3498db;
+    background-color: white;
+    max-width: 650px;
+    padding: 2px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.content {
+    text-align: center;
 }
 
 body {
@@ -24,9 +47,62 @@ body {
     text-align: center;
 }
 
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 auto;
+    min-height: 300px;
+    text-align: center;
+    width: 245px;
+    border: 2px solid black;
+    border-radius: 3px;
+    font-size: 16px;
+    line-height: 25px;
+}
+
+li {
+    border: 2px solid black;
+    border-radius: 3px;
+    display: block;
+    background-color: white;
+    width: 220px;
+    padding: 5px 0;
+    margin-top: 3px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+}
+
+#logout-button {
+    width: 64px;
+    height: 64px;
+}
+
+#name-logout-table {
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 80%;
+}
+
+#logout-td {
+    text-align: left;
+    width: 30%;
+}
+
+#name-td {
+    text-align: center;
+    width: 70%;
+}
+
+/*
+   ******************
+     REGISTER-LOGIN
+   ******************
+ */
+
 .form-div {
     text-align: center;
-    margin-top: 120px;
+    margin-top: 100px;
 }
 
 .input-div {
@@ -37,29 +113,69 @@ body {
     border-radius: 30px;
     border: 3px;
     border-style: ridge;
-    border-color: darkred;
+    border-color: #3498db;
     background-color: white;
     width: 300px;
 }
 
-.btn {
-    color: #fff;
-    margin-top: 10px;
-    padding: 5px 15px;
-    font-weight: 500;
-    border-radius: 100px;
-    border: 2px;
-    border-style: ridge;
-    background-color: darkred;
-    border-color: #8b0000;
-    transition: background-color 1s;
+.input {
+    text-align: center;
+    background-color: #ECF0F1;
+    border: 2px solid transparent;
+    border-radius: 2px;
+    font-size: 16px;
+    font-weight: 200;
+    padding: 7px 0;
+    width: 250px;
+    transition: border .5s;
 }
 
-.btn:active,
+.input:focus {
+    border: 2px solid #3498db;
+    box-shadow: none;
+}
+
+.input-min {
+    text-align: center;
+    background-color: #ECF0F1;
+    border: 2px solid transparent;
+    border-radius: 2px;
+    font-size: 12px;
+    font-weight: 200;
+    padding: 5px 0;
+    width: 180px;
+    margin-top: 4px;
+    transition: border .5s;
+
+}
+
+.input-min:focus {
+    border: 2px solid black;
+    box-shadow: none;
+}
+
+.btn {
+    border: 2px solid transparent;
+    background: #3498DB;
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 25px;
+    padding: 10px 0;
+    text-decoration: none;
+    text-shadow: none;
+    border-radius: 3px;
+    box-shadow: none;
+    display: block;
+    width: 250px;
+    margin: 10px auto;
+    transition: background-color .5s;
+
+}
+
 .btn:hover {
-    background-color: #460000;
+    background-color: #2980B9;
     cursor: pointer;
-    transition: background-color 1s;
+    transition: background-color .5s;
 }
 
 .register-paragraph {
@@ -70,12 +186,179 @@ body {
     cursor: pointer;
     text-decoration: underline;
     color: #fff;
-    transition: color 1s;
+    transition: color .5s;
 }
 
 .register-link:hover,
 .register-link:active {
     text-decoration: none;
-    color: red;
-    transition: color 1s;
+    color: #3498db;
+    transition: color .5s;
 }
+
+/*
+   ******************
+     MAIN ELEMENTS
+   ******************
+ */
+
+.container {
+    border: 2px solid black;
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 25px;
+    padding: 10px 0;
+    text-decoration: none;
+    text-shadow: none;
+    border-radius: 3px;
+    box-shadow: none;
+    transition: 0.25s;
+    display: block;
+    width: 250px;
+    margin: 0 auto;
+}
+
+.middle-td {
+    width: 60%;
+}
+
+.wing-td {
+    width: 15%;
+}
+
+.create-div {
+    margin-top: 20px;
+    min-height: 200px;
+    width: 245px;
+    border: 2px solid black;
+    border-radius: 3px;
+    line-height: 25px;
+    position: relative;
+}
+
+.create-btn {
+    border: 1px solid black;
+    color: #ffffff;
+    font-size: 12px;
+    line-height: 25px;
+    padding: 5px 0;
+    text-decoration: none;
+    text-shadow: none;
+    border-radius: 2px;
+    box-shadow: none;
+    display: block;
+    width: 180px;
+    margin: 10px auto;
+}
+
+.close-btn {
+    background: white url(img/back.png) center;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+}
+
+.delete-btn {
+    background: white url(img/remove.png) center;
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+}
+
+.change-btn {
+    background: white url(img/update.png) center;
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+}
+
+/*
+   ******************
+       SCHEDULES
+   ******************
+ */
+
+#schedules-button:hover {
+    background-color: #1e73a1;
+    transition: background-color .5s;
+
+}
+
+#schedules-button {
+    background-color: #3195d1;
+    transition: background-color .5s;
+
+}
+
+#schedulesUl {
+    background-color: #2f9fe2;
+}
+
+#create-schedule {
+    background-color: #3195d1;
+}
+
+#schedule-create-btn {
+    background: #2f9fe2;
+    transition: background-color .5s;
+}
+
+#schedule-create-btn:hover {
+    background-color: #2980B9;
+    cursor: pointer;
+    transition: background-color .5s;
+}
+
+.schedule-li {
+    color: #3195d1;
+}
+
+/*
+   ******************
+         TASKS
+   ******************
+ */
+
+#tasks-button {
+    background-color: #24be3e;
+    transition: background-color .5s;
+
+}
+
+#tasks-button:hover {
+    background-color: #24a83c;
+    transition: background-color .5s;
+
+}
+
+#tasksUl {
+    background-color: #27ee48;
+}
+
+#create-task {
+    background-color: #24be3e;
+}
+
+#task-create-btn {
+    background: #27ee48;
+    transition: background-color .5s;
+}
+
+#task-create-btn:hover {
+    background-color: #14b536;
+    cursor: pointer;
+    transition: background-color .5s;
+}
+
+.task-li {
+    color: #24A83C;
+}
+
+
+
+
+
+

@@ -8,11 +8,7 @@ function showSchedule() {
 function hideSchedule() {
     const scheduleEl = document.getElementById("schedulesUl");
     scheduleEl.classList.add('hidden');
-    const sched = document.getElementById("create-schedule");
     scheduleButtonEl.removeEventListener('click', hideSchedule);
-    if (sched !== null) {
-        sched.remove();
-    }
     scheduleButtonEl.addEventListener('click', showSchedule);
 }
 
@@ -22,32 +18,51 @@ function showCreateSchedule() {
 
     const createScheduleDiv = document.createElement("div");
     createScheduleDiv.setAttribute("id", "create-schedule");
+    createScheduleDiv.setAttribute("class", "create-div");
+
+    const closeScheduleButt = document.createElement("button");
+    closeScheduleButt.addEventListener('click', closeCreateSchedule);
+    closeScheduleButt.setAttribute("class", "close-btn");
 
     const inputTitle = document.createElement("INPUT");
     inputTitle.setAttribute("type", "text");
     inputTitle.setAttribute("id", "schedule-title");
+    inputTitle.setAttribute("class", "input-min");
     inputTitle.placeholder = "Title";
 
     const inputDesc = document.createElement("INPUT");
     inputDesc.setAttribute("type", "text");
     inputDesc.setAttribute("id", "schedule-desc");
+    inputDesc.setAttribute("class", "input-min");
     inputDesc.placeholder = "Description";
+
+    const numOfDaysSpanEl = document.createElement("span");
+    numOfDaysSpanEl.textContent = "Number of days :";
 
     const inputNumberOfDays = document.createElement("INPUT");
     inputNumberOfDays.setAttribute("type", "number");
-    inputNumberOfDays.setAttribute("id", "schedule-days");
+    inputNumberOfDays.setAttribute("id", "schedule-days")
+    inputNumberOfDays.setAttribute("class", "input-min");
     inputNumberOfDays.placeholder = "Number of Days";
     inputNumberOfDays.max = 7;
     inputNumberOfDays.min = 1;
     inputNumberOfDays.value = 3;
 
+    const breakEl = document.createElement("br");
+
     const createScheduleButt = document.createElement("button");
     createScheduleButt.addEventListener('click', createSchedule);
+    createScheduleButt.setAttribute("id", "schedule-create-btn");
+    createScheduleButt.setAttribute("class", "create-btn");
     createScheduleButt.textContent = "Create";
 
     createScheduleDiv.appendChild(inputTitle);
+    createScheduleDiv.appendChild(closeScheduleButt);
     createScheduleDiv.appendChild(inputDesc);
+    createScheduleDiv.appendChild(breakEl);
+    createScheduleDiv.appendChild(numOfDaysSpanEl);
     createScheduleDiv.appendChild(inputNumberOfDays);
+    createScheduleDiv.appendChild(breakEl);
     createScheduleDiv.appendChild(createScheduleButt);
     scheduleContentDivEl.appendChild(createScheduleDiv);
 }
@@ -76,7 +91,7 @@ function createSchedule() {
         xhr.open('POST', 'protected/schedule');
         xhr.send(params)
     } else {
-        newError(scheduleContentDivEl, "Please fill all the fields");
+        newError(mainDiv, "Please fill all the fields");
     }
 }
 
@@ -87,7 +102,7 @@ function onCreateScheduleResponse() {
         document.getElementById("schedulesUl").remove();
         createScheduleDiv(userDto);
     } else {
-        onMessageResponse(scheduleContentDivEl, this);
+        onMessageResponse(mainDiv, this);
     }
 }
 
@@ -112,7 +127,7 @@ function onDeleteScheduleResponse() {
         document.getElementById("schedulesUl").remove();
         createScheduleDiv(userDto);
     } else {
-        onMessageResponse(scheduleContentDivEl, this);
+        onMessageResponse(mainDiv, this);
     }
 }
 
@@ -136,7 +151,7 @@ function onListingResponse() {
         const userDto = JSON.parse(this.responseText);
         listingDays(userDto);
     } else {
-        onMessageResponse(daysContentDivEl, this);
+        onMessageResponse(mainDiv, this);
     }
 }
 
@@ -252,10 +267,12 @@ function onUpdateDayResponse() {
         listingDays(userDto);
     }
     else {
-        onMessageResponse(daysContentDivEl, this);
+        onMessageResponse(mainDiv, this);
     }
 }
 
-function createDaysDiv() {
-
+function closeCreateSchedule() {
+    document.getElementById("create-schedule").remove();
+    const toCreateTaskButt = document.getElementById("to-createSchedule-button");
+    toCreateTaskButt.addEventListener('click', showCreateSchedule);
 }
