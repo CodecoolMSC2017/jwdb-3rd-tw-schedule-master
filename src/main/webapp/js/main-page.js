@@ -50,6 +50,7 @@ function createTaskDiv(userDto) {
         taskSpan.textContent = userDto.tasks[i].title;
         taskSpan.setAttribute("id", userDto.tasks[i].title);
         taskSpan.addEventListener('click', showTaskDescription);
+        taskSpan.setAttribute("class", "show-task-btn");
 
         let taskDesc = document.createElement("p");
         taskDesc.textContent = userDto.tasks[i].description;

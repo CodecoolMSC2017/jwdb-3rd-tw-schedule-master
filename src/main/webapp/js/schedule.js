@@ -1,7 +1,11 @@
 function showSchedule() {
     const scheduleEl = document.getElementById("schedulesUl");
     scheduleEl.classList.remove('hidden');
-    scheduleButtonEl.removeEventListener('click', showSchedule);
+    const btnList = document.getElementsByClassName("show-task-btn");
+    for (let i = 0; i < btnList.length; i++) {
+        btnList[i].removeEventListener('click', hideSchedule);
+        btnList[i].addEventListener('click', showSchedule);
+    }
     scheduleButtonEl.addEventListener('click', hideSchedule);
 }
 
@@ -134,7 +138,6 @@ function onDeleteScheduleResponse() {
 function listingSchedules(e) {
     e.target.removeEventListener('click', listingSchedules);
     e.target.addEventListener('click', hideListingSchedules);
-    removeAllChildren(daysDiv);
     const idSchedule = e.target.parentElement.id;
     const xhr = new XMLHttpRequest();
 
@@ -150,6 +153,7 @@ function listingSchedules(e) {
 function onListingResponse() {
     if (this.status === OK) {
         const userDto = JSON.parse(this.responseText);
+        removeAllChildren(daysDiv);
         listingDays(userDto);
     } else {
         onMessageResponse(mainDiv, this);
@@ -179,12 +183,18 @@ function listingDays(userDto) {
     const descriptionRow = document.createElement("tr");
     descriptionRow.setAttribute("class","desc-row");
 
+    let numberOfDays = userDto.schedule.days.length;
+
+    if (numberOfDays > 1) {
+        numberOfDays -= 1;
+    }
+
 
     const titleTd = document.createElement("td");
-    titleTd.colSpan = userDto.schedule.days.length-1;
+    titleTd.colSpan = numberOfDays;
 
     const descriptionTd = document.createElement("td");
-    descriptionTd.colSpan = userDto.schedule.days.length-1;
+    descriptionTd.colSpan = numberOfDays;
 
     titleTd.textContent = userDto.schedule.title;
     descriptionTd.textContent = userDto.schedule.description;
