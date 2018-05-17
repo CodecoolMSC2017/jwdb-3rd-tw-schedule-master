@@ -32,18 +32,11 @@ public class ScheduleServlet extends AbstractServlet {
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
             List<Task> tasks = taskService.findAllByUserId(userId);
             UserDto userDto = new UserDto(user, tasks, schedules);
-            JsonNode jsonNode = createJsonNodeFromRequest(req);
 
             String scheduleIdFromReq = req.getParameter("scheduleId");
-            String scheduleIdFromJson = jsonNode.get("scheduleId").textValue();
 
             if (scheduleIdFromReq != null ) {
                 int scheduleId = Integer.parseInt(scheduleIdFromReq);
-                Schedule schedule = scheduleService.findById(scheduleId);
-                userDto.setSchedule(schedule);
-            }
-            else if(scheduleIdFromJson != null){
-                int scheduleId = Integer.parseInt(scheduleIdFromJson);
                 Schedule schedule = scheduleService.findById(scheduleId);
                 userDto.setSchedule(schedule);
             }
@@ -79,6 +72,12 @@ public class ScheduleServlet extends AbstractServlet {
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             ScheduleService scheduleService = new SimpleScheduleService(connection);
+            TaskService taskService = new SimpleTaskService(connection);
+            User user = getUser(req);
+            int userId = user.getId();
+            List<Schedule> schedules = scheduleService.findAllByUserId(userId);
+            List<Task> tasks = taskService.findAllByUserId(userId);
+            UserDto userDto = new UserDto(user, tasks, schedules);
 
             JsonNode jsonNode = createJsonNodeFromRequest(req);
 
@@ -87,8 +86,9 @@ public class ScheduleServlet extends AbstractServlet {
             String scheduleDescription = jsonNode.get("description").textValue();
 
             scheduleService.updateSchedule(scheduleId, scheduleTitle, scheduleDescription);
-
-            doGet(req, resp);
+            Schedule schedule = scheduleService.findById(scheduleId);
+            userDto.setSchedule(schedule);
+            sendMessage(resp, 200, userDto);
         } catch (SQLException e) {
             handleSqlError(resp, e);
         } catch (Exception e) {
