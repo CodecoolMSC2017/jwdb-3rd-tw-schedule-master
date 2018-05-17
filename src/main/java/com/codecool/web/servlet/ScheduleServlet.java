@@ -50,7 +50,6 @@ public class ScheduleServlet extends AbstractServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             ScheduleService scheduleService = new SimpleScheduleService(connection);
-            TaskService taskService = new SimpleTaskService(connection);
             User user = getUser(req);
             int userId = user.getId();
 
@@ -59,10 +58,7 @@ public class ScheduleServlet extends AbstractServlet {
             int scheduleDays = Integer.parseInt(req.getParameter("days"));
 
             scheduleService.createSchedule(scheduleTitle, scheduleDescription, userId, scheduleDays);
-            List<Schedule> schedules = scheduleService.findAllByUserId(userId);
-            List<Task> tasks = taskService.findAllByUserId(userId);
-            UserDto userDto = new UserDto(user, tasks, schedules);
-            sendMessage(resp, HttpServletResponse.SC_OK, userDto);
+            doGet(req, resp);
 
         } catch (SQLException ex) {
             handleSqlError(resp, ex);
@@ -75,22 +71,15 @@ public class ScheduleServlet extends AbstractServlet {
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             ScheduleService scheduleService = new SimpleScheduleService(connection);
-            TaskService taskService = new SimpleTaskService(connection);
-            User user = getUser(req);
-            int userId = user.getId();
 
             JsonNode jsonNode = createJsonNodeFromRequest(req);
 
             int scheduleId = Integer.parseInt(jsonNode.get("scheduleId").textValue());
-            String scheduleTitle = jsonNode.get("scheduleId").textValue();
+            String scheduleTitle = jsonNode.get("title").textValue();
             String scheduleDescription = jsonNode.get("description").textValue();
 
             scheduleService.updateSchedule(scheduleId, scheduleTitle, scheduleDescription);
-            List<Schedule> schedules = scheduleService.findAllByUserId(userId);
-            List<Task> tasks = taskService.findAllByUserId(userId);
-            UserDto userDto = new UserDto(user, tasks, schedules);
-
-            sendMessage(resp, HttpServletResponse.SC_OK, userDto);
+            doGet(req, resp);
 
         } catch (SQLException e) {
             handleSqlError(resp, e);
@@ -103,21 +92,14 @@ public class ScheduleServlet extends AbstractServlet {
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
-            TaskService taskService = new SimpleTaskService(connection);
             ScheduleService scheduleService = new SimpleScheduleService(connection);
-            User user = getUser(req);
-            int userId = user.getId();
 
             JsonNode jsonNode = createJsonNodeFromRequest(req);
 
             int scheduleId = Integer.parseInt(jsonNode.get("scheduleId").textValue());
 
             scheduleService.deleteSchedule(scheduleId);
-            List<Schedule> schedules = scheduleService.findAllByUserId(userId);
-            List<Task> tasks = taskService.findAllByUserId(userId);
-            UserDto userDto = new UserDto(user, tasks, schedules);
-
-            sendMessage(resp, HttpServletResponse.SC_OK, userDto);
+            doGet(req, resp);
 
         } catch (SQLException e) {
             handleSqlError(resp, e);
