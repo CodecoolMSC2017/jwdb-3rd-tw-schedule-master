@@ -34,7 +34,7 @@ function newMessage(targetEl, cssClass, message) {
     pEl.classList.add('message');
     pEl.classList.add(cssClass);
     pEl.textContent = message;
-    const firstChild = targetEl.firstElementChild;
+    const firstChild = targetEl.firstChild;
     targetEl.insertBefore(pEl, firstChild);
 }
 
@@ -111,7 +111,7 @@ function onLoad() {
     scheduleDiv = document.getElementById("schedules");
     daysContentDivEl = document.getElementById("days-content");
     daysDiv = document.getElementById("days");
-    mainDiv = document.getElementById("main-div");
+    mainDiv = document.getElementById("name-logout-content");
 
     loadUserCredentials();
 
