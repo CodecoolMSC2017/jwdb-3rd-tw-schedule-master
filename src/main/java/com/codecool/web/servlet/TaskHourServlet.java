@@ -39,7 +39,7 @@ public class TaskHourServlet extends AbstractServlet {
     }
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskHourService taskHourService = new SimpleTaskHourService(connection);
             int scheduleId = Integer.parseInt(req.getParameter("scheduleId"));
