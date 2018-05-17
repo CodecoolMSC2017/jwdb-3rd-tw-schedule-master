@@ -67,7 +67,7 @@ public class ScheduleServlet extends AbstractServlet {
         } catch (SQLException ex) {
             handleSqlError(resp, ex);
         } catch (TooManyDaysException e) {
-            sendMessage(resp,HttpServletResponse.SC_BAD_REQUEST,e.getMessage());
+            sendMessage(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         }
     }
 
