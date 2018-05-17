@@ -13,6 +13,7 @@ let taskContentDivEl;
 let taskDiv;
 let scheduleContentDivEl;
 let scheduleDiv;
+let mainDiv;
 let daysContentDivEl;
 let daysDiv;
 
@@ -110,6 +111,7 @@ function onLoad() {
     scheduleDiv = document.getElementById("schedules");
     daysContentDivEl = document.getElementById("days-content");
     daysDiv = document.getElementById("days");
+    mainDiv = document.getElementById("main-div");
 
     loadUserCredentials();
 

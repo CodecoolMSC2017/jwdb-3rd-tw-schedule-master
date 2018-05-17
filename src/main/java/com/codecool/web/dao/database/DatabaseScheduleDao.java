@@ -31,8 +31,8 @@ class DatabaseScheduleDao extends AbstractDaoFactory implements ScheduleDao {
 
     @Override
     public void delete(int id) throws SQLException {
-        String sql = "Delete from schedule\n" +
-                " where id = ?";
+        String sql = "DELETE FROM schedule\n" +
+                " WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, id);
             statement.executeUpdate();
@@ -41,9 +41,9 @@ class DatabaseScheduleDao extends AbstractDaoFactory implements ScheduleDao {
 
     @Override
     public void updateTitle(int id, String title) throws SQLException {
-        String sql = "update schedule\n" +
-                " set title = ?\n" +
-                " where id = ? ";
+        String sql = "UPDATE schedule\n" +
+                " SET title = ?\n" +
+                " WHERE id = ? ";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, title);
             statement.setInt(2, id);
@@ -54,9 +54,9 @@ class DatabaseScheduleDao extends AbstractDaoFactory implements ScheduleDao {
 
     @Override
     public void updateDescription(int id, String description) throws SQLException {
-        String sql = "update schedule\n" +
-                " set description = ?\n" +
-                " where id = ? ";
+        String sql = "UPDATE schedule\n" +
+                " SET description = ?\n" +
+                " WHERE id = ? ";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, description);
             statement.setInt(2, id);
@@ -67,8 +67,8 @@ class DatabaseScheduleDao extends AbstractDaoFactory implements ScheduleDao {
 
     @Override
     public Schedule findById(int id) throws SQLException {
-        String sql = "select * from schedule\n" +
-                " where id = ?";
+        String sql = "SELECT * FROM schedule\n" +
+                " WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -83,8 +83,8 @@ class DatabaseScheduleDao extends AbstractDaoFactory implements ScheduleDao {
     @Override
     public List<Schedule> findAllByUserId(int id) throws SQLException {
         List<Schedule> schedules = new ArrayList<>();
-        String sql = "select * from schedule\n" +
-                " where app_user_id = ?";
+        String sql = "SELECT * FROM schedule\n" +
+                " WHERE app_user_id = ? ORDER BY title ASC";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -99,7 +99,7 @@ class DatabaseScheduleDao extends AbstractDaoFactory implements ScheduleDao {
     @Override
     public List<Schedule> findAll() throws SQLException {
         List<Schedule> schedules = new ArrayList<>();
-        String sql = "Select * from schedule";
+        String sql = "SELECT * FROM schedule ORDER BY title ASC";
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {

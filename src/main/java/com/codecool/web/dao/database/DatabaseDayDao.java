@@ -65,7 +65,7 @@ class DatabaseDayDao extends AbstractDaoFactory implements DayDao {
     @Override
     public List<Day> findByScheduleId(int scheduleId) throws SQLException {
         List<Day> days = new ArrayList<>();
-        String sql = "SELECT * FROM day WHERE schedule_id = ? ";
+        String sql = "SELECT * FROM day WHERE schedule_id = ? ORDER BY id ASC";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, scheduleId);
             try (ResultSet resultSet = statement.executeQuery()) {
