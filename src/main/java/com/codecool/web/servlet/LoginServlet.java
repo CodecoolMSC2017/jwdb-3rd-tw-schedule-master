@@ -35,7 +35,15 @@ public final class LoginServlet extends AbstractServlet {
             String password = req.getParameter("password");
 
             User user = userService.login(email, password);
+            String role = user.getRole();
+
             req.getSession().setAttribute("user", user);
+
+            if(role.equals("admin")) {
+                List<User> allUsers = userService.findAll();
+                List<Task> allTasks = taskService.findAll();
+                sendMessage(resp, HttpServletResponse.SC_OK, new UserDto(allUsers, allTasks, user));
+            }
 
             List<Task> allTask = taskService.findAllByUserId(user.getId());
             List<Schedule> schedules = scheduleService.findAllByUserId(user.getId());
