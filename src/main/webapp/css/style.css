@@ -71,6 +71,7 @@ li {
     margin-left: auto;
     margin-right: auto;
     position: relative;
+    vertical-align : center;
 }
 
 #logout-button {
@@ -421,6 +422,10 @@ li {
     text-align: center;
     width: 100%;
     background-color: red;
+ }
+
+ .change-sched-fields{
+    background-color: black;
  }
 
 
