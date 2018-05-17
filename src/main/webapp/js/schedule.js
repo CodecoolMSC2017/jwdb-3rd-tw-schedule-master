@@ -134,6 +134,7 @@ function onDeleteScheduleResponse() {
 function listingSchedules(e) {
     e.target.removeEventListener('click', listingSchedules);
     e.target.addEventListener('click', hideListingSchedules);
+    removeAllChildren(daysDiv);
     const idSchedule = e.target.parentElement.id;
     const xhr = new XMLHttpRequest();
 
@@ -201,6 +202,7 @@ function listingDays(userDto) {
     for (let i = 0; i < userDto.schedule.days.length; i++) {
 
         let td = document.createElement("td");
+        td.setAttribute("class","day-td");
         let hoursTable = document.createElement("table");
         hoursTable.setAttribute("class","hours-table");
 
