@@ -10,6 +10,7 @@ public class UserDto {
     private User user;
     private List<Task> tasks;
     private List<Schedule> schedules;
+    private List<User> users;
     private Schedule schedule;
 
 
@@ -17,6 +18,12 @@ public class UserDto {
         this.user = user;
         this.tasks = tasks;
         this.schedules = schedules;
+    }
+
+    public UserDto(List<User> users, List<Task> tasks, User user) {
+        this.user = user;
+        this.tasks = tasks;
+        this.users = users;
     }
 
 
