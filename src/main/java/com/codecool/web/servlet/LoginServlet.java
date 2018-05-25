@@ -17,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -55,6 +56,8 @@ public final class LoginServlet extends AbstractServlet {
             sendMessage(resp, 404, "User not found" );
         } catch (WrongPasswordException e) {
             sendMessage(resp, 409, "Wrong password");
+        } catch (NoSuchAlgorithmException e) {
+            sendMessage(resp, HttpServletResponse.SC_EXPECTATION_FAILED, "Unexpected error occurred");
         }
     }
 }
