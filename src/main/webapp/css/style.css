@@ -78,6 +78,10 @@ li:first-child {
     margin-top: 4px;
 }
 
+li:last-child {
+    margin-bottom: 4px;
+}
+
 #logout-button {
     width: 64px;
     height: 64px;
@@ -149,13 +153,31 @@ li:first-child {
     font-weight: 200;
     padding: 5px 0;
     width: 180px;
-    margin-top: 4px;
+    margin-top: 7px;
     transition: border .5s;
 
 }
 
 .input-min:focus {
     border: 2px solid black;
+    box-shadow: none;
+}
+
+.input-miniature {
+    text-align: center;
+    background-color: #ECF0F1;
+    border: 1px solid transparent;
+    border-radius: 1px;
+    font-size: 10px;
+    font-weight: 200;
+    padding: 5px 0;
+    width: 140px;
+    margin-top: 3px;
+    transition: border .5s;
+}
+
+.input-miniature:focus {
+    border: 1px solid black;
     box-shadow: none;
 }
 
@@ -231,6 +253,12 @@ li:first-child {
     width: 15%;
 }
 
+.title-span {
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
 .create-div {
     margin-top: 20px;
     min-height: 250px;
@@ -257,27 +285,31 @@ li:first-child {
 }
 
 .close-btn {
-    background: white url(img/back.png) center;
+    background: url(img/back.png) center;
     position: absolute;
     right: 0;
     bottom: 0;
     width: 40px;
     height: 40px;
     margin: 5px;
+    padding: 0;
+    border: none;
 }
 
 .close-btn-min {
-    background: white url(img/back-mini.png) center;
+    background: url(img/back-mini.png) center;
     position: absolute;
     right: 0;
     bottom: 0;
     width: 25px;
     height: 25px;
     margin: 5px;
+    padding: 0;
+    border: none;
 }
 
 .delete-btn {
-    background: white url(img/remove-mini.png) center;
+    background: url(img/remove-mini.png) center;
     position: absolute;
     right: 0;
     top: 0;
@@ -285,30 +317,49 @@ li:first-child {
     height: 25px;
     margin: 5px;
     display: inline;
+    padding: 0;
+    border: none;
 
 }
 
 .change-btn {
-    background: white url(img/update.png) center;
+    background: url(img/update.png) center;
     width: 40px;
     height: 40px;
     margin: 5px;
     display: inline;
+    padding: 0;
+    border: none;
 }
 
 .change-btn-min {
-    background: white url(img/update-mini.png) center;
+    background: url(img/update-mini.png) center;
     width: 25px;
     height: 25px;
     margin: 5px;
     display: inline;
+    padding: 0;
+    border: none;
+}
+
+.change-btn-min-absolute {
+    background: url(img/update-mini.png) center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 25px;
+    height: 25px;
+    margin: 5px;
+    padding: 0;
+    border: none;
 }
 
 .create-min-btn {
-    background: white url(img/create.png) center;
+    background: url(img/create.png) center;
     width: 40px;
     height: 40px;
-    margin: 5px;
+    padding: 0;
+    border: none;
 }
 
 /*
@@ -352,6 +403,10 @@ li:first-child {
     color: #3195d1;
 }
 
+.show-schedule-span {
+
+}
+
 /*
    ******************
          TASKS
@@ -378,8 +433,13 @@ li:first-child {
     background-color: #24be3e;
 }
 
+#create-task:first-child {
+    margin-top: 4px;
+}
+
 #task-create-btn {
     background: #27ee48;
+    margin-top: 30px;
     transition: background-color .5s;
 }
 
@@ -437,7 +497,6 @@ li:first-child {
     font-size: 25px;
     font-weight: 600;
     width: 100%;
-
 }
 
 .day-row {
@@ -456,6 +515,15 @@ li:first-child {
 
 .change-sched-fields {
     background-color: #d62c1a;
+}
+
+.title-par {
+    margin-bottom: 0;
+    margin-top: 3px;
+}
+
+.desc-td {
+    padding-bottom: 5px;
 }
 
 
