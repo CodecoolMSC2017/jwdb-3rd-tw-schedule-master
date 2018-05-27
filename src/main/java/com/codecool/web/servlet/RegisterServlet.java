@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -30,6 +31,8 @@ public final class RegisterServlet extends AbstractServlet {
             handleSqlError(resp, ex);
         } catch (AlreadyRegisteredException e) {
             sendMessage(resp, HttpServletResponse.SC_CONFLICT, "This email is already in use!");
+        } catch (NoSuchAlgorithmException e) {
+            sendMessage(resp, HttpServletResponse.SC_EXPECTATION_FAILED, "Unexpected error occurred");
         }
     }
 }
