@@ -50,9 +50,12 @@ class DatabaseHourDao extends AbstractDaoFactory implements HourDao {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
-                return fetch(resultSet);
+                if(resultSet.next()) {
+                    return fetch(resultSet);
+                }
             }
         }
+        return null;
 
     }
 
