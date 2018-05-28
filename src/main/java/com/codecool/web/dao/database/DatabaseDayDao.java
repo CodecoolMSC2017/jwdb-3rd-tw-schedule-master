@@ -84,8 +84,8 @@ class DatabaseDayDao extends AbstractDaoFactory implements DayDao {
                 if(resultSet.next()){
                     return fetchDay(resultSet);
                 }
-            }
-        }return null;
+            }return null;
+        }
     }
 
 

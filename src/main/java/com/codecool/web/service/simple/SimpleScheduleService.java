@@ -116,10 +116,12 @@ public class SimpleScheduleService implements ScheduleService {
     @Override
     public Day addDay(int scheduleId, String title, int userId) throws SQLException, DayAlreadyExistsException {
         Day day = dayDao.findDayByTitle(title);
-        Schedule schedule = scheduleDao.findById(day.getScheduleId());
 
-        if(day != null && schedule.getId() == scheduleId &&schedule.getUserID() == userId){
-            throw new DayAlreadyExistsException();
+        if(day != null){
+            Schedule schedule = scheduleDao.findById(day.getScheduleId());
+            if (schedule.getUserID() == userId && schedule.getId() == scheduleId){
+                throw new DayAlreadyExistsException();
+            }
         }
         return dayDao.add(scheduleId, title);
     }
@@ -127,10 +129,13 @@ public class SimpleScheduleService implements ScheduleService {
     @Override
     public void updateDay(int dayId, String title, int userId) throws SQLException, DayAlreadyExistsException {
         Day day = dayDao.findDayByTitle(title);
-        Schedule schedule = scheduleDao.findById(day.getScheduleId());
 
-        if(day != null && schedule.getUserID() == userId){
-            throw new DayAlreadyExistsException();
+
+        if(day != null){
+            Schedule schedule = scheduleDao.findById(day.getScheduleId());
+            if ( schedule.getUserID() == userId){
+                throw new DayAlreadyExistsException();
+            }
         }
         dayDao.update(dayId, title);
     }
