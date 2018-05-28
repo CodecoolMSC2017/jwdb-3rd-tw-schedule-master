@@ -5,7 +5,7 @@ import com.codecool.web.dao.HourDao;
 import com.codecool.web.dao.ScheduleDao;
 import com.codecool.web.dao.TaskHourDao;
 import com.codecool.web.dao.database.AbstractDaoFactory;
-import com.codecool.web.exception.TooManyDaysException;
+import com.codecool.web.exception.WrongNumOfDaysException;
 import com.codecool.web.model.Day;
 import com.codecool.web.model.Hour;
 import com.codecool.web.model.Schedule;
@@ -30,9 +30,9 @@ public class SimpleScheduleService implements ScheduleService {
     }
 
     @Override
-    public void createSchedule(String title, String description, int userId, int numOfDays) throws SQLException, TooManyDaysException {
+    public void createSchedule(String title, String description, int userId, int numOfDays) throws SQLException, WrongNumOfDaysException {
         if(numOfDays > 7 || numOfDays == 0){
-            throw new TooManyDaysException();
+            throw new WrongNumOfDaysException();
         }
         Schedule schedule = scheduleDao.add(userId, title, description);
         for (int i = 0; i < numOfDays; i++) {
