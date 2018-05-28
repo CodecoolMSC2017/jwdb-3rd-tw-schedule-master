@@ -53,7 +53,7 @@ CREATE TABLE task_hour (
 );
 
 INSERT INTO app_user (email, user_name, password, role)  VALUES
-	('bence@gmail.com', 'Bence', 'password1', 'admin'), --1
+	('admin@admin.com', 'admin', 'd41d8cd98f00b204e9800998ecf8427e', 'admin'), --1
 	('david@gmail.com', 'David', 'password2', 'user'),	--2
 	('kenez@gmail.com', 'Kenez', 'password3', 'user'),	--3
 	('norbi@gmail.com', 'Norbi', 'password4', 'user');	--4

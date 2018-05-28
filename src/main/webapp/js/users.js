@@ -2,7 +2,7 @@ let usersTableEl;
 let usersTableHeadEl;
 let usersTableBodyEl;
 
-function onUserListingLoad(adminDto){
+function onUserListingLoad(adminDto) {
     clearMessages();
     showContents(['users-content','name-logout-content', 'logout-content']);
     createUsersTableHeader();
@@ -20,7 +20,7 @@ function appendUser(user) {
     const roleTdEl = document.createElement('td');
     roleTdEl.textContent = user.role;
 
-    const removeButt = document.createElement('td';)
+    const removeButt = document.createElement('td');
     const removeUserButt = document.createElement("button");
     removeUserButt.addEventListener('click', removeUser);
     removeUserButt.setAttribute("class", "delete-btn-min");

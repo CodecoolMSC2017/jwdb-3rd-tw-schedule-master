@@ -1,7 +1,5 @@
 package com.codecool.web.service;
 
-import com.codecool.web.exception.DayAlreadyExistsException;
-import com.codecool.web.exception.ScheduleAlreadyExistsException;
 import com.codecool.web.exception.WrongNumOfDaysException;
 import com.codecool.web.model.Day;
 import com.codecool.web.model.Hour;
@@ -12,11 +10,11 @@ import java.util.List;
 
 public interface ScheduleService {
 
-    void createSchedule(String title, String description, int userId, int numOfDays) throws SQLException, WrongNumOfDaysException, ScheduleAlreadyExistsException, DayAlreadyExistsException;
+    void createSchedule(String title, String description, int userId, int numOfDays) throws SQLException, WrongNumOfDaysException;
 
     void deleteSchedule(int scheduleId)throws SQLException;
 
-    void updateSchedule(int scheduleId, String title, String description) throws SQLException, ScheduleAlreadyExistsException;
+    void updateSchedule(int scheduleId, String title, String description)throws SQLException;
 
     Schedule findById(int scheduleId)throws SQLException;
 
@@ -24,9 +22,9 @@ public interface ScheduleService {
 
     List<Schedule> findAllByUserId(int userId)throws SQLException;
 
-    Day addDay(int scheduleId, String title, int userId) throws SQLException, DayAlreadyExistsException;
+    Day addDay(int scheduleId, String title)throws SQLException;
 
-    void updateDay(int dayId, String title, int userId) throws SQLException, DayAlreadyExistsException;
+    void updateDay(int dayId, String title)throws SQLException;
 
     Day findDayById(int id)throws SQLException;
 

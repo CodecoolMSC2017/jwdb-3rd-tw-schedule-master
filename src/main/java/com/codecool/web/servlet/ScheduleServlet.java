@@ -1,7 +1,6 @@
 package com.codecool.web.servlet;
 
 import com.codecool.web.dto.UserDto;
-import com.codecool.web.exception.ScheduleAlreadyExistsException;
 import com.codecool.web.exception.WrongNumOfDaysException;
 import com.codecool.web.model.Schedule;
 import com.codecool.web.model.Task;
@@ -66,8 +65,6 @@ public class ScheduleServlet extends AbstractServlet {
             handleSqlError(resp, ex);
         } catch (WrongNumOfDaysException e) {
             sendMessage(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-        } catch (ScheduleAlreadyExistsException e) {
-            sendMessage(resp,HttpServletResponse.SC_BAD_REQUEST,e.getMessage());
         }
     }
 
