@@ -46,6 +46,7 @@ function createTaskDiv(userDto) {
         let taskLi = document.createElement("li");
         taskLi.setAttribute("id", userDto.tasks[i].id);
         taskLi.setAttribute("class", "task-li");
+        taskLi.setAttribute('draggable', 'true');
 
         let taskSpan = document.createElement("span");
         taskSpan.textContent = userDto.tasks[i].title;
@@ -95,6 +96,7 @@ function createScheduleDiv(userDto){
         let scheduleLi = document.createElement("li");
         scheduleLi.setAttribute("id",userDto.schedules[i].id);
         scheduleLi.setAttribute("class", "schedule-li");
+        scheduleLi.setAttribute('draggable', 'true');
 
 
         let scheduleSpan = document.createElement("span");
