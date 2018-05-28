@@ -30,11 +30,13 @@ function appendUser(user) {
     emailTdEl.setAttribute('id',user.id);
     emailTdEl.addEventListener('click', showAsUser);
 
-    trEl.appendChild(nameTdEl);
-    trEl.appendChild(emailTdEl);
-    trEl.appendChild(roleTdEl);
-    trEl.appendChild(removeButt);
-    usersTableBodyEl.appendChild(trEl);
+    if(roleTdEl.textContent !== 'admin'){
+        trEl.appendChild(nameTdEl);
+        trEl.appendChild(emailTdEl);
+        trEl.appendChild(roleTdEl);
+        trEl.appendChild(removeButt);
+        usersTableBodyEl.appendChild(trEl);
+    }
 }
 
 function appendUsers(users) {
@@ -79,7 +81,7 @@ function showAsUser(e){
     params.append('id', id);
 
     const xhr = new XMLHttpRequest();
-    xhr.addEventListener('load', onLoginResponse);
+    xhr.addEventListener('load', onAdminLoginResponse);
     xhr.addEventListener('error', onNetworkError);
     xhr.open('GET', 'login?' + params.toString());
     xhr.send();
@@ -107,4 +109,26 @@ function onDeleteUserResponse(){
     } else {
         onMessageResponse(userContentDivEl, this);
     }
+}
+
+function onAdminLoginResponse() {
+    if (this.status === OK) {
+        const dto = JSON.parse(this.responseText);
+        onMainPageLoad(dto);
+    } else {
+        onMessageResponse(userContentDivEl, this);
+    }
+}
+
+function adminGoBackButtonClicked(){
+    const params = new URLSearchParams();
+
+    params.append('email', getAuthorization().email);
+    params.append('password', getAuthorization().password);
+
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onLoginResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('POST', 'login');
+    xhr.send(params);
 }

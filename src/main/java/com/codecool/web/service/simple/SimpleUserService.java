@@ -53,9 +53,15 @@ public class SimpleUserService implements UserService {
         return userDao.findById(id);
     }
 
+
     @Override
     public List<User> findAll() throws SQLException {
         return userDao.findAll();
+    }
+
+    @Override
+    public void deleteUser(int userId) throws SQLException {
+        userDao.deleteUserbyId(userId);
     }
 
     private String encrypt(String password) throws NoSuchAlgorithmException {
