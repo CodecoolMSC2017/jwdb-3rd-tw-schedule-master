@@ -10,9 +10,11 @@ public interface UserDao {
 
     void insert(String email, String userName, String password, String role) throws SQLException;
 
-    User find(String email) throws SQLException;
+    User findByEmail(String email) throws SQLException;
 
-    User find(String email, String password) throws SQLException;
+    User findByEmail(String email, String password) throws SQLException;
+
+    User findById(int id) throws SQLException;
 
     List<User> findAll() throws SQLException;
 }

@@ -31,7 +31,7 @@ class DatabaseUserDao extends AbstractDaoFactory implements UserDao {
     }
 
     @Override
-    public User find(String email) throws SQLException {
+    public User findByEmail(String email) throws SQLException {
         String sql = "SELECT * FROM app_user WHERE email = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, email);
@@ -45,7 +45,21 @@ class DatabaseUserDao extends AbstractDaoFactory implements UserDao {
     }
 
     @Override
-    public User find(String email, String password) throws SQLException {
+    public User findById(int id) throws SQLException {
+        String sql = "SELECT * FROM app_user WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return fetch(resultSet);
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public User findByEmail(String email, String password) throws SQLException {
         String sql = "SELECT * FROM app_user WHERE email = ? AND password = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, email);

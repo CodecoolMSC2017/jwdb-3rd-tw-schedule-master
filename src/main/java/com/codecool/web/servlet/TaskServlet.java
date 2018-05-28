@@ -60,9 +60,6 @@ public class TaskServlet extends AbstractServlet {
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskService taskService = new SimpleTaskService(connection);
-            ScheduleService scheduleService = new SimpleScheduleService(connection);
-            User user = getUser(req);
-            int userId = user.getId();
 
             JsonNode jsonNode = createJsonNodeFromRequest(req);
 
@@ -74,8 +71,6 @@ public class TaskServlet extends AbstractServlet {
             doGet(req,resp);
         } catch (SQLException e) {
             handleSqlError(resp, e);
-        } catch (Exception e) {
-            sendMessage(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.toString());
         }
     }
 

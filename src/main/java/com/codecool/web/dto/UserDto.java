@@ -10,22 +10,13 @@ public class UserDto {
     private User user;
     private List<Task> tasks;
     private List<Schedule> schedules;
-    private List<User> users;
     private Schedule schedule;
-
 
     public UserDto(User user, List<Task> tasks, List<Schedule> schedules) {
         this.user = user;
         this.tasks = tasks;
         this.schedules = schedules;
     }
-
-    public UserDto(List<User> users, List<Task> tasks, User user) {
-        this.user = user;
-        this.tasks = tasks;
-        this.users = users;
-    }
-
 
     public User getUser() {
         return user;
