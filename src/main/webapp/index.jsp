@@ -18,10 +18,10 @@
 
     <link rel="stylesheet" type="text/css" href="${styleUrl}">
     <script src="${indexScriptUrl}"></script>
+    <script src="${usersScriptUrl}"></script>
     <script src="${loginScriptUrl}"></script>
     <script src="${logoutScriptUrl}"></script>
     <script src="${registerScriptUrl}"></script>
-    <script src="${usersScriptUrl}"></script>
     <script src="${scheduleScriptUrl}"></script>
     <script src="${taskScriptUrl}"></script>
     <script src="${mainPageScriptUrl}"></script>
