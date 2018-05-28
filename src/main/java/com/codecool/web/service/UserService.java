@@ -1,5 +1,7 @@
 package com.codecool.web.service;
 
+import com.codecool.web.dto.AdminDto;
+import com.codecool.web.dto.UserDto;
 import com.codecool.web.exception.AlreadyRegisteredException;
 import com.codecool.web.exception.UserNotFoundException;
 import com.codecool.web.exception.WrongPasswordException;
@@ -17,5 +19,10 @@ public interface UserService {
 
     List<User> findAll() throws SQLException;
 
+    void handleRoles(User user) throws SQLException;
+
+    UserDto handleUserRole(User user) throws SQLException;
+
+    AdminDto handleAdminRole(User user) throws SQLException;
 
 }
