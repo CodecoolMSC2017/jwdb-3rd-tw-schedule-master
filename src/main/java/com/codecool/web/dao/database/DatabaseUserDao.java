@@ -88,7 +88,7 @@ class DatabaseUserDao extends AbstractDaoFactory implements UserDao {
 
     @Override
     public void deleteUserbyId(int id) throws SQLException {
-        String sql = "DELETE FROM user\n" +
+        String sql = "DELETE FROM app_user\n" +
                 " WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);

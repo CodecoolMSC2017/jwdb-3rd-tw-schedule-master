@@ -27,7 +27,7 @@ function appendUser(user) {
     removeButt.appendChild(removeUserButt);
 
     const trEl = document.createElement('tr');
-    emailTdEl.setAttribute('id',user.id);
+    trEl.setAttribute('id',user.id);
     emailTdEl.addEventListener('click', showAsUser);
 
     if(roleTdEl.textContent !== 'admin'){
@@ -76,7 +76,7 @@ function createUsersTableHeader() {
 }
 
 function showAsUser(e){
-    const id = e.target.id;
+    const id = e.target.parentElement.id;
     const params = new URLSearchParams();
     params.append('id', id);
 
@@ -88,8 +88,9 @@ function showAsUser(e){
 }
 
 function removeUser(e) {
-    const trEL = e.target.parentElement.parentElement;
-    const id = trEL.id;
+    const trEl = e.target.parentElement.parentElement;
+    const id = trEl.id;
+
     const data = JSON.stringify({"userId": id});
     trEl.remove();
 
@@ -121,6 +122,10 @@ function onAdminLoginResponse() {
 }
 
 function adminGoBackButtonClicked(){
+
+    const nameField = document.getElementById("name-field");
+    nameField.textContent = '';
+
     const params = new URLSearchParams();
 
     params.append('email', getAuthorization().email);
