@@ -65,7 +65,9 @@
                 here</a></p>
         </div>
     </div>
-
+    <div id="admin-content" class="content hidden">
+        <button id="admin-button">Go Back</button>
+    </div>
     <div id="users-content" class="content hidden">
         <h1>Users</h1>
         <table id="users">

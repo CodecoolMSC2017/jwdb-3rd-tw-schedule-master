@@ -126,6 +126,9 @@ function onLoad() {
     const logoutButtonEl = document.getElementById('logout-button');
     logoutButtonEl.addEventListener('click', onLogoutButtonClicked);
 
+    const adminGoBackButton = document.getElementById('admin-button');
+    adminGoBackButton.addEventListener('click',adminGoBackButtonClicked);
+
     if (hasAuthorization()) {
         onMainPageLoad(getAuthorization());
     }
