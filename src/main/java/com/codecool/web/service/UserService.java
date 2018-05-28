@@ -19,10 +19,4 @@ public interface UserService {
 
     List<User> findAll() throws SQLException;
 
-    void handleRoles(User user) throws SQLException;
-
-    UserDto handleUserRole(User user) throws SQLException;
-
-    AdminDto handleAdminRole(User user) throws SQLException;
-
 }
