@@ -24,9 +24,12 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 @WebServlet("/login")
 public final class LoginServlet extends AbstractServlet {
+
+    final Logger logger = Logger.getLogger(LoginServlet.class);
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -45,20 +48,24 @@ public final class LoginServlet extends AbstractServlet {
 
             if (role.equals("admin")) {
                 List<User> users = userService.findAll();
+                logger.info("admin logged in");
                 sendMessage(resp, 200, new AdminDto(user, users));
             }
 
             List<Task> allTask = taskService.findAllByUserId(user.getId());
             List<Schedule> schedules = scheduleService.findAllByUserId(user.getId());
-
+            logger.info(user.getUserName() + " logged in");
             sendMessage(resp, HttpServletResponse.SC_OK, new UserDto(user, allTask, schedules));
         } catch (SQLException ex) {
             handleSqlError(resp, ex);
         } catch (UserNotFoundException e) {
+            logger.error(e.getMessage());
             sendMessage(resp, 404, "User not found");
         } catch (WrongPasswordException e) {
+            logger.error(e.getMessage());
             sendMessage(resp, 409, "Wrong password");
         } catch (NoSuchAlgorithmException e) {
+            logger.error(e.getMessage());
             sendMessage(resp, HttpServletResponse.SC_EXPECTATION_FAILED, "Unexpected error occurred");
         }
     }
