@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface TaskDao {
 
-    void add(int userId, String title, String description) throws SQLException;
+    void add(int userId, String title, String description, String color) throws SQLException;
 
     void delete(int id) throws SQLException;
 

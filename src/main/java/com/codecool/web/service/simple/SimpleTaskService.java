@@ -23,8 +23,8 @@ public class SimpleTaskService implements TaskService {
     }
 
     @Override
-    public void addTask(int userId, String title, String description) throws SQLException {
-        taskDao.add(userId, title, description);
+    public void addTask(int userId, String title, String description, String color) throws SQLException {
+        taskDao.add(userId, title, description, color);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class SimpleTaskService implements TaskService {
         } else if (!currentTitle.equals(title) && !currentDescription.equals(description) && check == null) {
             taskDao.updateTitle(taskId, title);
             taskDao.updateDescription(taskId, description);
-        }else if(check != null){
+        } else if(check != null){
             throw new TaskAlreadyExistsException();
         }
     }

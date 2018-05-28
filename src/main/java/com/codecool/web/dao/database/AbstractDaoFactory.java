@@ -122,6 +122,7 @@ public abstract class AbstractDaoFactory {
         int userId = resultSet.getInt("app_user_id");
         String title = resultSet.getString("title");
         String description = resultSet.getString("description");
-        return new Task(id, userId, title, description);
+        String color = resultSet.getString("color");
+        return new Task(id, userId, title, description, color);
     }
 }
