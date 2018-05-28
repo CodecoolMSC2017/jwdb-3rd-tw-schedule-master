@@ -48,8 +48,9 @@ public class TaskServlet extends AbstractServlet {
             int userId = user.getId();
             String taskTitle = req.getParameter("title");
             String taskDescription = req.getParameter("description");
+            String taskColor = req.getParameter("color");
 
-            taskService.addTask(userId, taskTitle, taskDescription);
+            taskService.addTask(userId, taskTitle, taskDescription, taskColor);
 
             doGet(req,resp);
         } catch (SQLException ex) {
