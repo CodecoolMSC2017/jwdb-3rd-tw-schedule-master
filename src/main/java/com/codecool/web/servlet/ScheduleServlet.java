@@ -1,7 +1,8 @@
 package com.codecool.web.servlet;
 
 import com.codecool.web.dto.UserDto;
-import com.codecool.web.exception.TooManyDaysException;
+import com.codecool.web.exception.ScheduleAlreadyExistsException;
+import com.codecool.web.exception.WrongNumOfDaysException;
 import com.codecool.web.model.Schedule;
 import com.codecool.web.model.Task;
 import com.codecool.web.model.User;
@@ -63,8 +64,10 @@ public class ScheduleServlet extends AbstractServlet {
             doGet(req, resp);
         } catch (SQLException ex) {
             handleSqlError(resp, ex);
-        } catch (TooManyDaysException e) {
+        } catch (WrongNumOfDaysException e) {
             sendMessage(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+        } catch (ScheduleAlreadyExistsException e) {
+            sendMessage(resp,HttpServletResponse.SC_BAD_REQUEST,e.getMessage());
         }
     }
 
@@ -78,7 +81,6 @@ public class ScheduleServlet extends AbstractServlet {
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
             List<Task> tasks = taskService.findAllByUserId(userId);
 
-
             JsonNode jsonNode = createJsonNodeFromRequest(req);
 
             int scheduleId = Integer.parseInt(jsonNode.get("scheduleId").textValue());
@@ -86,15 +88,12 @@ public class ScheduleServlet extends AbstractServlet {
             String scheduleDescription = jsonNode.get("description").textValue();
 
             scheduleService.updateSchedule(scheduleId, scheduleTitle, scheduleDescription);
-            schedules = scheduleService.findAllByUserId(userId);
             Schedule schedule = scheduleService.findById(scheduleId);
             UserDto userDto = new UserDto(user, tasks, schedules);
             userDto.setSchedule(schedule);
             sendMessage(resp, 200, userDto);
         } catch (SQLException e) {
             handleSqlError(resp, e);
-        } catch (Exception e) {
-            sendMessage(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.toString());
         }
 
     }
