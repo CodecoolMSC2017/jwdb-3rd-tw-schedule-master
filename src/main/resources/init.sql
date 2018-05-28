@@ -54,9 +54,9 @@ CREATE TABLE task_hour (
 
 INSERT INTO app_user (email, user_name, password, role)  VALUES
 	('admin@admin.com', 'admin', 'd41d8cd98f00b204e9800998ecf8427e', 'admin'), --1
-	('david@gmail.com', 'David', 'password2', 'user'),	--2
-	('kenez@gmail.com', 'Kenez', 'password3', 'user'),	--3
-	('norbi@gmail.com', 'Norbi', 'password4', 'user');	--4
+	('david@gmail.com', 'David', 'd41d8cd98f00b204e9800998ecf8427e', 'user'),	--2
+	('kenez@gmail.com', 'Kenez', 'd41d8cd98f00b204e9800998ecf8427e', 'user'),	--3
+	('norbi@gmail.com', 'Norbi', 'd41d8cd98f00b204e9800998ecf8427e', 'user');	--4
 
 INSERT INTO schedule (app_user_id, title, description) VALUES
 	(2, 'Work', 'my working day'), --1
