@@ -109,6 +109,17 @@ class DatabaseScheduleDao extends AbstractDaoFactory implements ScheduleDao {
         return schedules;
     }
 
+    @Override
+    public Schedule findByTitle(String title) throws SQLException {
+        String sql = "SELECT * FROM schedule WHERE title = ?";
+        try(PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1,title);
+            try(ResultSet resultSet = statement.executeQuery()){
+                return fetch(resultSet);
+            }
+        }
+    }
+
     private Schedule fetch(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("id");
         int userID = resultSet.getInt("app_user_id");

@@ -75,6 +75,17 @@ class DatabaseDayDao extends AbstractDaoFactory implements DayDao {
         return days;
     }
 
+    @Override
+    public Day findDayByTitle(String title) throws SQLException {
+        String sql = "SELECT * FROM day WHERE title = ?";
+        try(PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1,title);
+            try(ResultSet resultSet = statement.executeQuery()){
+                return fetchDay(resultSet);
+            }
+        }
+    }
+
 
     private Day fetchDay(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("id");

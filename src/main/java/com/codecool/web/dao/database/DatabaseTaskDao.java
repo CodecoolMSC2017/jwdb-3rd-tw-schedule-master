@@ -3,6 +3,7 @@ package com.codecool.web.dao.database;
 import com.codecool.web.dao.TaskDao;
 import com.codecool.web.model.Task;
 
+import java.io.PipedReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -80,6 +81,8 @@ class DatabaseTaskDao extends AbstractDaoFactory implements TaskDao {
         return tasks;
     }
 
+
+
     @Override
     public List<Task> findAll() throws SQLException {
         List<Task> tasks = new ArrayList<>();
@@ -92,5 +95,17 @@ class DatabaseTaskDao extends AbstractDaoFactory implements TaskDao {
             }
         }
         return tasks;
+    }
+
+    @Override
+    public Task findByTitle(String title) throws SQLException {
+        String sql = "SELECT * FROM task WHERE title = ?";
+        try(PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1,title);
+            try (ResultSet resultSet = statement.executeQuery()){
+                return fetchTask(resultSet);
+            }
+        }
+
     }
 }

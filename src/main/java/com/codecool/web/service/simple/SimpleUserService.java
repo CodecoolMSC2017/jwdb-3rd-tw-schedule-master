@@ -26,7 +26,7 @@ public class SimpleUserService implements UserService {
 
     @Override
     public void register(String userName, String password, String email) throws SQLException, AlreadyRegisteredException, NoSuchAlgorithmException {
-        if (userDao.find(email) == null) {
+        if (userDao.findByEmail(email) == null) {
             password = encrypt(password);
             userDao.insert(email, userName, password, "user");
         } else {
@@ -36,10 +36,10 @@ public class SimpleUserService implements UserService {
 
     @Override
     public User login(String email, String password) throws SQLException, WrongPasswordException, UserNotFoundException, NoSuchAlgorithmException {
-        User userByEmail = userDao.find(email);
+        User userByEmail = userDao.findByEmail(email);
         if (userByEmail != null) {
             password = encrypt(password);
-            User userByEmailAndPassword = userDao.find(email, password);
+            User userByEmailAndPassword = userDao.findByEmail(email, password);
             if (userByEmailAndPassword != null) {
                 return userByEmailAndPassword;
             } else {

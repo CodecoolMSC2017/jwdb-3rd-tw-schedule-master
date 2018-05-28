@@ -22,5 +22,7 @@ public interface ScheduleDao {
 
     List<Schedule> findAll() throws SQLException;
 
+    Schedule findByTitle(String title) throws SQLException;
+
 
 }

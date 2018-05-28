@@ -1,6 +1,7 @@
 package com.codecool.web.servlet;
 
 import com.codecool.web.dto.UserDto;
+import com.codecool.web.exception.DayAlreadyExistsException;
 import com.codecool.web.model.Schedule;
 import com.codecool.web.model.Task;
 import com.codecool.web.model.User;
@@ -35,7 +36,7 @@ public class DayServlet extends AbstractServlet {
             String dayTitle = jsonNode.get("title").textValue();
             int scheduleId = Integer.parseInt(jsonNode.get("scheduleId").textValue());
 
-            scheduleService.updateDay(dayId, dayTitle);
+            scheduleService.updateDay(dayId, dayTitle, userId);
             Schedule schedule = scheduleService.findById(scheduleId);
 
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
@@ -46,6 +47,8 @@ public class DayServlet extends AbstractServlet {
             sendMessage(resp, HttpServletResponse.SC_OK, userDto);
         } catch (SQLException e) {
             handleSqlError(resp, e);
+        } catch (DayAlreadyExistsException e) {
+            sendMessage(resp,HttpServletResponse.SC_BAD_REQUEST,e.getMessage());
         }
     }
 }
