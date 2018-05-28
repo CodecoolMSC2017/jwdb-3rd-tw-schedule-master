@@ -165,7 +165,7 @@ li:last-child {
 
 .input-miniature {
     text-align: center;
-    background-color: #ECF0F1;
+    background-color: white;
     border: 1px solid transparent;
     border-radius: 1px;
     font-size: 10px;
@@ -177,7 +177,7 @@ li:last-child {
 }
 
 .input-miniature:focus {
-    border: 1px solid black;
+    border: 1px solid #d62c1a;
     box-shadow: none;
 }
 
@@ -282,6 +282,7 @@ li:last-child {
     display: block;
     width: 180px;
     margin: 10px auto;
+    cursor: pointer;
 }
 
 .close-btn {
@@ -294,6 +295,7 @@ li:last-child {
     margin: 5px;
     padding: 0;
     border: none;
+    cursor: pointer;
 }
 
 .close-btn-min {
@@ -306,6 +308,7 @@ li:last-child {
     margin: 5px;
     padding: 0;
     border: none;
+    cursor: pointer;
 }
 
 .delete-btn {
@@ -319,7 +322,7 @@ li:last-child {
     display: inline;
     padding: 0;
     border: none;
-
+    cursor: pointer;
 }
 
 .change-btn {
@@ -330,6 +333,7 @@ li:last-child {
     display: inline;
     padding: 0;
     border: none;
+    cursor: pointer;
 }
 
 .change-btn-min {
@@ -340,6 +344,7 @@ li:last-child {
     display: inline;
     padding: 0;
     border: none;
+    cursor: pointer;
 }
 
 .change-btn-min-absolute {
@@ -352,6 +357,7 @@ li:last-child {
     margin: 5px;
     padding: 0;
     border: none;
+    cursor: pointer;
 }
 
 .create-min-btn {
@@ -360,6 +366,7 @@ li:last-child {
     height: 40px;
     padding: 0;
     border: none;
+    cursor: pointer;
 }
 
 /*
