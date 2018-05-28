@@ -19,4 +19,6 @@ public interface UserService {
 
     List<User> findAll() throws SQLException;
 
+    void deleteUser(int userId) throws SQLException;
+
 }
