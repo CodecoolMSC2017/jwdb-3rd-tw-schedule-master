@@ -147,6 +147,7 @@ function createTask(){
         const params = new URLSearchParams();
         params.append('title',title);
         params.append('description',description);
+        params.append('color', '#ffffff');
 
         const xhr = new XMLHttpRequest();
         xhr.addEventListener('load',onCreateTaskResponse);

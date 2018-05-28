@@ -238,8 +238,8 @@ function listingDays(userDto) {
             let hoursTd = document.createElement("td");
             hoursTd.setAttribute("class", "hours-td");
             hoursTd.textContent = userDto.schedule.days[i].hours[j].value + ":00hr";
-            hoursTd.setAttribute('drop', "drag_drop(ev)");
-            hoursTr.setAttribute('dragenter', 'drag_enter(event)');
+            hoursTd.setAttribute('drop', 'drag_drop');
+            hoursTr.setAttribute('dragenter', 'drag_enter');
             hoursTr.appendChild(hoursTd);
             hoursTable.appendChild(hoursTr);
 
