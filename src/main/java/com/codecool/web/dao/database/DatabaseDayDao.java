@@ -81,9 +81,11 @@ class DatabaseDayDao extends AbstractDaoFactory implements DayDao {
         try(PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1,title);
             try(ResultSet resultSet = statement.executeQuery()){
-                return fetchDay(resultSet);
+                if(resultSet.next()){
+                    return fetchDay(resultSet);
+                }
             }
-        }
+        }return null;
     }
 
 

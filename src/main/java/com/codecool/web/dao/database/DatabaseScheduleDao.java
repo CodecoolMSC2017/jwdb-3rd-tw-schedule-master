@@ -23,8 +23,8 @@ class DatabaseScheduleDao extends AbstractDaoFactory implements ScheduleDao {
             statement.setString(3, description);
             executeInsert(statement);
             int id = fetchGeneratedId(statement);
-            return new Schedule(id,appUserId,title,description);
-        }finally {
+            return new Schedule(id, appUserId, title, description);
+        } finally {
             connection.setAutoCommit(autoCommit);
         }
     }
@@ -112,13 +112,17 @@ class DatabaseScheduleDao extends AbstractDaoFactory implements ScheduleDao {
     @Override
     public Schedule findByTitle(String title) throws SQLException {
         String sql = "SELECT * FROM schedule WHERE title = ?";
-        try(PreparedStatement statement = connection.prepareStatement(sql)){
-            statement.setString(1,title);
-            try(ResultSet resultSet = statement.executeQuery()){
-                return fetch(resultSet);
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, title);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next())
+                    return fetch(resultSet);
             }
-        }
+
+        }return null;
     }
+
+
 
     private Schedule fetch(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("id");
