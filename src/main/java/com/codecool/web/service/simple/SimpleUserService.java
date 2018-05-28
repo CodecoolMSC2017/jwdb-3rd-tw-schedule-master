@@ -2,8 +2,6 @@ package com.codecool.web.service.simple;
 
 import com.codecool.web.dao.UserDao;
 import com.codecool.web.dao.database.AbstractDaoFactory;
-import com.codecool.web.dto.AdminDto;
-import com.codecool.web.dto.UserDto;
 import com.codecool.web.exception.AlreadyRegisteredException;
 import com.codecool.web.exception.UserNotFoundException;
 import com.codecool.web.exception.WrongPasswordException;
@@ -48,6 +46,11 @@ public class SimpleUserService implements UserService {
         } else {
             throw new UserNotFoundException();
         }
+    }
+
+    @Override
+    public User findById(int id) throws SQLException {
+        return userDao.findById(id);
     }
 
     @Override

@@ -18,21 +18,21 @@ CREATE TABLE schedule (
 	app_user_id INTEGER NOT NULL,
 	title TEXT NOT NULL,
 	description TEXT NOT NULL,
-	FOREIGN KEY (app_user_id) REFERENCES app_user("id")
+	FOREIGN KEY (app_user_id) REFERENCES app_user("id") ON DELETE CASCADE
 );
 
 CREATE TABLE day (
 	id SERIAL PRIMARY KEY NOT NULL,
 	schedule_id INTEGER NOT NULL,
 	title TEXT NOT NULL,
-	FOREIGN KEY (schedule_id) REFERENCES schedule("id")
+	FOREIGN KEY (schedule_id) REFERENCES schedule("id") ON DELETE CASCADE
 );
 
 CREATE TABLE hour (
 	id SERIAL PRIMARY KEY NOT NULL,
 	day_id INTEGER NOT NULL,
 	value INTEGER NOT NULL,
-	FOREIGN KEY (day_id) REFERENCES day("id")
+	FOREIGN KEY (day_id) REFERENCES day("id") ON DELETE CASCADE
 );
 
 CREATE TABLE task (
@@ -40,7 +40,7 @@ CREATE TABLE task (
 	app_user_id INTEGER NOT NULL,
 	title TEXT NOT NULL,
 	description TEXT,
-	FOREIGN KEY (app_user_id) REFERENCES app_user("id")
+	FOREIGN KEY (app_user_id) REFERENCES app_user("id") ON DELETE CASCADE
 );
 
 CREATE TABLE task_hour (
@@ -48,8 +48,8 @@ CREATE TABLE task_hour (
     schedule_id INTEGER,
     hour_ids TEXT,
     PRIMARY KEY (task_id, schedule_id),
-	  FOREIGN KEY (task_id) REFERENCES task("id"),
-    FOREIGN KEY (schedule_id) REFERENCES schedule("id")
+	FOREIGN KEY (task_id) REFERENCES task("id")  ON DELETE CASCADE,
+    FOREIGN KEY (schedule_id) REFERENCES schedule("id") ON DELETE CASCADE
 );
 
 INSERT INTO app_user (email, user_name, password, role)  VALUES
@@ -57,27 +57,27 @@ INSERT INTO app_user (email, user_name, password, role)  VALUES
 	('david@gmail.com', 'David', 'password2', 'user'),	--2
 	('kenez@gmail.com', 'Kenez', 'password3', 'user'),	--3
 	('norbi@gmail.com', 'Norbi', 'password4', 'user');	--4
-	
+
 INSERT INTO schedule (app_user_id, title, description) VALUES
 	(2, 'Work', 'my working day'), --1
 	(2, 'PS4', 'God of War'), -- 2
 	(3, 'fap', 'pubg'); --3
-	
+
 INSERT INTO day (schedule_id, title) VALUES
 	(2, 'prologue'), --1
 	(3, 'one round'); --2
-	
+
 INSERT INTO hour (day_id, value) VALUES
     (1,0), --1
     (1,1), --2
 	(1, 17), --3
 	(1, 18), --4
 	(2, 20); --5
-	
+
 INSERT INTO task (app_user_id, title, description) VALUES
 	(2, 'gaming', 'playing god of war'), --1
 	(3, 'fap', 'playing gay games'); --2
-	
+
 INSERT INTO task_hour (task_id, schedule_id, hour_ids) VALUES
 	(1, 1, '1,2'),
 	(1, 2, '3');

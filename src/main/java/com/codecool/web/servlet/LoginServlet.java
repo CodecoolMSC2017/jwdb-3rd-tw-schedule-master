@@ -1,5 +1,6 @@
 package com.codecool.web.servlet;
 
+import com.codecool.web.dto.AdminDto;
 import com.codecool.web.dto.UserDto;
 import com.codecool.web.exception.UserNotFoundException;
 import com.codecool.web.exception.WrongPasswordException;
@@ -13,6 +14,7 @@ import com.codecool.web.service.simple.SimpleScheduleService;
 import com.codecool.web.service.simple.SimpleTaskService;
 import com.codecool.web.service.simple.SimpleUserService;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,24 +42,44 @@ public final class LoginServlet extends AbstractServlet {
 
             req.getSession().setAttribute("user", user);
 
-            if(role.equals("admin")) {
-                List<User> allUsers = userService.findAll();
-                List<Task> allTasks = taskService.findAll();
-                sendMessage(resp, HttpServletResponse.SC_OK, new UserDto(allUsers, allTasks, user));
+            if (role.equals("admin")) {
+                List<User> users = userService.findAll();
+                sendMessage(resp, 200, new AdminDto(user, users));
             }
 
             List<Task> allTask = taskService.findAllByUserId(user.getId());
             List<Schedule> schedules = scheduleService.findAllByUserId(user.getId());
 
             sendMessage(resp, HttpServletResponse.SC_OK, new UserDto(user, allTask, schedules));
-        }  catch (SQLException ex) {
+        } catch (SQLException ex) {
             handleSqlError(resp, ex);
         } catch (UserNotFoundException e) {
-            sendMessage(resp, 404, "User not found" );
+            sendMessage(resp, 404, "User not found");
         } catch (WrongPasswordException e) {
             sendMessage(resp, 409, "Wrong password");
         } catch (NoSuchAlgorithmException e) {
             sendMessage(resp, HttpServletResponse.SC_EXPECTATION_FAILED, "Unexpected error occurred");
+        }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try (Connection connection = getConnection(req.getServletContext())) {
+            UserService userService = new SimpleUserService(connection);
+            TaskService taskService = new SimpleTaskService(connection);
+            ScheduleService scheduleService = new SimpleScheduleService(connection);
+
+            int userId = Integer.parseInt(req.getParameter("id"));
+            User user = userService.findById(userId);
+
+            req.getSession().setAttribute("user", user);
+
+            List<Task> allTask = taskService.findAllByUserId(user.getId());
+            List<Schedule> schedules = scheduleService.findAllByUserId(user.getId());
+            sendMessage(resp, HttpServletResponse.SC_OK, new UserDto(user, allTask, schedules));
+
+        } catch (SQLException e) {
+            handleSqlError(resp, e);
         }
     }
 }

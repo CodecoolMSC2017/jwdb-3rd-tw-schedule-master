@@ -1,7 +1,5 @@
 package com.codecool.web.service;
 
-import com.codecool.web.dto.AdminDto;
-import com.codecool.web.dto.UserDto;
 import com.codecool.web.exception.AlreadyRegisteredException;
 import com.codecool.web.exception.UserNotFoundException;
 import com.codecool.web.exception.WrongPasswordException;
@@ -16,6 +14,8 @@ public interface UserService {
     void register(String userName, String password, String email) throws SQLException, AlreadyRegisteredException, NoSuchAlgorithmException;
 
     User login(String email, String password) throws SQLException, WrongPasswordException, UserNotFoundException, NoSuchAlgorithmException;
+
+    User findById(int id) throws SQLException;
 
     List<User> findAll() throws SQLException;
 
