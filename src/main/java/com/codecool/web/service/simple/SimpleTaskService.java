@@ -3,6 +3,7 @@ package com.codecool.web.service.simple;
 import com.codecool.web.dao.TaskDao;
 import com.codecool.web.dao.TaskHourDao;
 import com.codecool.web.dao.database.AbstractDaoFactory;
+import com.codecool.web.exception.TaskAlreadyExistsException;
 import com.codecool.web.model.Task;
 import com.codecool.web.service.TaskService;
 
@@ -15,7 +16,7 @@ public class SimpleTaskService implements TaskService {
     private final TaskDao taskDao;
     private final TaskHourDao taskHourDao;
 
-    public SimpleTaskService(Connection connection) throws SQLException {
+    public SimpleTaskService(Connection connection) {
         taskDao = (TaskDao) AbstractDaoFactory.getDao("task", connection);
         taskHourDao = (TaskHourDao) AbstractDaoFactory.getDao("taskHour",connection);
 
@@ -34,18 +35,21 @@ public class SimpleTaskService implements TaskService {
     }
 
     @Override
-    public void update(int taskId, String title, String description) throws SQLException {
+    public void update(int taskId, String title, String description) throws SQLException, TaskAlreadyExistsException {
         Task task = taskDao.findById(taskId);
+        Task check = taskDao.findByTitle(title);
         String currentTitle = task.getTitle();
         String currentDescription = task.getDescription();
 
         if (currentTitle.equals(title) && !currentDescription.equals(description)) {
             taskDao.updateDescription(taskId, description);
-        } else if (!currentTitle.equals(title) && currentDescription.equals(description)) {
+        } else if (!currentTitle.equals(title) && currentDescription.equals(description) && check == null) {
             taskDao.updateTitle(taskId, title);
-        } else if (!currentTitle.equals(title) && !currentDescription.equals(description)) {
+        } else if (!currentTitle.equals(title) && !currentDescription.equals(description) && check == null) {
             taskDao.updateTitle(taskId, title);
             taskDao.updateDescription(taskId, description);
+        }else if(check != null){
+            throw new TaskAlreadyExistsException();
         }
     }
 

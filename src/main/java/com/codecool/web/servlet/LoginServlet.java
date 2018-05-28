@@ -13,6 +13,7 @@ import com.codecool.web.service.UserService;
 import com.codecool.web.service.simple.SimpleScheduleService;
 import com.codecool.web.service.simple.SimpleTaskService;
 import com.codecool.web.service.simple.SimpleUserService;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -84,6 +85,25 @@ public final class LoginServlet extends AbstractServlet {
             List<Task> allTask = taskService.findAllByUserId(user.getId());
             List<Schedule> schedules = scheduleService.findAllByUserId(user.getId());
             sendMessage(resp, HttpServletResponse.SC_OK, new UserDto(user, allTask, schedules));
+
+        } catch (SQLException e) {
+            handleSqlError(resp, e);
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try (Connection connection = getConnection(req.getServletContext())) {
+            UserService userService = new SimpleUserService(connection);
+
+            JsonNode jsonNode = createJsonNodeFromRequest(req);
+
+            int userId = Integer.parseInt(jsonNode.get("userId").textValue());
+
+            userService.deleteUser(userId);
+            User user = getUser(req);
+            List<User> users = userService.findAll();
+            sendMessage(resp, 200, new AdminDto(user, users));
 
         } catch (SQLException e) {
             handleSqlError(resp, e);

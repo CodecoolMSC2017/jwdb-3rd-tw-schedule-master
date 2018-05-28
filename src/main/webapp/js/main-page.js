@@ -3,7 +3,11 @@ let scheduleButtonEl;
 
 function onMainPageLoad(userDto) {
     clearMessages();
-    showContents(['name-logout-content', 'logout-content', 'schedules-content', 'tasks-content', 'days-content']);
+    if (getAuthorization().role !== 'admin') {
+        showContents(['name-logout-content', 'logout-content', 'schedules-content', 'tasks-content', 'days-content']);
+    } else {
+        showContents(['admin-content', 'name-logout-content', 'logout-content', 'schedules-content', 'tasks-content', 'days-content']);
+    }
 
     const nameField = document.getElementById("name-field");
     nameField.textContent = userDto.user.userName;
@@ -96,7 +100,9 @@ function createScheduleDiv(userDto){
         let scheduleLi = document.createElement("li");
         scheduleLi.setAttribute("id",userDto.schedules[i].id);
         scheduleLi.setAttribute("class", "schedule-li");
-        scheduleLi.setAttribute('draggable', 'true');
+        scheduleLi.setAttribute('draggable', true);
+        scheduleLi.setAttribute('ondragstart', 'drag(event)');
+        scheduleLi.setAttribute('ondrop', 'drop(event)');
 
 
         let scheduleSpan = document.createElement("span");
@@ -124,4 +130,16 @@ function createScheduleDiv(userDto){
     scheduleCreateLiEl.appendChild(createButton);
     scheduleEl.appendChild(scheduleCreateLiEl);
     scheduleDiv.appendChild(scheduleEl);
+}
+
+
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    ev.target.appendChild(document.getElementById(data));
 }

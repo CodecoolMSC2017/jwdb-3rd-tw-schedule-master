@@ -1,5 +1,6 @@
 package com.codecool.web.service;
 
+import com.codecool.web.exception.TaskAlreadyExistsException;
 import com.codecool.web.model.Task;
 
 import java.sql.SQLException;
@@ -11,7 +12,7 @@ public interface TaskService {
 
     void deleteTask(int taskId) throws SQLException;
 
-    void update(int taskId, String title, String description) throws SQLException;
+    void update(int taskId, String title, String description) throws SQLException, TaskAlreadyExistsException;
 
     Task findById(int taskId) throws SQLException;
 

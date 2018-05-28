@@ -28,13 +28,15 @@ function appendUser(user) {
 
     const trEl = document.createElement('tr');
     trEl.setAttribute('id',user.id);
-    trEl.addEventListener('click', showAsUser);
+    emailTdEl.addEventListener('click', showAsUser);
 
-    trEl.appendChild(nameTdEl);
-    trEl.appendChild(emailTdEl);
-    trEl.appendChild(roleTdEl);
-    trEl.appendChild(removeButt);
-    usersTableBodyEl.appendChild(trEl);
+    if(roleTdEl.textContent !== 'admin'){
+        trEl.appendChild(nameTdEl);
+        trEl.appendChild(emailTdEl);
+        trEl.appendChild(roleTdEl);
+        trEl.appendChild(removeButt);
+        usersTableBodyEl.appendChild(trEl);
+    }
 }
 
 function appendUsers(users) {
@@ -74,20 +76,21 @@ function createUsersTableHeader() {
 }
 
 function showAsUser(e){
-    const id = e.target.id;
+    const id = e.target.parentElement.id;
     const params = new URLSearchParams();
     params.append('id', id);
 
     const xhr = new XMLHttpRequest();
-    xhr.addEventListener('load', onLoginResponse);
+    xhr.addEventListener('load', onAdminLoginResponse);
     xhr.addEventListener('error', onNetworkError);
     xhr.open('GET', 'login?' + params.toString());
     xhr.send();
 }
 
 function removeUser(e) {
-    const trEL = e.target.parentElement.parentElement;
-    const id = trEL.id;
+    const trEl = e.target.parentElement.parentElement;
+    const id = trEl.id;
+
     const data = JSON.stringify({"userId": id});
     trEl.remove();
 
@@ -107,4 +110,30 @@ function onDeleteUserResponse(){
     } else {
         onMessageResponse(userContentDivEl, this);
     }
+}
+
+function onAdminLoginResponse() {
+    if (this.status === OK) {
+        const dto = JSON.parse(this.responseText);
+        onMainPageLoad(dto);
+    } else {
+        onMessageResponse(userContentDivEl, this);
+    }
+}
+
+function adminGoBackButtonClicked(){
+
+    const nameField = document.getElementById("name-field");
+    nameField.textContent = '';
+
+    const params = new URLSearchParams();
+
+    params.append('email', getAuthorization().email);
+    params.append('password', getAuthorization().password);
+
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onLoginResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('POST', 'login');
+    xhr.send(params);
 }

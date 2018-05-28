@@ -18,4 +18,6 @@ public interface DayDao {
     Day findById(int id) throws SQLException;
 
     List<Day> findByScheduleId(int scheduleId) throws SQLException;
+
+    Day findDayByTitle(String title) throws SQLException;
 }

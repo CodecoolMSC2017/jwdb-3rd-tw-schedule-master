@@ -1,5 +1,6 @@
 package com.codecool.web.dao;
 
+import com.codecool.web.model.Schedule;
 import com.codecool.web.model.Task;
 
 import java.sql.SQLException;
@@ -20,4 +21,8 @@ public interface TaskDao {
     List<Task> findByUserId(int userId) throws SQLException;
 
     List<Task> findAll() throws SQLException;
+
+    Task findByTitle(String title) throws SQLException;
+
+
 }
