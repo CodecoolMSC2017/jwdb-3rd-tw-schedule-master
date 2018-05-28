@@ -1,9 +1,9 @@
 package com.codecool.web.exception;
 
-public class TooManyDaysException extends Exception{
+public class WrongNumOfDaysException extends Exception{
 
 
-    public TooManyDaysException() {
+    public WrongNumOfDaysException() {
         super("Number of days can not be more than 7 or less than 1");
     }
 }
