@@ -50,13 +50,15 @@ function createTaskDiv(userDto) {
         let taskLi = document.createElement("li");
         taskLi.setAttribute("id", userDto.tasks[i].id);
         taskLi.setAttribute("class", "task-li");
-        taskLi.setAttribute('draggable', 'true');
+        taskLi.setAttribute('draggable', true);
+        taskLi.setAttribute('ondragstart', 'drag_start(event)');
 
         let taskSpan = document.createElement("span");
         taskSpan.textContent = userDto.tasks[i].title;
         taskSpan.setAttribute("id", userDto.tasks[i].title);
         taskSpan.setAttribute('class', 'title-span');
         taskSpan.addEventListener('click', showTaskDescription);
+
 
         let taskDesc = document.createElement("p");
         taskDesc.textContent = userDto.tasks[i].description;
@@ -100,9 +102,6 @@ function createScheduleDiv(userDto){
         let scheduleLi = document.createElement("li");
         scheduleLi.setAttribute("id",userDto.schedules[i].id);
         scheduleLi.setAttribute("class", "schedule-li");
-        scheduleLi.setAttribute('draggable', true);
-        scheduleLi.setAttribute('ondragstart', 'drag(event)');
-        scheduleLi.setAttribute('ondrop', 'drop(event)');
 
 
         let scheduleSpan = document.createElement("span");
@@ -133,13 +132,8 @@ function createScheduleDiv(userDto){
 }
 
 
-function drag(ev) {
-    ev.dataTransfer.setData("text", ev.target.id);
+function drag_start(ev) {
+    ev.dataTransfer.setData("text", ev.target.getAttribute('id'));
+    ev.dataTransfer.dropEffect = "move";
 }
 
-
-function drop(ev) {
-    ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-    ev.target.appendChild(document.getElementById(data));
-}
