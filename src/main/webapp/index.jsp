@@ -14,12 +14,14 @@
     <c:url value="/js/main-page.js" var="mainPageScriptUrl"/>
     <c:url value="/js/task.js" var="taskScriptUrl"/>
     <c:url value="/js/schedule.js" var="scheduleScriptUrl"/>
+    <c:url value="/js/users.js" var="usersScriptUrl"/>
 
     <link rel="stylesheet" type="text/css" href="${styleUrl}">
     <script src="${indexScriptUrl}"></script>
     <script src="${loginScriptUrl}"></script>
     <script src="${logoutScriptUrl}"></script>
     <script src="${registerScriptUrl}"></script>
+    <script src="${usersScriptUrl}"></script>
     <script src="${scheduleScriptUrl}"></script>
     <script src="${taskScriptUrl}"></script>
     <script src="${mainPageScriptUrl}"></script>
@@ -62,6 +64,16 @@
                                                                       onclick="toLogin();">Login
                 here</a></p>
         </div>
+    </div>
+
+    <div id="users-content" class="content hidden">
+        <h1>Users</h1>
+        <table id="users">
+            <thead>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
 
     <div class="main-div">

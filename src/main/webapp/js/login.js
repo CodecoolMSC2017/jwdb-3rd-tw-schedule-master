@@ -2,7 +2,11 @@ function onLoginResponse() {
     if (this.status === OK) {
         const userDto = JSON.parse(this.responseText);
         setAuthorization(userDto.user);
-        onMainPageLoad(userDto);
+        if(userDto.user.role === 'admin'){
+            onUserListingLoad(userDto);
+        }else{
+            onMainPageLoad(userDto);
+        }
     } else {
         onMessageResponse(loginContentDivEl, this);
     }

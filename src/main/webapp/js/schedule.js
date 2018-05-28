@@ -218,11 +218,11 @@ function listingDays(userDto) {
         let hoursTable = document.createElement("table");
         hoursTable.setAttribute("class","hours-table");
 
-        let titleSpan = document.createElement("span");
-        titleSpan.textContent = userDto.schedule.days[i].title;
-        titleSpan.setAttribute("id", userDto.schedule.days[i].id);
-        titleSpan.setAttribute("class", "title-span");
-        td.appendChild(titleSpan);
+        let titleParEl = document.createElement("p");
+        titleParEl.textContent = userDto.schedule.days[i].title;
+        titleParEl.setAttribute("id", userDto.schedule.days[i].id);
+        titleParEl.setAttribute("class", "title-par");
+        td.appendChild(titleParEl);
 
         let renameButt = document.createElement("button");
         renameButt.setAttribute("id", userDto.schedule.days[i].title);
@@ -270,11 +270,13 @@ function renameDay(e) {
     newTitle.setAttribute("type", "text");
     newTitle.placeholder = oldTitle;
     newTitle.setAttribute("id", id);
+    newTitle.setAttribute("class", "input-miniature");
 
     buttonEl.removeEventListener('click', renameDay);
     buttonEl.addEventListener('click', applyDayUpdates);
 
     tdEl.insertBefore(newTitle, buttonEl);
+    tdEl.insertBefore(document.createElement("br"), buttonEl);
 
 }
 
@@ -336,6 +338,7 @@ function updateScheduleFields(e){
     const titleTd = document.createElement("td");
     titleTd.colSpan = colspan;
     const descTd = document.createElement("td");
+    descTd.setAttribute("class", "desc-td");
     descTd.colSpan = colspan;
 
     const titleInputEl = document.createElement("INPUT");

@@ -50,6 +50,7 @@ function createTaskDiv(userDto) {
         let taskSpan = document.createElement("span");
         taskSpan.textContent = userDto.tasks[i].title;
         taskSpan.setAttribute("id", userDto.tasks[i].title);
+        taskSpan.setAttribute('class', 'title-span');
         taskSpan.addEventListener('click', showTaskDescription);
 
         let taskDesc = document.createElement("p");
@@ -59,15 +60,12 @@ function createTaskDiv(userDto) {
 
         let renameTaskButt = document.createElement("button");
         renameTaskButt.addEventListener('click', updateTask);
-        renameTaskButt.setAttribute("class", "change-btn-min");
+        renameTaskButt.setAttribute("class", "change-btn-min-absolute");
 
 
         let deleteTaskButt = document.createElement("button");
         deleteTaskButt.addEventListener('click', removeTask);
         deleteTaskButt.setAttribute("class", "delete-btn");
-
-
-
 
         taskLi.appendChild(taskSpan);
         taskLi.appendChild(renameTaskButt);
@@ -76,13 +74,13 @@ function createTaskDiv(userDto) {
     }
 
     const taskCreateLiEl = document.createElement("li");
-    const createButton = document.createElement("button");
 
-    createButton.addEventListener('click',showCreateTask);
-    createButton.setAttribute("id", "to-createTask-button");
-    createButton.setAttribute("class", "create-min-btn");
+    const createImage = document.createElement("button");
+    createImage.addEventListener('click', showCreateTask);
+    createImage.setAttribute("id", "to-createTask-button");
+    createImage.setAttribute("class", "create-min-btn");
 
-    taskCreateLiEl.appendChild(createButton);
+    taskCreateLiEl.appendChild(createImage);
     taskEl.appendChild(taskCreateLiEl);
     taskDiv.appendChild(taskEl);
 
@@ -102,7 +100,7 @@ function createScheduleDiv(userDto){
         let scheduleSpan = document.createElement("span");
         scheduleSpan.textContent = userDto.schedules[i].title;
         scheduleSpan.addEventListener('click',listingSchedules);
-        scheduleSpan.setAttribute("class", "show-schedule-span");
+        scheduleSpan.setAttribute("class", "title-span");
 
         let deleteScheduleButt = document.createElement("button");
         deleteScheduleButt.addEventListener('click',removeSchedule);
@@ -113,8 +111,8 @@ function createScheduleDiv(userDto){
         scheduleLi.appendChild(deleteScheduleButt);
         scheduleEl.appendChild(scheduleLi);
     }
-
     const scheduleCreateLiEl = document.createElement('li');
+    scheduleCreateLiEl.setAttribute("class", 'task-create-li');
     const createButton = document.createElement("button");
 
     createButton.addEventListener('click',showCreateSchedule);
