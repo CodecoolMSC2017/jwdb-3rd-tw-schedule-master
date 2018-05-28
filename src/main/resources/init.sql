@@ -75,9 +75,9 @@ INSERT INTO hour (day_id, value) VALUES
 	(1, 18), --4
 	(2, 20); --5
 
-INSERT INTO task (app_user_id, title, description) VALUES
-	(2, 'gaming', 'playing god of war'), --1
-	(3, 'fap', 'playing gay games'); --2
+INSERT INTO task (app_user_id, title, description, color) VALUES
+	(2, 'gaming', 'playing god of war', '#ffffff'), --1
+	(3, 'fap', 'playing gay games', '#ffffff'); --2
 
 INSERT INTO task_hour (task_id, schedule_id, hour_ids) VALUES
 	(1, 1, '1,2'),
