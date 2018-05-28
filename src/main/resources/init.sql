@@ -40,6 +40,7 @@ CREATE TABLE task (
 	app_user_id INTEGER NOT NULL,
 	title TEXT NOT NULL,
 	description TEXT,
+	color TEXT NOT NULL,
 	FOREIGN KEY (app_user_id) REFERENCES app_user("id") ON DELETE CASCADE
 );
 
