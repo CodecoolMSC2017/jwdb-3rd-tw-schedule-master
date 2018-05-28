@@ -6,8 +6,8 @@ import java.util.List;
 
 public class AdminDto {
 
-    User user;
-    List<User> users;
+    private User user;
+    private List<User> users;
 
     public AdminDto(User user, List<User> users) {
         this.user = user;
@@ -18,15 +18,7 @@ public class AdminDto {
         return user;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public List<User> getUsers() {
         return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
     }
 }

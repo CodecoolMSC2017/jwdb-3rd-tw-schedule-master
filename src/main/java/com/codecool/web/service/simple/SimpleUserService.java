@@ -2,8 +2,6 @@ package com.codecool.web.service.simple;
 
 import com.codecool.web.dao.UserDao;
 import com.codecool.web.dao.database.AbstractDaoFactory;
-import com.codecool.web.dto.AdminDto;
-import com.codecool.web.dto.UserDto;
 import com.codecool.web.exception.AlreadyRegisteredException;
 import com.codecool.web.exception.UserNotFoundException;
 import com.codecool.web.exception.WrongPasswordException;
@@ -26,7 +24,7 @@ public class SimpleUserService implements UserService {
 
     @Override
     public void register(String userName, String password, String email) throws SQLException, AlreadyRegisteredException, NoSuchAlgorithmException {
-        if (userDao.find(email) == null) {
+        if (userDao.findByEmail(email) == null) {
             password = encrypt(password);
             userDao.insert(email, userName, password, "user");
         } else {
@@ -36,10 +34,10 @@ public class SimpleUserService implements UserService {
 
     @Override
     public User login(String email, String password) throws SQLException, WrongPasswordException, UserNotFoundException, NoSuchAlgorithmException {
-        User userByEmail = userDao.find(email);
+        User userByEmail = userDao.findByEmail(email);
         if (userByEmail != null) {
             password = encrypt(password);
-            User userByEmailAndPassword = userDao.find(email, password);
+            User userByEmailAndPassword = userDao.findByEmail(email, password);
             if (userByEmailAndPassword != null) {
                 return userByEmailAndPassword;
             } else {
@@ -48,6 +46,11 @@ public class SimpleUserService implements UserService {
         } else {
             throw new UserNotFoundException();
         }
+    }
+
+    @Override
+    public User findById(int id) throws SQLException {
+        return userDao.findById(id);
     }
 
     @Override
