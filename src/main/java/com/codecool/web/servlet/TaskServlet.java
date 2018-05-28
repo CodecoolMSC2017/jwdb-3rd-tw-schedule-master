@@ -1,6 +1,7 @@
 package com.codecool.web.servlet;
 
 import com.codecool.web.dto.UserDto;
+import com.codecool.web.exception.TaskAlreadyExistsException;
 import com.codecool.web.model.Schedule;
 import com.codecool.web.model.Task;
 import com.codecool.web.model.User;
@@ -71,6 +72,8 @@ public class TaskServlet extends AbstractServlet {
             doGet(req,resp);
         } catch (SQLException e) {
             handleSqlError(resp, e);
+        } catch (TaskAlreadyExistsException e) {
+            sendMessage(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         }
     }
 

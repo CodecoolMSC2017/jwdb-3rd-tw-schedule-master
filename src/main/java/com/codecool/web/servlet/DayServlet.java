@@ -48,7 +48,7 @@ public class DayServlet extends AbstractServlet {
         } catch (SQLException e) {
             handleSqlError(resp, e);
         } catch (DayAlreadyExistsException e) {
-            sendMessage(resp,HttpServletResponse.SC_BAD_REQUEST,e.getMessage());
+            sendMessage(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         }
     }
 }
