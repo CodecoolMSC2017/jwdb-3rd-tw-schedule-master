@@ -16,6 +16,7 @@ let scheduleDiv;
 let mainDiv;
 let daysContentDivEl;
 let daysDiv;
+let userContentDivEl;
 
 
 
@@ -112,6 +113,7 @@ function onLoad() {
     daysContentDivEl = document.getElementById("days-content");
     daysDiv = document.getElementById("days");
     mainDiv = document.getElementById("name-logout-content");
+    userContentDivEl = document.getElementById('users-content');
 
     loadUserCredentials();
 

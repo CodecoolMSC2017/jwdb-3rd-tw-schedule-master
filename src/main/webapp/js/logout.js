@@ -2,6 +2,7 @@ function onLogoutResponse() {
     if (this.status === OK) {
         setUnauthorized();
         clearMessages();
+        localStorage.clear();
         showContents(['login-content']);
         onMessageResponse(loginContentDivEl, this);
     } else {
