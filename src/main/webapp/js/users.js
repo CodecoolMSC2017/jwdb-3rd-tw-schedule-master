@@ -2,12 +2,12 @@ let usersTableEl;
 let usersTableHeadEl;
 let usersTableBodyEl;
 
-function onUserListingLoad(userDto){
+function onUserListingLoad(adminDto){
     clearMessages();
     showContents(['users-content','name-logout-content', 'logout-content']);
     createUsersTableHeader();
     usersTableBodyEl = usersTableEl.querySelector('tbody');
-    appendUsers(users);
+    appendUsers(adminDto.users);
 }
 
 function appendUser(user) {
@@ -20,12 +20,20 @@ function appendUser(user) {
     const roleTdEl = document.createElement('td');
     roleTdEl.textContent = user.role;
 
+    const removeButt = document.createElement('td';)
+    const removeUserButt = document.createElement("button");
+    removeUserButt.addEventListener('click', removeUser);
+    removeUserButt.setAttribute("class", "delete-btn-min");
+    removeButt.appendChild(removeUserButt);
+
     const trEl = document.createElement('tr');
     trEl.setAttribute('id',user.id);
     trEl.addEventListener('click', showAsUser);
+
     trEl.appendChild(nameTdEl);
     trEl.appendChild(emailTdEl);
     trEl.appendChild(roleTdEl);
+    trEl.appendChild(removeButt);
     usersTableBodyEl.appendChild(trEl);
 }
 
@@ -54,9 +62,13 @@ function createUsersTableHeader() {
     const roleThEl = document.createElement('th');
     roleThEl.textContent = 'Role';
 
+    const removeThEl = document.createElement('th');
+    removeThEl.textContent = 'Remove';
+
     trEl.appendChild(nameThEl);
     trEl.appendChild(emailThEl);
     trEl.appendChild(roleThEl);
+    trEl.appendChild(removeThEl);
     usersTableHeadEl.appendChild(trEl);
 
 }
@@ -71,4 +83,28 @@ function showAsUser(e){
     xhr.addEventListener('error', onNetworkError);
     xhr.open('GET', 'login?' + params.toString());
     xhr.send();
+}
+
+function removeUser(e) {
+    const trEL = e.target.parentElement.parentElement;
+    const id = trEL.id;
+    const data = JSON.stringify({"userId": id});
+    trEl.remove();
+
+
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onDeleteUserResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('DELETE', 'login');
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.send(data);
+}
+
+function onDeleteUserResponse(){
+    if (this.status === OK) {
+        const adminDto = JSON.parse(this.responseText);
+        onUserListingLoad(adminDto);
+    } else {
+        onMessageResponse(userContentDivEl, this);
+    }
 }
