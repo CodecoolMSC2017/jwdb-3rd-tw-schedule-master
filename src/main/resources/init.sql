@@ -24,7 +24,7 @@ CREATE TABLE schedule (
 CREATE TABLE day (
 	id SERIAL PRIMARY KEY NOT NULL,
 	schedule_id INTEGER NOT NULL,
-	title TEXT NOT NULL,
+	title TEXT,
 	FOREIGN KEY (schedule_id) REFERENCES schedule("id") ON DELETE CASCADE
 );
 
