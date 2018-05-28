@@ -55,7 +55,7 @@ class DatabaseTaskDao extends AbstractDaoFactory implements TaskDao {
 
     @Override
     public Task findById(int id) throws SQLException {
-        String sql = "SELECT id, app_user_id, title, description FROM task WHERE id = ?";
+        String sql = "SELECT id, app_user_id, title, description, color FROM task WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -70,7 +70,7 @@ class DatabaseTaskDao extends AbstractDaoFactory implements TaskDao {
     @Override
     public List<Task> findByUserId(int userId) throws SQLException {
         List<Task> tasks = new ArrayList<>();
-        String sql = "SELECT id, app_user_id, title, description FROM task WHERE app_user_id = ? ORDER BY title ASC ";
+        String sql = "SELECT id, app_user_id, title, description, color FROM task WHERE app_user_id = ? ORDER BY title ASC ";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, userId);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -87,7 +87,7 @@ class DatabaseTaskDao extends AbstractDaoFactory implements TaskDao {
     @Override
     public List<Task> findAll() throws SQLException {
         List<Task> tasks = new ArrayList<>();
-        String sql = "SELECT task.id, app_user_id, title, description FROM task ORDER BY title ASC";
+        String sql = "SELECT task.id, app_user_id, title, description, color FROM task ORDER BY title ASC";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
