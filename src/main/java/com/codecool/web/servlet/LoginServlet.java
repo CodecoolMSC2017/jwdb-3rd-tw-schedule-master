@@ -24,12 +24,9 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import org.apache.log4j.Logger;
 
 @WebServlet("/login")
 public final class LoginServlet extends AbstractServlet {
-
-    final Logger logger = Logger.getLogger(LoginServlet.class);
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -48,7 +45,7 @@ public final class LoginServlet extends AbstractServlet {
 
             if (role.equals("admin")) {
                 List<User> users = userService.findAll();
-                logger.info("admin logged in");
+                logger.info("Admin logged in");
                 sendMessage(resp, 200, new AdminDto(user, users));
             }
 

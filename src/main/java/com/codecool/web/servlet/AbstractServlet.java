@@ -4,6 +4,7 @@ import com.codecool.web.dto.MessageDto;
 import com.codecool.web.model.User;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
@@ -18,6 +19,7 @@ import java.sql.SQLException;
 abstract class AbstractServlet extends HttpServlet {
 
     private final ObjectMapper om = new ObjectMapper();
+    final Logger logger = Logger.getLogger(LoginServlet.class);
 
     Connection getConnection(ServletContext sce) throws SQLException {
         DataSource dataSource = (DataSource) sce.getAttribute("dataSource");
