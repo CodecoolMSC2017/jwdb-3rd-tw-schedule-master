@@ -325,6 +325,17 @@ li:last-child {
     cursor: pointer;
 }
 
+.delete-btn-min {
+    background: url(img/remove-mini.png) center;
+    width: 25px;
+    height: 25px;
+    margin: 5px;
+    display: inline;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+}
+
 .change-btn {
     background: url(img/update.png) center;
     width: 40px;
@@ -408,10 +419,7 @@ li:last-child {
 
 .schedule-li {
     color: #3195d1;
-}
-
-.show-schedule-span {
-
+    cursor: grab;
 }
 
 /*
@@ -458,6 +466,7 @@ li:last-child {
 
 .task-li {
     color: #24A83C;
+    cursor: grab;
 }
 
 /*
