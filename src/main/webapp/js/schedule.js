@@ -238,6 +238,8 @@ function listingDays(userDto) {
             let hoursTd = document.createElement("td");
             hoursTd.setAttribute("class", "hours-td");
             hoursTd.textContent = userDto.schedule.days[i].hours[j].value + ":00hr";
+            hoursTd.setAttribute('drop', "drag_drop(ev)");
+            hoursTr.setAttribute('dragenter', 'drag_enter(event)');
             hoursTr.appendChild(hoursTd);
             hoursTable.appendChild(hoursTr);
 
@@ -407,4 +409,20 @@ function onUpdateScheduleResponse() {
         onMessageResponse(mainDiv, this);
     }
 
+}
+
+function drag_drop(ev) {
+    ev.preventDefault();
+    const elem_id = ev.dataTransfer.getData("text");
+    console.log(elem_id);
+    console.log(ev.target);
+    ev.target.textContent = elem_id;
+}
+
+function drag_enter(event) {
+    event.preventDefault();
+    const elem_id = event.dataTransfer.getData("text");
+    console.log(elem_id);
+    console.log(event.target);
+    event.target.textContent = elem_id;
 }
