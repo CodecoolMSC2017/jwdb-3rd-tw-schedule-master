@@ -27,8 +27,8 @@ function appendUser(user) {
     removeButt.appendChild(removeUserButt);
 
     const trEl = document.createElement('tr');
-    trEl.setAttribute('id',user.id);
-    trEl.addEventListener('click', showAsUser);
+    emailTdEl.setAttribute('id',user.id);
+    emailTdEl.addEventListener('click', showAsUser);
 
     trEl.appendChild(nameTdEl);
     trEl.appendChild(emailTdEl);
