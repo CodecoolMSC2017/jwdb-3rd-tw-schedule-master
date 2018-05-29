@@ -163,11 +163,6 @@ function listingSchedules(e) {
 function onListingResponse() {
     if (this.status === OK) {
         const userDto = JSON.parse(this.responseText);
-        removeAllChildren(daysDiv);
-        const schedulesULEl = document.getElementById("schedulesUl");
-        removeAllChildren(schedulesULEl);
-        const tasksULEl = document.getElementById("tasksUl");
-        removeAllChildren(tasksULEl);
         listingDays(userDto);
         createScheduleDiv(userDto);
         createTaskDiv(userDto);
@@ -178,6 +173,9 @@ function onListingResponse() {
 
 function listingDays(userDto) {
     clearMessages();
+    removeAllChildren(daysDiv);
+    document.getElementById("schedulesUl").remove();
+    document.getElementById("tasksUl").remove();
     const table = document.createElement("table");
     table.setAttribute("class", "schedule-table");
     table.setAttribute("id", userDto.schedule.id);
