@@ -26,7 +26,7 @@ import java.util.List;
 
 abstract class AbstractServlet extends HttpServlet {
 
-    private final ObjectMapper om = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
     final Logger logger = Logger.getLogger(LoginServlet.class);
 
     Connection getConnection(ServletContext sce) throws SQLException {
