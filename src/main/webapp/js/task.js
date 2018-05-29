@@ -22,6 +22,7 @@ function updateTask(e) {
 
     const oldTitle = spanTask.id;
     const oldDesc = descParEl.textContent;
+    const oldColor = liEl.style.backgroundColor;
 
     spanTask.remove();
     descParEl.remove();
@@ -43,6 +44,11 @@ function updateTask(e) {
     descInputEl.placeholder = oldDesc;
     descInputEl.setAttribute("class", "input-min");
 
+    const colorInputEl = document.createElement("INPUT");
+    colorInputEl.setAttribute("type", "color");
+    colorInputEl.value = oldColor;
+    colorInputEl.setAttribute("class", "input-min");
+
     buttonEl.removeEventListener('click', updateTask);
     buttonEl.addEventListener('click', applyTaskUpdates);
 
@@ -50,6 +56,7 @@ function updateTask(e) {
     liEl.insertBefore(breakEl, buttonEl);
     liEl.insertBefore(titleInputEl, buttonEl);
     liEl.insertBefore(descInputEl, buttonEl);
+    liEl.insertBefore(colorInputEl, buttonEl);
     liEl.insertBefore(closeTaskButt, buttonEl);
     liEl.insertBefore(breakEl, buttonEl);
 
@@ -59,12 +66,15 @@ function applyTaskUpdates(e) {
     const liEl = e.target.parentElement;
     const titleInputField = liEl.firstChild;
     const descInputField = liEl.children.item(1);
+    const colorInputField = liEl.children.item(2);
 
 
     let title = titleInputField.value;
     const oldTitle = titleInputField.placeholder;
     let desc = descInputField.value;
     const oldDesc = descInputField.placeholder;
+    let color = colorInputField.value;
+    const oldColor = colorInputField.value;
     const id = liEl.id;
 
     if (title == null || title === "" || title === " ") {
@@ -74,7 +84,11 @@ function applyTaskUpdates(e) {
         desc = oldDesc;
     }
 
-    const data = JSON.stringify({"taskId": id, "description": desc, "title": title});
+    if (color == null || color === "" || color === " ") {
+        color = oldColor;
+    }
+
+    const data = JSON.stringify({"taskId": id, "description": desc, "title": title, "color": color});
 
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onUpdateTaskResponse);
