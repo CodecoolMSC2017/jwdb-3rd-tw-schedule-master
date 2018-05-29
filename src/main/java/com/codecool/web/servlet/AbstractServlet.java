@@ -1,7 +1,14 @@
 package com.codecool.web.servlet;
 
 import com.codecool.web.dto.MessageDto;
+import com.codecool.web.dto.UserDto;
+import com.codecool.web.model.Schedule;
+import com.codecool.web.model.Task;
 import com.codecool.web.model.User;
+import com.codecool.web.service.ScheduleService;
+import com.codecool.web.service.TaskService;
+import com.codecool.web.service.simple.SimpleScheduleService;
+import com.codecool.web.service.simple.SimpleTaskService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
@@ -15,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 abstract class AbstractServlet extends HttpServlet {
 
@@ -59,6 +67,20 @@ abstract class AbstractServlet extends HttpServlet {
         String json = jsonToString(reader);
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readTree(json);
+    }
+
+    UserDto getDatas(HttpServletRequest req) throws SQLException {
+        try (Connection connection = getConnection(req.getServletContext())) {
+            TaskService taskService = new SimpleTaskService(connection);
+            ScheduleService scheduleService = new SimpleScheduleService(connection);
+            User user = getUser(req);
+            int userId = user.getId();
+            List<Schedule> schedules = scheduleService.findAllByUserId(userId);
+            List<Task> tasks = taskService.findAllByUserId(userId);
+            UserDto userdto = new UserDto(user, tasks, schedules);
+            return userdto;
+
+        }
     }
 }
 

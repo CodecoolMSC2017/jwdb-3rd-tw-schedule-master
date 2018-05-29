@@ -10,5 +10,5 @@ public interface TaskHourService {
 
     void updateHours(int scheduleId, int taskId, String... newHourIds) throws SQLException, InvalidArgumentException;
 
-    void connectTaskToSchedule(int scheduleId,int taskId,String... hourIds) throws SQLException, InvalidArgumentException;
+    void connectTaskToSchedule(int scheduleId, int taskId, String hourId) throws SQLException, InvalidArgumentException;
 }

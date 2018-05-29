@@ -38,8 +38,8 @@ public class SimpleTaskHourService implements TaskHourService {
     }
 
     @Override
-    public void connectTaskToSchedule(int scheduleId, int taskId, String... hourIds) throws SQLException, InvalidArgumentException {
-        taskHourDao.add(taskId, scheduleId, hourIds);
+    public void connectTaskToSchedule(int scheduleId, int taskId, String hourId) throws SQLException, InvalidArgumentException {
+        taskHourDao.add(taskId, scheduleId, hourId);
     }
 
 

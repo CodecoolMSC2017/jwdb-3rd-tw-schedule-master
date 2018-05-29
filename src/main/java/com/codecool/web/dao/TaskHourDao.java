@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface TaskHourDao {
 
-    void add(int taskId, int scheduleId, String... hourIds) throws SQLException, InvalidArgumentException;
+    void add(int taskId, int scheduleId, String hourId) throws SQLException;
 
     void delete(int taskId,int scheduleId)throws SQLException;
 

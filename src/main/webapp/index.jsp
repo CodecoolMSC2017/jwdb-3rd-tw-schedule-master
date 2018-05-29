@@ -29,42 +29,59 @@
     <title>Schedule Master</title>
 </head>
 <body>
-    <div id="login-content" class="content">
-        <div class="form-div">
-            <form id="login-form" name="login" onsubmit="return false;">
-                <div class="input-div">
-                    <h2 id="h2">Log in</h2><br>E-mail:<br>
-                    <input type="email" name="email" class="input">
-                    <br> Password:<br>
-                    <input type=password name="password" class="input"><br>
-                    <input id="login-button" type="submit" value="Login" class="btn">
-                </div>
-            </form>
-            <p id="registration-para" class="register-paragraph">If you don't have an account <a
-                    class="register-link"
-                    href=javascript:void(0); onclick="toRegistration();">register</a>
-                one</p>
-        </div>
+<div id="login-content" class="content">
+    <div class="form-div">
+        <form id="login-form" name="login" onsubmit="return false;">
+            <div class="input-div">
+                <h2 id="h2">Log in</h2><br>E-mail:<br>
+                <input type="email" name="email" class="input">
+                <br> Password:<br>
+                <input type=password name="password" class="input"><br>
+                <input id="login-button" type="submit" value="Login" class="btn">
+            </div>
+        </form>
+        <p id="registration-para" class="register-paragraph">If you don't have an account <a
+                class="register-link"
+                href=javascript:void(0); onclick="toRegistration();">register</a>
+            one</p>
+    </div>
+</div>
+
+<div id="register-content" class="content hidden">
+    <div class="form-div">
+        <form id="register-form" name="register" onsubmit="return false;">
+            <div class="input-div">
+                <h2>Registration</h2>Name:<br>
+                <input type="text" name="name" class="input"><br>E-mail:<br>
+                <input type="email" name="email" class="input"><br>Password:<br>
+                <input type=password name="password" class="input"><br>Confirm Password:<br>
+                <input type="password" name="password-again" class="input"><br>
+                <input id="register-button" type="submit" value="Register" class="btn">
+            </div>
+        </form>
+        <p class="register-paragraph">Already have an account? <a class="register-link"
+                                                                  href=javascript:void(0);
+                                                                  onclick="toLogin();">Login
+            here</a></p>
+    </div>
+</div>
+
+<div class="main-div">
+    <div id="name-logout-content" class="content hidden">
+        <table id="name-logout-table">
+            <tr>
+                <td id="name-td">
+                    <h2 id="name-field"></h2>
+                </td>
+                <td id="logout-td">
+                    <div id="logout-content" class="content hidden">
+                        <img id="logout-button" src="css/img/logout.png" alt="logout"/>
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
 
-    <div id="register-content" class="content hidden">
-        <div class="form-div">
-            <form id="register-form" name="register" onsubmit="return false;">
-                <div class="input-div">
-                    <h2>Registration</h2>Name:<br>
-                    <input type="text" name="name" class="input"><br>E-mail:<br>
-                    <input type="email" name="email" class="input"><br>Password:<br>
-                    <input type=password name="password" class="input"><br>Confirm Password:<br>
-                    <input type="password" name="password-again" class="input"><br>
-                    <input id="register-button" type="submit" value="Register" class="btn">
-                </div>
-            </form>
-            <p class="register-paragraph">Already have an account? <a class="register-link"
-                                                                      href=javascript:void(0);
-                                                                      onclick="toLogin();">Login
-                here</a></p>
-        </div>
-    </div>
     <div id="admin-content" class="content hidden">
         <button id="admin-button">Go Back</button>
     </div>
@@ -78,48 +95,33 @@
         </table>
     </div>
 
-    <div class="main-div">
-        <div id="name-logout-content" class="content hidden">
-            <table id="name-logout-table">
-                <tr>
-                    <td id="name-td">
-                        <h2 id="name-field"></h2>
-                    </td>
-                    <td id="logout-td">
-                        <div id="logout-content" class="content hidden">
-                            <img id="logout-button" src="css/img/logout.png" alt="logout"/>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </div>
 
-        <table class="content-table">
-            <tr>
-                <td valign="top" class="wing-td">
-                    <div id="schedules-content" class="content hidden">
-                        <div id="schedules">
-                            <button id="schedules-button" class="container">Schedules</button>
-                        </div>
+    <table class="content-table">
+        <tr>
+            <td valign="top" class="wing-td">
+                <div id="schedules-content" class="content hidden">
+                    <div id="schedules">
+                        <button id="schedules-button" class="container">Schedules</button>
                     </div>
-                </td>
-                <td class="middle-td" valign="top">
-                    <div id="days-content" class="content hidden">
-                        <div id="days">
-                        </div>
+                </div>
+            </td>
+            <td class="middle-td" valign="top">
+                <div id="days-content" class="content hidden">
+                    <div id="days">
                     </div>
-                </td>
-                <td valign="top" class="wing-td">
-                    <div id="tasks-content" class="content hidden">
-                        <div id="tasks">
-                            <button id="tasks-button" class="container">Tasks</button>
-                        </div>
+                </div>
+            </td>
+            <td valign="top" class="wing-td">
+                <div id="tasks-content" class="content hidden">
+                    <div id="tasks">
+                        <button id="tasks-button" class="container">Tasks</button>
                     </div>
-                </td>
-            </tr>
-        </table>
+                </div>
+            </td>
+        </tr>
+    </table>
 
-    </div>
+</div>
 
 
 </body>

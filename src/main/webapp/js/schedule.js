@@ -210,6 +210,7 @@ function listingDays(userDto) {
 
     let tr = document.createElement("tr");
     tr.setAttribute("class","day-row");
+    tr.setAttribute('id', userDto.schedule.id);
 
     for (let i = 0; i < userDto.schedule.days.length; i++) {
 
@@ -233,13 +234,15 @@ function listingDays(userDto) {
 
         for (let j = 0; j < userDto.schedule.days[i].hours.length; j++) {
             let hoursTr = document.createElement("tr");
-            hoursTr.setAttribute("id",userDto.schedule.days[i].hours[j].value);
+            hoursTr.setAttribute("id", userDto.schedule.days[i].hours[j].id);
             hoursTr.setAttribute("class","hours-row");
+
             let hoursTd = document.createElement("td");
             hoursTd.setAttribute("class", "hours-td");
             hoursTd.textContent = userDto.schedule.days[i].hours[j].value + ":00hr";
-            hoursTd.setAttribute('drop', 'drag_drop');
-            hoursTr.setAttribute('dragenter', 'drag_enter');
+            hoursTd.addEventListener('drop', drag_drop);
+            hoursTd.addEventListener('dragenter', drag_enter);
+            hoursTd.addEventListener('dragover', drag_over);
             hoursTr.appendChild(hoursTd);
             hoursTable.appendChild(hoursTr);
 
@@ -413,16 +416,28 @@ function onUpdateScheduleResponse() {
 
 function drag_drop(ev) {
     ev.preventDefault();
-    const elem_id = ev.dataTransfer.getData("text");
-    console.log(elem_id);
-    console.log(ev.target);
-    ev.target.textContent = elem_id;
+
+    const taskId = ev.dataTransfer.getData("text");
+    const hourId = ev.target.parentElement.id;
+    const scheduleId = ev.target.parentElement.parentElement.parentElement.parentElement.id;
+
+    const params = new URLSearchParams();
+    params.append('taskId', taskId);
+    params.append('hourId', hourId);
+    params.append('scheduleId', scheduleId);
+
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onListingResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('POST', 'protected/taskHour');
+    xhr.send(params);
+
 }
 
 function drag_enter(event) {
     event.preventDefault();
-    const elem_id = event.dataTransfer.getData("text");
-    console.log(elem_id);
-    console.log(event.target);
-    event.target.textContent = elem_id;
+}
+
+function drag_over(event) {
+    event.preventDefault();
 }

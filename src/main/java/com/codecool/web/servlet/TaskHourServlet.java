@@ -21,37 +21,29 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet("/taskHour")
+@WebServlet("/protected/taskHour")
 public class TaskHourServlet extends AbstractServlet {
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        try (Connection connection = getConnection(req.getServletContext())) {
-            TaskService taskService = new SimpleTaskService(connection);
-            ScheduleService scheduleService = new SimpleScheduleService(connection);
-            User user = getUser(req);
-            int userId = user.getId();
-            List<Schedule> schedules = scheduleService.findAllByUserId(userId);
-            List<Task> tasks = taskService.findAllByUserId(userId);
-            UserDto userDto = new UserDto(user, tasks, schedules);
-
-            sendMessage(resp, HttpServletResponse.SC_OK, userDto);
-        } catch (SQLException ex) {
-            handleSqlError(resp, ex);
-        }
-    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskHourService taskHourService = new SimpleTaskHourService(connection);
+            ScheduleService scheduleService = new SimpleScheduleService(connection);
+            TaskService taskService = new SimpleTaskService(connection);
             int scheduleId = Integer.parseInt(req.getParameter("scheduleId"));
             int taskId = Integer.parseInt(req.getParameter("taskId"));
-            String[] hourIds = req.getParameter("hourIds").split(",");
+            String hourId = req.getParameter("hourId");
 
-            taskHourService.connectTaskToSchedule(scheduleId, taskId, hourIds);
+            taskHourService.connectTaskToSchedule(scheduleId, taskId, hourId);
 
-            doGet(req, resp);
+            User user = getUser(req);
+            int userId = user.getId();
+            List<Schedule> schedules = scheduleService.findAllByUserId(userId);
+            List<Task> tasks = taskService.findAllByUserId(userId);
+            Schedule schedule = scheduleService.findById(scheduleId);
+            UserDto userDto = new UserDto(user, tasks, schedules);
+            userDto.setSchedule(schedule);
+            sendMessage(resp, HttpServletResponse.SC_OK, userDto);
         } catch (SQLException e) {
             handleSqlError(resp, e);
         } catch (InvalidArgumentException e) {
@@ -69,7 +61,6 @@ public class TaskHourServlet extends AbstractServlet {
 
             taskHourService.updateHours(scheduleId, taskId, newHourIds);
 
-            doGet(req,resp);
         } catch (SQLException e) {
             handleSqlError(resp, e);
         } catch (InvalidArgumentException e) {
@@ -78,7 +69,7 @@ public class TaskHourServlet extends AbstractServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp)throws IOException {
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskHourService taskHourService = new SimpleTaskHourService(connection);
             JsonNode jsonNode = createJsonNodeFromRequest(req);

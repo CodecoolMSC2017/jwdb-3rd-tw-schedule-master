@@ -17,13 +17,13 @@ class DatabaseTaskHourDao extends AbstractDaoFactory implements TaskHourDao {
     }
 
     @Override
-    public void add(int taskId, int scheduleId, String... hourIds) throws SQLException, InvalidArgumentException {
+    public void add(int taskId, int scheduleId, String hourId) throws SQLException {
         String sql = "INSERT INTO task_hour (task_id, schedule_id, hour_ids) VALUES (?, ?, ?);";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, taskId);
             statement.setInt(2, scheduleId);
-            statement.setString(3, join(hourIds));
-            statement.executeQuery();
+            statement.setString(3, hourId);
+            statement.executeUpdate();
         }
     }
 

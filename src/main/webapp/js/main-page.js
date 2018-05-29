@@ -133,7 +133,7 @@ function createScheduleDiv(userDto){
 
 
 function drag_start(ev) {
-    ev.dataTransfer.setData("text", ev.target.getAttribute('id'));
     ev.dataTransfer.dropEffect = "move";
+    ev.dataTransfer.setData("text", ev.target.id);
 }
 
