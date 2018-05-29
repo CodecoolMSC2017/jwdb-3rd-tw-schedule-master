@@ -15,6 +15,9 @@ public class Task extends AbstractModel {
         this.color = color;
     }
 
+    public Task() {
+    }
+
     public int getUserId() {
         return userId;
     }

@@ -16,6 +16,9 @@ public class Schedule extends AbstractModel {
         this.description = description;
     }
 
+    public Schedule() {
+    }
+
     public int getUserId() {
         return userId;
     }
