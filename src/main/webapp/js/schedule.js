@@ -168,6 +168,8 @@ function onListingResponse() {
         const userDto = JSON.parse(this.responseText);
         removeAllChildren(daysDiv);
         listingDays(userDto);
+        createScheduleDiv(userDto);
+        createTaskDiv(userDto);
     } else {
         onMessageResponse(mainDiv, this);
     }
@@ -177,14 +179,14 @@ function listingDays(userDto) {
     clearMessages();
     const table = document.createElement("table");
     table.setAttribute("class", "schedule-table");
-    table.setAttribute("id",userDto.schedule.id);
+    table.setAttribute("id", userDto.schedule.id);
 
     const updateButt = document.createElement("button");
-    updateButt.addEventListener('click',updateScheduleFields);
+    updateButt.addEventListener('click', updateScheduleFields);
     updateButt.setAttribute("class", "change-btn");
 
     const createTd = document.createElement("td");
-    createTd.setAttribute("class","change-sched-fields");
+    createTd.setAttribute("class", "change-sched-fields");
     createTd.rowSpan = "2";
     createTd.appendChild(updateButt);
 
@@ -195,7 +197,7 @@ function listingDays(userDto) {
 
 
     const descriptionRow = document.createElement("tr");
-    descriptionRow.setAttribute("class","desc-row");
+    descriptionRow.setAttribute("class", "desc-row");
 
     let numberOfDays = userDto.schedule.days.length;
 
@@ -221,15 +223,15 @@ function listingDays(userDto) {
     table.appendChild(descriptionRow);
 
     let tr = document.createElement("tr");
-    tr.setAttribute("class","day-row");
+    tr.setAttribute("class", "day-row");
     tr.setAttribute('id', userDto.schedule.id);
 
     for (let i = 0; i < userDto.schedule.days.length; i++) {
 
         let td = document.createElement("td");
-        td.setAttribute("class","day-td");
+        td.setAttribute("class", "day-td");
         let hoursTable = document.createElement("table");
-        hoursTable.setAttribute("class","hours-table");
+        hoursTable.setAttribute("class", "hours-table");
 
         let titleParEl = document.createElement("p");
         titleParEl.textContent = userDto.schedule.days[i].title;
@@ -247,11 +249,28 @@ function listingDays(userDto) {
         for (let j = 0; j < userDto.schedule.days[i].hours.length; j++) {
             let hoursTr = document.createElement("tr");
             hoursTr.setAttribute("id", userDto.schedule.days[i].hours[j].id);
-            hoursTr.setAttribute("class","hours-row");
+            hoursTr.setAttribute("class", "hours-row");
 
             let hoursTd = document.createElement("td");
             hoursTd.setAttribute("class", "hours-td");
             hoursTd.textContent = userDto.schedule.days[i].hours[j].value + ":00hr";
+
+            if (userDto.schedule.days[i].hours[j].task != null) {
+
+                let task = userDto.schedule.days[i].hours[j].task;
+                let taskDivEl = document.createElement("div");
+
+                taskDivEl.style.backgroundColor = task.color;
+                taskDivEl.setAttribute("id", task.id);
+                taskDivEl.setAttribute("class", "task-div-little-div");
+
+                let taskSpan = document.createElement("span");
+                taskSpan.textContent = task.title;
+                taskSpan.setAttribute('class', 'task-title-span');
+
+                taskDivEl.appendChild(taskSpan);
+                hoursTd.appendChild(taskDivEl);
+            }
             hoursTd.addEventListener('drop', drag_drop);
             hoursTd.addEventListener('dragenter', drag_enter);
             hoursTd.addEventListener('dragover', drag_over);
@@ -266,17 +285,17 @@ function listingDays(userDto) {
     daysDiv.appendChild(table);
 
     const guestButton = document.createElement("button");
-    guestButton.setAttribute("class","guest-link-btn");
-    guestButton.addEventListener('click',createLink);
+    guestButton.setAttribute("class", "guest-link-btn");
+    guestButton.addEventListener('click', createLink);
 
     daysDiv.appendChild(guestButton);
 }
 
-function createLink(e){
-    e.target.removeEventListener('click',createLink);
+function createLink(e) {
+    e.target.removeEventListener('click', createLink);
     const linkInputField = document.createElement("INPUT");
-    linkInputField.setAttribute("id","guest-link");
-    linkInputField.setAttribute("type","text");
+    linkInputField.setAttribute("id", "guest-link");
+    linkInputField.setAttribute("type", "text");
 
     const scheduleId = e.target.parentElement.firstElementChild.id;
 
@@ -359,7 +378,7 @@ function closeCreateSchedule() {
     toCreateTaskButt.addEventListener('click', showCreateSchedule);
 }
 
-function updateScheduleFields(e){
+function updateScheduleFields(e) {
     const scheduleUpdateButt = e.target;
     const trEl = scheduleUpdateButt.parentElement.parentElement;
     const table = trEl.parentElement;
@@ -393,10 +412,10 @@ function updateScheduleFields(e){
     descTd.appendChild(descInputEl);
 
 
-    scheduleUpdateButt.removeEventListener('click',updateScheduleFields);
-    scheduleUpdateButt.addEventListener('click',applyScheduleUpdates);
+    scheduleUpdateButt.removeEventListener('click', updateScheduleFields);
+    scheduleUpdateButt.addEventListener('click', applyScheduleUpdates);
 
-    trEl.insertBefore(titleTd,scheduleUpdateButt.parentElement);
+    trEl.insertBefore(titleTd, scheduleUpdateButt.parentElement);
     table.children.item(1).appendChild(descTd);
 
 
