@@ -30,6 +30,10 @@ function onLoginButtonClicked() {
         newError(loginFormEl, "Enter a password!");
         return false;
     }
+    if (password.length < 9) {
+        newError(loginFormEl, "The password must be longer than 8 character");
+        return false;
+    }
 
     const params = new URLSearchParams();
     params.append('email', email);

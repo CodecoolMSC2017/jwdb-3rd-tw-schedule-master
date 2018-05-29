@@ -163,9 +163,8 @@ function listingSchedules(e) {
 function onListingResponse() {
     if (this.status === OK) {
         const userDto = JSON.parse(this.responseText);
+        removeAllChildren(daysDiv);
         listingDays(userDto);
-        createScheduleDiv(userDto);
-        createTaskDiv(userDto);
     } else {
         onMessageResponse(mainDiv, this);
     }
@@ -173,9 +172,6 @@ function onListingResponse() {
 
 function listingDays(userDto) {
     clearMessages();
-    removeAllChildren(daysDiv);
-    document.getElementById("schedulesUl").remove();
-    document.getElementById("tasksUl").remove();
     const table = document.createElement("table");
     table.setAttribute("class", "schedule-table");
     table.setAttribute("id", userDto.schedule.id);
@@ -484,11 +480,22 @@ function drag_drop(ev) {
     params.append('scheduleId', scheduleId);
 
     const xhr = new XMLHttpRequest();
-    xhr.addEventListener('load', onListingResponse);
+    xhr.addEventListener('load', onDragResponse);
     xhr.addEventListener('error', onNetworkError);
     xhr.open('POST', 'protected/taskHour');
     xhr.send(params);
+}
 
+function onDragResponse() {
+    if (this.status === OK) {
+        const userDto = JSON.parse(this.responseText);
+        removeAllChildren(daysDiv);
+        document.getElementById("tasksUl").remove();
+        createTaskDiv(userDto);
+        listingDays(userDto);
+    } else {
+        onMessageResponse(mainDiv, this);
+    }
 }
 
 function drag_enter(event) {
