@@ -52,6 +52,11 @@ class DatabaseTaskDao extends AbstractDaoFactory implements TaskDao {
         update(id, newDescription, sql);
     }
 
+    @Override
+    public void updateColor(int taskId, String newColor) throws SQLException {
+        String sql = "UPDATE task SET color = ? WHERE id = ?";
+        update(taskId, newColor, sql);
+    }
 
     @Override
     public Task findById(int id) throws SQLException {
