@@ -468,6 +468,12 @@ li:last-child {
     cursor: grab;
 }
 
+.task-create-li {
+    margin-top: 5px;
+    border: transparent;
+    padding: 0;
+}
+
 /*
    ******************
          DAYS
@@ -541,24 +547,35 @@ li:last-child {
     padding-bottom: 5px;
 }
 
-#users{
+#users {
     border-collapse: collapse;
+    margin-right: auto;
+    margin-left: auto;
 }
 
-#users th{
-    text-align: left;
-    background-color: #3a6070;
+#users th {
+    border: 2px solid black;
+    text-align: center;
+    background-color: #9b59b6;
     color: #FFF;
+    font-size: 22px;
+    font-weight: bolder;
     padding: 4px 30px 4px 8px;
 }
 
-#users td{
-    border: 1px solid #e3e3e3;
+#users td {
+    border: 2px solid black;
     padding: 4px 8px;
 }
 
-#users tr:nth-child(odd) td{
-    background-color: #e7edf0;
+#users tr:nth-child(odd) td {
+    background-color: #b788cb;
+    color: black;
+}
+
+#users tr:nth-child(even) td {
+    background-color: white;
+    color: #763e8d;
 }
 
 

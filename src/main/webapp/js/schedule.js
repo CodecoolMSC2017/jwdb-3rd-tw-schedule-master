@@ -284,7 +284,9 @@ function listingDays(userDto) {
     daysDiv.appendChild(table);
 
     const guestButton = document.createElement("button");
-    guestButton.setAttribute("class", "guest-link-btn");
+    guestButton.setAttribute("class", "btn");
+    guestButton.innerText = "Create Guest Link";
+
     guestButton.addEventListener('click', createLink);
 
     daysDiv.appendChild(guestButton);
@@ -294,6 +296,7 @@ function createLink(e) {
     e.target.removeEventListener('click', createLink);
     const linkInputField = document.createElement("INPUT");
     linkInputField.setAttribute("id", "guest-link");
+    linkInputField.setAttribute("class", "input");
     linkInputField.setAttribute("type", "text");
 
     const scheduleId = e.target.parentElement.firstElementChild.id;

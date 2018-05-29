@@ -127,7 +127,7 @@ function onAdminLoginResponse() {
 function adminGoBackButtonClicked(){
 
     const nameField = document.getElementById("name-field");
-    nameField.textContent = '';
+    nameField.textContent = 'admin';
 
     const params = new URLSearchParams();
 
