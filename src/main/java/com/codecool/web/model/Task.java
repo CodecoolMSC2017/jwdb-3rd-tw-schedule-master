@@ -30,4 +30,20 @@ public class Task extends AbstractModel {
     public String getColor() {
         return  color;
     }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 }
