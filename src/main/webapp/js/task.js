@@ -76,7 +76,8 @@ function applyTaskUpdates(e) {
     let color = colorInputField.value;
     const oldColor = colorInputField.value;
     const id = liEl.id;
-    const userId = document.getElementById("name-field").name;
+    const userId = document.getElementById("name-field").getAttribute("name");
+    console.log(userId);
 
     if (title == null || title === "" || title === " ") {
         title = oldTitle;
@@ -89,13 +90,13 @@ function applyTaskUpdates(e) {
         color = oldColor;
     }
 
-    const data = JSON.stringify({"id": id, "description": desc, "title": title, "color": color, "userId" :userId});
+    const data = JSON.stringify({id: id, description: desc, title: title, color: color, userId :userId});
 
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onUpdateTaskResponse);
     xhr.addEventListener('error', onNetworkError);
     xhr.open('PUT','protected/task');
-    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.setRequestHeader('Content-type', 'application/json');
     xhr.send(data);
 }
 
@@ -213,7 +214,7 @@ function removeTask(e) {
     if (r == true) {
         const liEL = e.target.parentElement;
         const id = liEL.id;
-        const userId = document.getElementById("name-field").name;
+        const userId = document.getElementById("name-field").getAttribute("name");
 
 
         const data = JSON.stringify({"id": id, "userId" :userId});
