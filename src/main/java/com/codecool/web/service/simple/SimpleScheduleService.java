@@ -37,7 +37,7 @@ public class SimpleScheduleService implements ScheduleService {
         if(numOfDays > 7 || numOfDays == 0 ){
             throw new WrongNumOfDaysException();
         }
-        if(check != null && check.getUserID() == userId){
+        if(check != null && check.getUserId() == userId){
             throw new ScheduleAlreadyExistsException();
         }
         Schedule schedule = scheduleDao.add(userId, title, description);
@@ -120,7 +120,7 @@ public class SimpleScheduleService implements ScheduleService {
 
         if(day != null){
             Schedule schedule = scheduleDao.findById(day.getScheduleId());
-            if (schedule.getUserID() == userId && schedule.getId() == scheduleId){
+            if (schedule.getUserId() == userId && schedule.getId() == scheduleId){
                 throw new DayAlreadyExistsException();
             }
         }
@@ -134,7 +134,7 @@ public class SimpleScheduleService implements ScheduleService {
 
         if(day != null){
             Schedule schedule = scheduleDao.findById(day.getScheduleId());
-            if ( schedule.getUserID() == userId){
+            if ( schedule.getUserId() == userId){
                 throw new DayAlreadyExistsException();
             }
         }
