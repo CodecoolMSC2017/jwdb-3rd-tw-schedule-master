@@ -11,6 +11,7 @@ import com.codecool.web.exception.WrongNumOfDaysException;
 import com.codecool.web.model.Day;
 import com.codecool.web.model.Hour;
 import com.codecool.web.model.Schedule;
+import com.codecool.web.model.Task;
 import com.codecool.web.service.ScheduleService;
 
 import java.sql.Connection;
@@ -28,21 +29,21 @@ public class SimpleScheduleService implements ScheduleService {
         scheduleDao = (ScheduleDao) AbstractDaoFactory.getDao("schedule", connection);
         dayDao = (DayDao) AbstractDaoFactory.getDao("day", connection);
         hourDao = (HourDao) AbstractDaoFactory.getDao("hour", connection);
-        taskHourDao = (TaskHourDao) AbstractDaoFactory.getDao("taskHour",connection);
+        taskHourDao = (TaskHourDao) AbstractDaoFactory.getDao("taskHour", connection);
     }
 
     @Override
     public void createSchedule(String title, String description, int userId, int numOfDays) throws SQLException, WrongNumOfDaysException, ScheduleAlreadyExistsException, DayAlreadyExistsException {
         Schedule check = scheduleDao.findByTitle(title);
-        if(numOfDays > 7 || numOfDays == 0 ){
+        if (numOfDays > 7 || numOfDays == 0) {
             throw new WrongNumOfDaysException();
         }
-        if(check != null && check.getUserID() == userId){
+        if (check != null && check.getUserID() == userId) {
             throw new ScheduleAlreadyExistsException();
         }
         Schedule schedule = scheduleDao.add(userId, title, description);
         for (int i = 0; i < numOfDays; i++) {
-            Day day = addDay(schedule.getId(),String.format("Day%d",i+1) ,userId);
+            Day day = addDay(schedule.getId(), String.format("Day%d", i + 1), userId);
             for (int j = 0; j < 24; j++) {
                 hourDao.add(day.getId(), j);
             }
@@ -72,7 +73,7 @@ public class SimpleScheduleService implements ScheduleService {
         } else if (!scheduleTile.equals(title) && !scheduleDescription.equals(description) && check == null) {
             scheduleDao.updateTitle(scheduleId, title);
             scheduleDao.updateDescription(scheduleId, description);
-        }else if(check != null){
+        } else if (check != null) {
             throw new ScheduleAlreadyExistsException();
         }
     }
@@ -80,9 +81,20 @@ public class SimpleScheduleService implements ScheduleService {
     @Override
     public Schedule findById(int scheduleId) throws SQLException {
         Schedule schedule = scheduleDao.findById(scheduleId);
+        List<Task> tasks = taskHourDao.findTaskByScheduleId(schedule.getId());
         List<Day> days = dayDao.findByScheduleId(scheduleId);
         for (Day day : days) {
-            day.setHours(hourDao.findByDayId(day.getId()));
+            List<Hour> hours = hourDao.findByDayId(day.getId());
+            for (Hour hour : hours) {
+                for (Task task : tasks) {
+                    List<String> hourIds = taskHourDao.findHoursByTaskAndScheduleId(task.getId(), schedule.getId());
+                    if (hour.getDayId() == day.getId() && hourIds.contains(Integer.toString(hour.getId()))) {
+                        hour.setTask(task);
+                    }
+                }
+
+            }
+            day.setHours(hours);
         }
         schedule.setDays(days);
         return schedule;
@@ -117,9 +129,9 @@ public class SimpleScheduleService implements ScheduleService {
     public Day addDay(int scheduleId, String title, int userId) throws SQLException, DayAlreadyExistsException {
         Day day = dayDao.findDayByTitle(title);
 
-        if(day != null){
+        if (day != null) {
             Schedule schedule = scheduleDao.findById(day.getScheduleId());
-            if (schedule.getUserID() == userId && schedule.getId() == scheduleId){
+            if (schedule.getUserID() == userId && schedule.getId() == scheduleId) {
                 throw new DayAlreadyExistsException();
             }
         }
@@ -131,9 +143,9 @@ public class SimpleScheduleService implements ScheduleService {
         Day day = dayDao.findDayByTitle(title);
 
 
-        if(day != null){
+        if (day != null) {
             Schedule schedule = scheduleDao.findById(day.getScheduleId());
-            if ( schedule.getUserID() == userId){
+            if (schedule.getUserID() == userId) {
                 throw new DayAlreadyExistsException();
             }
         }

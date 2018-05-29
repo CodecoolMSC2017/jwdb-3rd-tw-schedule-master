@@ -71,7 +71,7 @@ class DatabaseTaskHourDao extends AbstractDaoFactory implements TaskHourDao {
     @Override
     public List<Task> findTaskByScheduleId(int scheduleId) throws SQLException {
         List<Task> tasks = new ArrayList<>();
-        String sql = "SELECT id,app_user_id,title,description FROM task WHERE id IN(SELECT task_id FROM task_hour WHERE schedule_id = ?) ORDER BY id ASC;";
+        String sql = "SELECT id,app_user_id,title,description,color FROM task WHERE id IN(SELECT task_id FROM task_hour WHERE schedule_id = ?) ORDER BY id ASC;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, scheduleId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -83,6 +83,26 @@ class DatabaseTaskHourDao extends AbstractDaoFactory implements TaskHourDao {
         }
     }
 
+    public List<String> findHoursByTaskAndScheduleId(int taskId, int scheduleId) throws SQLException {
+        List<String> hourIds = new ArrayList<>();
+        String hours = "";
+        String sql = "SELECT hour_ids FROM task_hour RIGHT JOIN task ON task.id = task_id WHERE task.id = ? AND schedule_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setInt(1,taskId);
+            statement.setInt(2,scheduleId);
+            try(ResultSet resultSet = statement.executeQuery()){
+                if(resultSet.next()){
+                    hours = resultSet.getString("hour_ids");
+
+                }
+            }
+        }
+        for (int i = 0; i < hours.split(",").length; i++) {
+            hourIds.add(hours.split(",")[i]);
+        }
+        return hourIds;
+
+    }
 
     private String join(String... ids) throws InvalidArgumentException {
         String idString = "";

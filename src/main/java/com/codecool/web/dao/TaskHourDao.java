@@ -20,6 +20,8 @@ public interface TaskHourDao {
 
     List<Task> findTaskByScheduleId(int scheduleId)throws SQLException;
 
+    List<String> findHoursByTaskAndScheduleId(int taskId, int scheduleId)throws SQLException;
+
 
 
 }
