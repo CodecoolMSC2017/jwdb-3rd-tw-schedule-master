@@ -252,6 +252,8 @@ function listingDays(userDto) {
 
             if (userDto.schedule.days[i].hours[j].task != null) {
 
+                hoursTd.textContent = "";
+
                 let task = userDto.schedule.days[i].hours[j].task;
                 let taskDivEl = document.createElement("div");
 

@@ -30,7 +30,7 @@ function onLoginButtonClicked() {
         newError(loginFormEl, "Enter a password!");
         return false;
     }
-    if (password.length < 9) {
+    if (password.length < 8) {
         newError(loginFormEl, "The password must be longer than 8 character");
         return false;
     }
