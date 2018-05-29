@@ -24,5 +24,7 @@ public interface TaskDao {
 
     Task findByTitle(String title) throws SQLException;
 
+    void updateColor(int taskId, String color) throws SQLException;
+
 
 }
