@@ -22,6 +22,7 @@ function updateTask(e) {
 
     const oldTitle = spanTask.id;
     const oldDesc = descParEl.textContent;
+    const oldColor = liEl.style.backgroundColor;
 
     spanTask.remove();
     descParEl.remove();
@@ -43,6 +44,11 @@ function updateTask(e) {
     descInputEl.placeholder = oldDesc;
     descInputEl.setAttribute("class", "input-min");
 
+    const colorInputEl = document.createElement("INPUT");
+    colorInputEl.setAttribute("type", "color");
+    colorInputEl.value = oldColor;
+    colorInputEl.setAttribute("class", "input-min");
+
     buttonEl.removeEventListener('click', updateTask);
     buttonEl.addEventListener('click', applyTaskUpdates);
 
@@ -50,6 +56,7 @@ function updateTask(e) {
     liEl.insertBefore(breakEl, buttonEl);
     liEl.insertBefore(titleInputEl, buttonEl);
     liEl.insertBefore(descInputEl, buttonEl);
+    liEl.insertBefore(colorInputEl, buttonEl);
     liEl.insertBefore(closeTaskButt, buttonEl);
     liEl.insertBefore(breakEl, buttonEl);
 
@@ -59,12 +66,15 @@ function applyTaskUpdates(e) {
     const liEl = e.target.parentElement;
     const titleInputField = liEl.firstChild;
     const descInputField = liEl.children.item(1);
+    const colorInputField = liEl.children.item(2);
 
 
     let title = titleInputField.value;
     const oldTitle = titleInputField.placeholder;
     let desc = descInputField.value;
     const oldDesc = descInputField.placeholder;
+    let color = colorInputField.value;
+    const oldColor = colorInputField.value;
     const id = liEl.id;
 
     if (title == null || title === "" || title === " ") {
@@ -74,7 +84,11 @@ function applyTaskUpdates(e) {
         desc = oldDesc;
     }
 
-    const data = JSON.stringify({"taskId": id, "description": desc, "title": title});
+    if (color == null || color === "" || color === " ") {
+        color = oldColor;
+    }
+
+    const data = JSON.stringify({"taskId": id, "description": desc, "title": title, "color": color});
 
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onUpdateTaskResponse);
@@ -118,6 +132,12 @@ function showCreateTask(){
     inputDescript.setAttribute("class", "input-min");
     inputDescript.placeholder = "Description";
 
+    const inputColor = document.createElement("INPUT");
+    inputColor.setAttribute("type","color");
+    inputColor.setAttribute("id", "task-color");
+    inputColor.setAttribute("class", "input-min");
+    inputColor.placeholder = "Color";
+
     const breakEl = document.createElement("br");
 
     const createTaskButt = document.createElement("button");
@@ -130,6 +150,8 @@ function showCreateTask(){
     createTaskDiv.appendChild(closeTaskButt);
     createTaskDiv.appendChild(inputDescript);
     createTaskDiv.appendChild(breakEl);
+    createTaskDiv.appendChild(inputColor);
+    createTaskDiv.appendChild(breakEl);
     createTaskDiv.appendChild(createTaskButt);
     taskContentDivEl.appendChild(createTaskDiv);
 }
@@ -140,14 +162,16 @@ function createTask(){
 
     const taskTitleInputEl = document.getElementById("task-title");
     const taskDescInputEl = document.getElementById("task-desc");
+    const taskColorInputEl = document.getElementById("task-color");
 
     const title = taskTitleInputEl.value;
     const description = taskDescInputEl.value;
-    if(title !== "" && description !== ""){
+    const color = taskColorInputEl.value;
+    if(title !== "" && description !== "" && color !== ""){
         const params = new URLSearchParams();
         params.append('title',title);
         params.append('description',description);
-        params.append('color', '#ffffff');
+        params.append('color',color);
 
         const xhr = new XMLHttpRequest();
         xhr.addEventListener('load',onCreateTaskResponse);
