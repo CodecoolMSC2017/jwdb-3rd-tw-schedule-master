@@ -31,6 +31,7 @@ public final class LoginServlet extends AbstractServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
+            logger.trace("POST login");
             UserService userService = new SimpleUserService(connection);
             TaskService taskService = new SimpleTaskService(connection);
             ScheduleService scheduleService = new SimpleScheduleService(connection);
@@ -45,15 +46,16 @@ public final class LoginServlet extends AbstractServlet {
 
             if (role.equals("admin")) {
                 List<User> users = userService.findAll();
-                logger.info("Admin logged in");
+                logger.info("Admin with username: " + user.getUserName() + " logged in");
                 sendMessage(resp, 200, new AdminDto(user, users));
             }
 
             List<Task> allTask = taskService.findAllByUserId(user.getId());
             List<Schedule> schedules = scheduleService.findAllByUserId(user.getId());
-            logger.info(user.getUserName() + " logged in");
+            logger.info("User with username: " + user.getUserName() + " logged in");
             sendMessage(resp, HttpServletResponse.SC_OK, new UserDto(user, allTask, schedules));
         } catch (SQLException ex) {
+            logger.error(ex.getMessage());
             handleSqlError(resp, ex);
         } catch (UserNotFoundException e) {
             logger.error(e.getMessage());
@@ -70,6 +72,7 @@ public final class LoginServlet extends AbstractServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
+            logger.trace("GET login");
             UserService userService = new SimpleUserService(connection);
             TaskService taskService = new SimpleTaskService(connection);
             ScheduleService scheduleService = new SimpleScheduleService(connection);
@@ -84,6 +87,7 @@ public final class LoginServlet extends AbstractServlet {
             sendMessage(resp, HttpServletResponse.SC_OK, new UserDto(user, allTask, schedules));
 
         } catch (SQLException e) {
+            logger.error(e.getMessage());
             handleSqlError(resp, e);
         }
     }
@@ -103,6 +107,7 @@ public final class LoginServlet extends AbstractServlet {
             sendMessage(resp, 200, new AdminDto(user, users));
 
         } catch (SQLException e) {
+            logger.error(e.getMessage());
             handleSqlError(resp, e);
         }
     }

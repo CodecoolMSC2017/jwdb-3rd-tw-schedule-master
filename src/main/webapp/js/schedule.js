@@ -107,22 +107,30 @@ function onCreateScheduleResponse() {
 }
 
 function removeSchedule(e) {
-    const liEL = e.target.parentElement;
-    const id = liEL.id;
-    removeAllChildren(daysDiv);
-    const title = liEL.children.item(1).textContent;
-    const desc = liEL.children.item(1).id;
-    const userId = document.getElementById("name-field").name;
+    var txt;
+    var r = confirm("Press a button!\nEither OK or Cancel.");
+    if (r == true) {
+        txt = "You pressed OK!";
+        const liEL = e.target.parentElement;
+        const id = liEL.id;
+        removeAllChildren(daysDiv);
+        const title = liEL.children.item(1).textContent;
+        const desc = liEL.children.item(1).id;
+        const userId = document.getElementById("name-field").name;
 
-    const data = JSON.stringify({"id": id, "userID": userId, "title": title, "description": description});
+        const data = JSON.stringify({"id": id,"userID" :userId,"title": title, "description": desc});
 
 
-    const xhr = new XMLHttpRequest();
-    xhr.addEventListener('load', onDeleteScheduleResponse);
-    xhr.addEventListener('error', onNetworkError);
-    xhr.open('DELETE', 'protected/schedule');
-    xhr.setRequestHeader("Content-type", "application/json");
-    xhr.send(data);
+        const xhr = new XMLHttpRequest();
+        xhr.addEventListener('load', onDeleteScheduleResponse);
+        xhr.addEventListener('error', onNetworkError);
+        xhr.open('DELETE', 'protected/schedule');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(data);
+    } else {
+        txt = "You pressed Cancel!";
+    }
+
 }
 
 function onDeleteScheduleResponse() {

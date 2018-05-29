@@ -50,7 +50,8 @@ public class SimpleScheduleService implements ScheduleService {
     }
 
     @Override
-    public void deleteSchedule(int scheduleId) throws SQLException {
+    public void deleteSchedule(Schedule schedule) throws SQLException {
+        int scheduleId = schedule.getId();
         for (Day day : findDayByScheduleId(scheduleId)) {
             hourDao.deleteByDayId(day.getId());
         }

@@ -209,20 +209,23 @@ function hideTaskDescription(e) {
 }
 
 function removeTask(e) {
-    const liEL = e.target.parentElement;
-    const id = liEL.id;
-    const userId = document.getElementById("name-field").name;
+    var r = confirm("Press a button!\nEither OK or Cancel.");
+    if (r == true) {
+        const liEL = e.target.parentElement;
+        const id = liEL.id;
+        const userId = document.getElementById("name-field").name;
 
 
-    const data = JSON.stringify({"id": id, "userId" :userId});
+        const data = JSON.stringify({"id": id, "userId" :userId});
 
 
-    const xhr = new XMLHttpRequest();
-    xhr.addEventListener('load', onDeleteTaskResponse);
-    xhr.addEventListener('error', onNetworkError);
-    xhr.open('DELETE', 'protected/task');
-    xhr.setRequestHeader("Content-type", "application/json");
-    xhr.send(data);
+        const xhr = new XMLHttpRequest();
+        xhr.addEventListener('load', onDeleteTaskResponse);
+        xhr.addEventListener('error', onNetworkError);
+        xhr.open('DELETE', 'protected/task');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(data);
+    }
 }
 
 function onDeleteTaskResponse() {
