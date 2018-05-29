@@ -11,6 +11,7 @@ import com.codecool.web.service.ScheduleService;
 import com.codecool.web.service.TaskService;
 import com.codecool.web.service.simple.SimpleScheduleService;
 import com.codecool.web.service.simple.SimpleTaskService;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import javax.servlet.annotation.WebServlet;
@@ -108,11 +109,10 @@ public class ScheduleServlet extends AbstractServlet {
         try (Connection connection = getConnection(req.getServletContext())) {
             ScheduleService scheduleService = new SimpleScheduleService(connection);
 
-            JsonNode jsonNode = createJsonNodeFromRequest(req);
+            JsonParser jsonParser = objectMapper.getFactory().createParser(req.getInputStream());
+            Schedule schedule = objectMapper.readValue(jsonParser, Schedule.class);
 
-            int scheduleId = Integer.parseInt(jsonNode.get("scheduleId").textValue());
-
-            scheduleService.deleteSchedule(scheduleId);
+            scheduleService.deleteSchedule(schedule);
 
             doGet(req, resp);
         } catch (SQLException e) {
