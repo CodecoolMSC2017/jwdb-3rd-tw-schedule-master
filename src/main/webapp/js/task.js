@@ -118,6 +118,12 @@ function showCreateTask(){
     inputDescript.setAttribute("class", "input-min");
     inputDescript.placeholder = "Description";
 
+    const inputColor = document.createElement("INPUT");
+    inputColor.setAttribute("type","color");
+    inputColor.setAttribute("id", "task-color");
+    inputColor.setAttribute("class", "input-min");
+    inputColor.placeholder = "Color";
+
     const breakEl = document.createElement("br");
 
     const createTaskButt = document.createElement("button");
@@ -130,6 +136,8 @@ function showCreateTask(){
     createTaskDiv.appendChild(closeTaskButt);
     createTaskDiv.appendChild(inputDescript);
     createTaskDiv.appendChild(breakEl);
+    createTaskDiv.appendChild(inputColor);
+    createTaskDiv.appendChild(breakEl);
     createTaskDiv.appendChild(createTaskButt);
     taskContentDivEl.appendChild(createTaskDiv);
 }
@@ -140,14 +148,16 @@ function createTask(){
 
     const taskTitleInputEl = document.getElementById("task-title");
     const taskDescInputEl = document.getElementById("task-desc");
+    const taskColorInputEl = document.getElementById("task-color");
 
     const title = taskTitleInputEl.value;
     const description = taskDescInputEl.value;
-    if(title !== "" && description !== ""){
+    const color = taskColorInputEl.value;
+    if(title !== "" && description !== "" && color !== ""){
         const params = new URLSearchParams();
         params.append('title',title);
         params.append('description',description);
-        params.append('color', '#ffffff');
+        params.append('color',color);
 
         const xhr = new XMLHttpRequest();
         xhr.addEventListener('load',onCreateTaskResponse);

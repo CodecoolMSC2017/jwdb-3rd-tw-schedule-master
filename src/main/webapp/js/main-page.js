@@ -48,6 +48,7 @@ function createTaskDiv(userDto) {
     for (let i = 0; i < userDto.tasks.length; i++) {
 
         let taskLi = document.createElement("li");
+        taskLi.style.backgroundColor = userDto.tasks[i].color;
         taskLi.setAttribute("id", userDto.tasks[i].id);
         taskLi.setAttribute("class", "task-li");
         taskLi.setAttribute('draggable', true);

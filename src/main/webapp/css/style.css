@@ -64,7 +64,6 @@ li {
     border-radius: 3px;
     font-size: 16px;
     display: block;
-    background-color: white;
     width: 220px;
     padding: 5px 0;
     margin-top: 3px;
@@ -418,6 +417,7 @@ li:last-child {
 }
 
 .schedule-li {
+    background-color: white;
     color: #3195d1;
 }
 
@@ -464,7 +464,7 @@ li:last-child {
 }
 
 .task-li {
-    color: #24A83C;
+    color: black;
     cursor: grab;
 }
 
