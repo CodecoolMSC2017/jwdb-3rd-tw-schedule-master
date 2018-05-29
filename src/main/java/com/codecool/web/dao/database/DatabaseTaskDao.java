@@ -3,7 +3,6 @@ package com.codecool.web.dao.database;
 import com.codecool.web.dao.TaskDao;
 import com.codecool.web.model.Task;
 
-import java.io.PipedReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -75,9 +74,10 @@ class DatabaseTaskDao extends AbstractDaoFactory implements TaskDao {
     @Override
     public List<Task> findByUserId(int userId) throws SQLException {
         List<Task> tasks = new ArrayList<>();
-        String sql = "SELECT id, app_user_id, title, description, color FROM task WHERE app_user_id = ? ORDER BY title ASC ";
+        String sql = "SELECT * FROM task WHERE app_user_id = ? ";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, userId);
+
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     tasks.add(fetchTask(resultSet));
@@ -85,6 +85,29 @@ class DatabaseTaskDao extends AbstractDaoFactory implements TaskDao {
             }
         }
         return tasks;
+    }
+
+
+    public List<Task> findByUserIdAndScheduleId(int userId, int scheduleId) throws SQLException {
+        List<Task> tasks = new ArrayList<>();
+        String sql = "SELECT id,app_user_id,title,description,color " +
+                "FROM task " +
+                "LEFT JOIN task_hour ON task_id = id " +
+                "WHERE app_user_id = ? " +
+                "AND schedule_id <> ? " +
+                "OR schedule_id " +
+                "IS NULL GROUP BY id";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(2, scheduleId);
+            statement.setInt(1,userId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    tasks.add(fetchTask(resultSet));
+                }
+            }
+            return tasks;
+        }
+
     }
 
 

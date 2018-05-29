@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/protected/schedule")
@@ -33,16 +34,21 @@ public class ScheduleServlet extends AbstractServlet {
             User user = getUser(req);
             int userId = user.getId();
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
-            List<Task> tasks = taskService.findAllByUserId(userId);
+            List<Task> tasks = new ArrayList<>();
             UserDto userDto = new UserDto(user, tasks, schedules);
 
             String scheduleIdFromReq = req.getParameter("scheduleId");
 
-            if (scheduleIdFromReq != null ) {
+            if (scheduleIdFromReq != null) {
                 int scheduleId = Integer.parseInt(scheduleIdFromReq);
                 Schedule schedule = scheduleService.findById(scheduleId);
+                scheduleIdFromReq = Integer.toString(schedule.getId());
+
                 userDto.setSchedule(schedule);
             }
+
+            List<Task> taskList = taskService.findAllByUserAndScheduleId(userId, Integer.parseInt(scheduleIdFromReq));
+            userDto.setTasks(taskList);
 
             sendMessage(resp, HttpServletResponse.SC_OK, userDto);
         } catch (SQLException ex) {

@@ -1,5 +1,7 @@
 package com.codecool.web.model;
 
+import java.util.Objects;
+
 public class Task extends AbstractModel {
 
     private int userId;

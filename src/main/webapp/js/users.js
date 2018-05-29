@@ -8,6 +8,9 @@ function onUserListingLoad(adminDto) {
     createUsersTableHeader();
     usersTableBodyEl = usersTableEl.querySelector('tbody');
     appendUsers(adminDto.users);
+
+    const nameField = document.getElementById("name-field");
+    nameField.textContent = 'admin';
 }
 
 function appendUser(user) {
@@ -59,6 +62,7 @@ function createUsersTableHeader() {
     nameThEl.textContent = 'Name';
 
     const emailThEl = document.createElement('th');
+    emailThEl.setAttribute("class", "email-th-el");
     emailThEl.textContent = 'Email';
 
     const roleThEl = document.createElement('th');
@@ -88,19 +92,22 @@ function showAsUser(e){
 }
 
 function removeUser(e) {
-    const trEl = e.target.parentElement.parentElement;
-    const id = trEl.id;
+    var r = confirm("Press a button!\nEither OK or Cancel.");
+    if (r == true) {
+        const trEl = e.target.parentElement.parentElement;
+        const id = trEl.id;
 
-    const data = JSON.stringify({"userId": id});
-    trEl.remove();
+        const data = JSON.stringify({"userId": id});
+        trEl.remove();
 
 
-    const xhr = new XMLHttpRequest();
-    xhr.addEventListener('load', onDeleteUserResponse);
-    xhr.addEventListener('error', onNetworkError);
-    xhr.open('DELETE', 'login');
-    xhr.setRequestHeader("Content-type", "application/json");
-    xhr.send(data);
+        const xhr = new XMLHttpRequest();
+        xhr.addEventListener('load', onDeleteUserResponse);
+        xhr.addEventListener('error', onNetworkError);
+        xhr.open('DELETE', 'login');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(data);
+    }
 }
 
 function onDeleteUserResponse(){
@@ -124,7 +131,7 @@ function onAdminLoginResponse() {
 function adminGoBackButtonClicked(){
 
     const nameField = document.getElementById("name-field");
-    nameField.textContent = '';
+    nameField.textContent = 'admin';
 
     const params = new URLSearchParams();
 

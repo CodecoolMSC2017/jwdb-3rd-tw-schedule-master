@@ -80,4 +80,9 @@ public class SimpleTaskService implements TaskService {
     public List<Task> findAllByUserId(int userId) throws SQLException {
         return taskDao.findByUserId(userId);
     }
+
+    @Override
+    public List<Task> findAllByUserAndScheduleId(int userId, int scheduleId) throws SQLException {
+        return taskDao.findByUserIdAndScheduleId(userId,scheduleId);
+    }
 }

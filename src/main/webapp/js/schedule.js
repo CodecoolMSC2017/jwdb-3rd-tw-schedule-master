@@ -107,10 +107,9 @@ function onCreateScheduleResponse() {
 }
 
 function removeSchedule(e) {
-    var txt;
     var r = confirm("Press a button!\nEither OK or Cancel.");
     if (r == true) {
-        txt = "You pressed OK!";
+
         const liEL = e.target.parentElement;
         const id = liEL.id;
         removeAllChildren(daysDiv);
@@ -118,7 +117,7 @@ function removeSchedule(e) {
         const desc = liEL.children.item(1).id;
         const userId = document.getElementById("name-field").name;
 
-        const data = JSON.stringify({"id": id,"userID" :userId,"title": title, "description": desc});
+        const data = JSON.stringify({"id": id,"userId" :userId,"title": title, "description": desc});
 
 
         const xhr = new XMLHttpRequest();
@@ -127,8 +126,6 @@ function removeSchedule(e) {
         xhr.open('DELETE', 'protected/schedule');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(data);
-    } else {
-        txt = "You pressed Cancel!";
     }
 
 }
@@ -166,7 +163,6 @@ function listingSchedules(e) {
 function onListingResponse() {
     if (this.status === OK) {
         const userDto = JSON.parse(this.responseText);
-        removeAllChildren(daysDiv);
         listingDays(userDto);
         createScheduleDiv(userDto);
         createTaskDiv(userDto);
@@ -177,6 +173,9 @@ function onListingResponse() {
 
 function listingDays(userDto) {
     clearMessages();
+    removeAllChildren(daysDiv);
+    document.getElementById("schedulesUl").remove();
+    document.getElementById("tasksUl").remove();
     const table = document.createElement("table");
     table.setAttribute("class", "schedule-table");
     table.setAttribute("id", userDto.schedule.id);
@@ -285,7 +284,9 @@ function listingDays(userDto) {
     daysDiv.appendChild(table);
 
     const guestButton = document.createElement("button");
-    guestButton.setAttribute("class", "guest-link-btn");
+    guestButton.setAttribute("class", "btn");
+    guestButton.innerText = "Create Guest Link";
+
     guestButton.addEventListener('click', createLink);
 
     daysDiv.appendChild(guestButton);
@@ -295,6 +296,7 @@ function createLink(e) {
     e.target.removeEventListener('click', createLink);
     const linkInputField = document.createElement("INPUT");
     linkInputField.setAttribute("id", "guest-link");
+    linkInputField.setAttribute("class", "input");
     linkInputField.setAttribute("type", "text");
 
     const scheduleId = e.target.parentElement.firstElementChild.id;
@@ -446,7 +448,7 @@ function applyScheduleUpdates(e) {
         desc = oldDesc;
     }
 
-    const data = JSON.stringify({"scheduleId": id, "description": desc, "title": title, "userID": userId});
+    const data = JSON.stringify({"scheduleId": id, "description": desc, "title": title, "userId": userId});
 
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onUpdateScheduleResponse);

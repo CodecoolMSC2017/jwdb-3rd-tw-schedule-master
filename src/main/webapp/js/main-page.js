@@ -83,6 +83,7 @@ function createTaskDiv(userDto) {
     }
 
     const taskCreateLiEl = document.createElement("li");
+    taskCreateLiEl.setAttribute("class", "task-create-li");
 
     const createImage = document.createElement("button");
     createImage.addEventListener('click', showCreateTask);
@@ -110,6 +111,11 @@ function createScheduleDiv(userDto){
         scheduleSpan.textContent = userDto.schedules[i].title;
         scheduleSpan.addEventListener('click',listingSchedules);
         scheduleSpan.setAttribute("class", "title-span");
+        scheduleSpan.classList.add("tooltip");
+        let tooltipSpan = document.createElement("span");
+        tooltipSpan.setAttribute("class","tooltiptext");
+        tooltipSpan.innerText = userDto.schedules[i].description;
+        scheduleSpan.appendChild(tooltipSpan);
         scheduleSpan.setAttribute("id",userDto.schedules[i].description);
 
         let deleteScheduleButt = document.createElement("button");
