@@ -12,7 +12,7 @@ public interface TaskService {
 
     void deleteTask(int taskId) throws SQLException;
 
-    void update(int taskId, String title, String description) throws SQLException, TaskAlreadyExistsException;
+    void update(Task task) throws SQLException, TaskAlreadyExistsException;
 
     Task findById(int taskId) throws SQLException;
 
