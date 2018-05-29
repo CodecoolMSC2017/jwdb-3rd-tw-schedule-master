@@ -39,20 +39,25 @@ public class SimpleTaskService implements TaskService {
         int taskId = task.getId();
         String title = task.getTitle();
         String description = task.getDescription();
+        String color = task.getColor();
 
         Task taskToUpdate = taskDao.findById(taskId);
         Task check = taskDao.findByTitle(title);
         String currentTitle = taskToUpdate.getTitle();
         String currentDescription = taskToUpdate.getDescription();
+        String currentColor = taskToUpdate.getColor();
 
-        if (currentTitle.equals(title) && !currentDescription.equals(description)) {
+        if (currentTitle.equals(title) && !currentDescription.equals(description) && currentColor.equals(color)) {
             taskDao.updateDescription(taskId, description);
-        } else if (!currentTitle.equals(title) && currentDescription.equals(description) && check == null) {
+        } else if (!currentTitle.equals(title) && currentDescription.equals(description) && currentColor.equals(color) && check == null) {
             taskDao.updateTitle(taskId, title);
-        } else if (!currentTitle.equals(title) && !currentDescription.equals(description) && check == null) {
+        } else if (!currentTitle.equals(title) && !currentDescription.equals(description) && !currentColor.equals(color) && check == null) {
             taskDao.updateTitle(taskId, title);
             taskDao.updateDescription(taskId, description);
-        } else if(check != null){
+        } else if (currentTitle.equals(title) && currentDescription.equals(description) && !currentColor.equals(color) && check == null) {
+            taskDao.updateColor(taskId, color);
+        }
+        else if(check != null){
             throw new TaskAlreadyExistsException();
         }
     }
