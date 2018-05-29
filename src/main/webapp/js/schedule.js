@@ -107,10 +107,9 @@ function onCreateScheduleResponse() {
 }
 
 function removeSchedule(e) {
-    var txt;
     var r = confirm("Press a button!\nEither OK or Cancel.");
     if (r == true) {
-        txt = "You pressed OK!";
+
         const liEL = e.target.parentElement;
         const id = liEL.id;
         removeAllChildren(daysDiv);
@@ -118,7 +117,7 @@ function removeSchedule(e) {
         const desc = liEL.children.item(1).id;
         const userId = document.getElementById("name-field").name;
 
-        const data = JSON.stringify({"id": id,"userID" :userId,"title": title, "description": desc});
+        const data = JSON.stringify({"id": id,"userId" :userId,"title": title, "description": desc});
 
 
         const xhr = new XMLHttpRequest();
@@ -127,8 +126,6 @@ function removeSchedule(e) {
         xhr.open('DELETE', 'protected/schedule');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(data);
-    } else {
-        txt = "You pressed Cancel!";
     }
 
 }
@@ -167,6 +164,10 @@ function onListingResponse() {
     if (this.status === OK) {
         const userDto = JSON.parse(this.responseText);
         removeAllChildren(daysDiv);
+        const schedulesULEl = document.getElementById("schedulesUl");
+        removeAllChildren(schedulesULEl);
+        const tasksULEl = document.getElementById("tasksUl");
+        removeAllChildren(tasksULEl);
         listingDays(userDto);
         createScheduleDiv(userDto);
         createTaskDiv(userDto);
@@ -446,7 +447,7 @@ function applyScheduleUpdates(e) {
         desc = oldDesc;
     }
 
-    const data = JSON.stringify({"scheduleId": id, "description": desc, "title": title, "userID": userId});
+    const data = JSON.stringify({"scheduleId": id, "description": desc, "title": title, "userId": userId});
 
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onUpdateScheduleResponse);
