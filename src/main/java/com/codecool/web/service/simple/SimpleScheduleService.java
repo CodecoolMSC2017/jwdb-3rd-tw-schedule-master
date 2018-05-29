@@ -61,8 +61,11 @@ public class SimpleScheduleService implements ScheduleService {
     }
 
     @Override
-    public void updateSchedule(int scheduleId, String title, String description) throws SQLException, ScheduleAlreadyExistsException {
-        Schedule schedule = scheduleDao.findById(scheduleId);
+    public void updateSchedule(Schedule schedule) throws SQLException, ScheduleAlreadyExistsException {
+        int scheduleId = schedule.getId();
+        String title = schedule.getTitle();
+        String description = schedule.getDescription();
+
         Schedule check = scheduleDao.findByTitle(title);
         String scheduleTile = schedule.getTitle();
         String scheduleDescription = schedule.getDescription();

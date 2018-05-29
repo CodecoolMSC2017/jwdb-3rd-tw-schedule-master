@@ -28,7 +28,8 @@ public class SimpleTaskService implements TaskService {
     }
 
     @Override
-    public void deleteTask(int taskId) throws SQLException {
+    public void deleteTask(Task task) throws SQLException {
+        int taskId = task.getId();
         taskHourDao.deleteByTaskId(taskId);
         taskDao.delete(taskId);
 
@@ -46,7 +47,9 @@ public class SimpleTaskService implements TaskService {
         String currentTitle = taskToUpdate.getTitle();
         String currentDescription = taskToUpdate.getDescription();
         String currentColor = taskToUpdate.getColor();
-
+        if(check == null || check.getId() == taskId)  {
+            check = null;
+        }
         if (currentTitle.equals(title) && !currentDescription.equals(description) && currentColor.equals(color)) {
             taskDao.updateDescription(taskId, description);
         } else if (!currentTitle.equals(title) && currentDescription.equals(description) && currentColor.equals(color) && check == null) {
@@ -54,7 +57,8 @@ public class SimpleTaskService implements TaskService {
         } else if (!currentTitle.equals(title) && !currentDescription.equals(description) && !currentColor.equals(color) && check == null) {
             taskDao.updateTitle(taskId, title);
             taskDao.updateDescription(taskId, description);
-        } else if (currentTitle.equals(title) && currentDescription.equals(description) && !currentColor.equals(color) && check == null) {
+            taskDao.updateColor(taskId, color);
+        } else if (currentTitle.equals(title) && currentDescription.equals(description) && !currentColor.equals(color)) {
             taskDao.updateColor(taskId, color);
         }
         else if(check != null){
