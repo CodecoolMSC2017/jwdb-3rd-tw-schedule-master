@@ -26,7 +26,7 @@ import java.util.List;
 
 abstract class AbstractServlet extends HttpServlet {
 
-    private final ObjectMapper om = new ObjectMapper();
+    final ObjectMapper objectMapper = new ObjectMapper();
     final Logger logger = Logger.getLogger(LoginServlet.class);
 
     Connection getConnection(ServletContext sce) throws SQLException {
@@ -45,7 +45,7 @@ abstract class AbstractServlet extends HttpServlet {
 
     void sendMessage(HttpServletResponse resp, int status, Object object) throws IOException {
         resp.setStatus(status);
-        om.writeValue(resp.getOutputStream(), object);
+        objectMapper.writeValue(resp.getOutputStream(), object);
     }
 
     void handleSqlError(HttpServletResponse resp, SQLException ex) throws IOException {

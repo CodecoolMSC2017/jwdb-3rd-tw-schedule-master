@@ -2,6 +2,7 @@ package com.codecool.web.servlet;
 
 import com.codecool.web.dto.UserDto;
 import com.codecool.web.exception.TaskAlreadyExistsException;
+import com.codecool.web.model.Task;
 import com.codecool.web.model.User;
 import com.codecool.web.service.TaskService;
 import com.codecool.web.service.simple.SimpleTaskService;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -50,13 +52,11 @@ public class TaskServlet extends AbstractServlet {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskService taskService = new SimpleTaskService(connection);
 
-            JsonNode jsonNode = createJsonNodeFromRequest(req);
+            BufferedReader reader = req.getReader();
 
-            int taskId = Integer.parseInt(jsonNode.get("taskId").textValue());
-            String taskTitle = jsonNode.get("title").textValue();
-            String taskDescription = jsonNode.get("description").textValue();
+            Task task = objectMapper.readValue(reader, Task.class);
 
-            taskService.update(taskId, taskTitle, taskDescription);
+            taskService.update(task);
             doGet(req, resp);
         } catch (SQLException e) {
             handleSqlError(resp, e);

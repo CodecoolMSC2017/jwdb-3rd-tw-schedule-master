@@ -35,11 +35,15 @@ public class SimpleTaskService implements TaskService {
     }
 
     @Override
-    public void update(int taskId, String title, String description) throws SQLException, TaskAlreadyExistsException {
-        Task task = taskDao.findById(taskId);
+    public void update(Task task) throws SQLException, TaskAlreadyExistsException {
+        int taskId = task.getId();
+        String title = task.getTitle();
+        String description = task.getDescription();
+
+        Task taskToUpdate = taskDao.findById(taskId);
         Task check = taskDao.findByTitle(title);
-        String currentTitle = task.getTitle();
-        String currentDescription = task.getDescription();
+        String currentTitle = taskToUpdate.getTitle();
+        String currentDescription = taskToUpdate.getDescription();
 
         if (currentTitle.equals(title) && !currentDescription.equals(description)) {
             taskDao.updateDescription(taskId, description);
