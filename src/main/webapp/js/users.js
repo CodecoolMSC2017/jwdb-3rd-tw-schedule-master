@@ -8,6 +8,9 @@ function onUserListingLoad(adminDto) {
     createUsersTableHeader();
     usersTableBodyEl = usersTableEl.querySelector('tbody');
     appendUsers(adminDto.users);
+
+    const nameField = document.getElementById("name-field");
+    nameField.textContent = 'admin';
 }
 
 function appendUser(user) {
@@ -59,6 +62,7 @@ function createUsersTableHeader() {
     nameThEl.textContent = 'Name';
 
     const emailThEl = document.createElement('th');
+    emailThEl.setAttribute("class", "email-th-el");
     emailThEl.textContent = 'Email';
 
     const roleThEl = document.createElement('th');

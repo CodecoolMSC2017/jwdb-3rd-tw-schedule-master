@@ -256,6 +256,7 @@ li:last-child {
     font-size: 18px;
     font-weight: bold;
     letter-spacing: 1px;
+    cursor: pointer;
 }
 
 .create-div {
@@ -576,6 +577,10 @@ li:last-child {
 #users tr:nth-child(even) td {
     background-color: white;
     color: #763e8d;
+}
+
+.email-th-el {
+    cursor: pointer;
 }
 
 
