@@ -75,7 +75,7 @@ class DatabaseTaskDao extends AbstractDaoFactory implements TaskDao {
     @Override
     public List<Task> findByUserId(int userId) throws SQLException {
         List<Task> tasks = new ArrayList<>();
-        String sql = "SELECT id, app_user_id, title, description, color FROM task WHERE app_user_id = ? ORDER BY title ASC ";
+        String sql = "SELECT id, app_user_id, title, description, color FROM task WHERE app_user_id = ? AND app_user_id NOT IN(SELECT task_id FROM task_hour) ORDER BY title ASC ";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, userId);
             try (ResultSet resultSet = statement.executeQuery()) {
