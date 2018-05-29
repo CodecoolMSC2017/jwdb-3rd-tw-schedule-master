@@ -83,6 +83,7 @@ function createTaskDiv(userDto) {
     }
 
     const taskCreateLiEl = document.createElement("li");
+    taskCreateLiEl.setAttribute("class", "task-create-li");
 
     const createImage = document.createElement("button");
     createImage.addEventListener('click', showCreateTask);

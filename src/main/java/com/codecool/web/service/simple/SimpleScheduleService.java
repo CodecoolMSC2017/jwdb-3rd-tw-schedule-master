@@ -38,7 +38,7 @@ public class SimpleScheduleService implements ScheduleService {
         if (numOfDays > 7 || numOfDays == 0) {
             throw new WrongNumOfDaysException();
         }
-        if (check != null && check.getUserID() == userId) {
+        if(check != null && check.getUserId() == userId){
             throw new ScheduleAlreadyExistsException();
         }
         Schedule schedule = scheduleDao.add(userId, title, description);
@@ -51,7 +51,8 @@ public class SimpleScheduleService implements ScheduleService {
     }
 
     @Override
-    public void deleteSchedule(int scheduleId) throws SQLException {
+    public void deleteSchedule(Schedule schedule) throws SQLException {
+        int scheduleId = schedule.getId();
         for (Day day : findDayByScheduleId(scheduleId)) {
             hourDao.deleteByDayId(day.getId());
         }
@@ -73,7 +74,7 @@ public class SimpleScheduleService implements ScheduleService {
         } else if (!scheduleTile.equals(title) && !scheduleDescription.equals(description) && check == null) {
             scheduleDao.updateTitle(scheduleId, title);
             scheduleDao.updateDescription(scheduleId, description);
-        } else if (check != null) {
+        }else if(check != null){
             throw new ScheduleAlreadyExistsException();
         }
     }
@@ -131,7 +132,7 @@ public class SimpleScheduleService implements ScheduleService {
 
         if (day != null) {
             Schedule schedule = scheduleDao.findById(day.getScheduleId());
-            if (schedule.getUserID() == userId && schedule.getId() == scheduleId) {
+            if (schedule.getUserId() == userId && schedule.getId() == scheduleId){
                 throw new DayAlreadyExistsException();
             }
         }
@@ -145,7 +146,7 @@ public class SimpleScheduleService implements ScheduleService {
 
         if (day != null) {
             Schedule schedule = scheduleDao.findById(day.getScheduleId());
-            if (schedule.getUserID() == userId) {
+            if ( schedule.getUserId() == userId){
                 throw new DayAlreadyExistsException();
             }
         }

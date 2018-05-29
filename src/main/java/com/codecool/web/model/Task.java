@@ -33,16 +33,19 @@ public class Task extends AbstractModel {
         return  color;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Task task = (Task) o;
-        return userId == task.userId &&
-                Objects.equals(title, task.title) &&
-                Objects.equals(description, task.description) &&
-                Objects.equals(color, task.color);
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 }

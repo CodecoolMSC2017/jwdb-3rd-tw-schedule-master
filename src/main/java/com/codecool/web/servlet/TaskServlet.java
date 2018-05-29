@@ -6,13 +6,16 @@ import com.codecool.web.model.Task;
 import com.codecool.web.model.User;
 import com.codecool.web.service.TaskService;
 import com.codecool.web.service.simple.SimpleTaskService;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -52,11 +55,12 @@ public class TaskServlet extends AbstractServlet {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskService taskService = new SimpleTaskService(connection);
 
-            BufferedReader reader = req.getReader();
+            // Reader reader = req.getReader();
 
-            Task task = objectMapper.readValue(reader, Task.class);
-
+            JsonParser jsonParser = objectMapper.getFactory().createParser(req.getInputStream());
+            Task task = objectMapper.readValue(jsonParser, Task.class);
             taskService.update(task);
+
             doGet(req, resp);
         } catch (SQLException e) {
             handleSqlError(resp, e);
