@@ -137,6 +137,7 @@ function showCreateTask(){
     inputColor.setAttribute("id", "task-color");
     inputColor.setAttribute("class", "input-min");
     inputColor.placeholder = "Color";
+    inputColor.value = "#24be3e";
 
     const breakEl = document.createElement("br");
 
