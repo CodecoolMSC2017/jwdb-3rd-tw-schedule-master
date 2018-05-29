@@ -20,6 +20,8 @@ public interface TaskDao {
 
     List<Task> findByUserId(int userId) throws SQLException;
 
+    List<Task> findByUserIdAndScheduleId(int userId, int scheduleId) throws SQLException;
+
     List<Task> findAll() throws SQLException;
 
     Task findByTitle(String title) throws SQLException;

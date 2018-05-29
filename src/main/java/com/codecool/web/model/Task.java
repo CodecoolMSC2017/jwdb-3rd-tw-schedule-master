@@ -1,5 +1,7 @@
 package com.codecool.web.model;
 
+import java.util.Objects;
+
 public class Task extends AbstractModel {
 
     private int userId;
@@ -30,4 +32,17 @@ public class Task extends AbstractModel {
     public String getColor() {
         return  color;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Task task = (Task) o;
+        return userId == task.userId &&
+                Objects.equals(title, task.title) &&
+                Objects.equals(description, task.description) &&
+                Objects.equals(color, task.color);
+    }
+
 }

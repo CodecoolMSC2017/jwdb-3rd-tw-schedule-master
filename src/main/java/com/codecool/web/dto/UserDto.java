@@ -38,4 +38,7 @@ public class UserDto {
         this.schedule = schedule;
     }
 
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
 }

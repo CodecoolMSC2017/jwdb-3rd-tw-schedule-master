@@ -19,4 +19,6 @@ public interface TaskService {
     List<Task> findAll() throws SQLException;
 
     List<Task> findAllByUserId(int userId) throws SQLException;
+
+    List<Task> findAllByUserAndScheduleId(int userId,int scheduleId) throws SQLException;
 }
