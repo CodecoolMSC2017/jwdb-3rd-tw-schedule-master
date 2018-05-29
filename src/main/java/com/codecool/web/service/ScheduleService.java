@@ -16,7 +16,7 @@ public interface ScheduleService {
 
     void deleteSchedule(Schedule schedule)throws SQLException;
 
-    void updateSchedule(int scheduleId, String title, String description)throws SQLException, ScheduleAlreadyExistsException;
+    void updateSchedule(Schedule schedule)throws SQLException, ScheduleAlreadyExistsException;
 
     Schedule findById(int scheduleId)throws SQLException;
 
