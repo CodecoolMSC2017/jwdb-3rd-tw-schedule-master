@@ -11,6 +11,7 @@ function onMainPageLoad(userDto) {
 
     const nameField = document.getElementById("name-field");
     nameField.textContent = userDto.user.userName;
+    nameField.setAttribute("name",userDto.user.id);
 
     const taskULEl = document.getElementById("tasksUl");
     if (taskULEl !== null) {
@@ -109,6 +110,7 @@ function createScheduleDiv(userDto){
         scheduleSpan.textContent = userDto.schedules[i].title;
         scheduleSpan.addEventListener('click',listingSchedules);
         scheduleSpan.setAttribute("class", "title-span");
+        scheduleSpan.setAttribute("id",userDto.schedules[i].description);
 
         let deleteScheduleButt = document.createElement("button");
         deleteScheduleButt.addEventListener('click',removeSchedule);

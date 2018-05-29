@@ -110,7 +110,11 @@ function removeSchedule(e) {
     const liEL = e.target.parentElement;
     const id = liEL.id;
     removeAllChildren(daysDiv);
-    const data = JSON.stringify({"scheduleId": id});
+    const title = liEL.children.item(1).textContent;
+    const desc = liEL.children.item(1).id;
+    const userId = document.getElementById("name-field").name;
+
+    const data = JSON.stringify({"id": id,"userID" :userId,"title": title, "description": description});
 
 
     const xhr = new XMLHttpRequest();
@@ -252,6 +256,28 @@ function listingDays(userDto) {
     }
     table.appendChild(tr);
     daysDiv.appendChild(table);
+
+    const guestButton = document.createElement("button");
+    guestButton.setAttribute("class","guest-link-btn");
+    guestButton.addEventListener('click',createLink);
+
+    daysDiv.appendChild(guestButton);
+}
+
+function createLink(e){
+    e.target.removeEventListener('click',createLink);
+    const linkInputField = document.createElement("INPUT");
+    linkInputField.setAttribute("id","guest-link");
+    linkInputField.setAttribute("type","text");
+
+    const scheduleId = e.target.parentElement.firstElementChild.id;
+
+    const params = new URLSearchParams();
+    params.append('scheduleId', scheduleId);
+
+    linkInputField.value = "localhost:8080/schedule-master/guest?" + params.toString();
+    daysDiv.appendChild(linkInputField);
+
 }
 
 function hideListingSchedules(e) {
@@ -299,7 +325,7 @@ function applyDayUpdates(e) {
         title = oldTitle;
     }
 
-    const data = JSON.stringify({"dayId": id, "title": title, "scheduleId": scheduleId});
+    const data = JSON.stringify({"id": id, "title": title, "scheduleId": scheduleId});
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onUpdateDayResponse);
     xhr.addEventListener('error', onNetworkError);
@@ -378,6 +404,8 @@ function applyScheduleUpdates(e) {
 
     const id = table.id;
 
+    const userId = document.getElementById("name-field").name;
+
     let title = titleInputEl.value;
     const oldTitle = titleInputEl.placeholder;
 
@@ -391,7 +419,7 @@ function applyScheduleUpdates(e) {
         desc = oldDesc;
     }
 
-    const data = JSON.stringify({"scheduleId": id, "description": desc, "title": title});
+    const data = JSON.stringify({"scheduleId": id, "description": desc, "title": title, "userID": userId});
 
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onUpdateScheduleResponse);

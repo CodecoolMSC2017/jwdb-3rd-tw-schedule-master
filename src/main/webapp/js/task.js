@@ -76,6 +76,7 @@ function applyTaskUpdates(e) {
     let color = colorInputField.value;
     const oldColor = colorInputField.value;
     const id = liEl.id;
+    const userId = document.getElementById("name-field").name;
 
     if (title == null || title === "" || title === " ") {
         title = oldTitle;
@@ -88,7 +89,7 @@ function applyTaskUpdates(e) {
         color = oldColor;
     }
 
-    const data = JSON.stringify({"taskId": id, "description": desc, "title": title, "color": color});
+    const data = JSON.stringify({"id": id, "description": desc, "title": title, "color": color, "userId" :userId});
 
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onUpdateTaskResponse);
@@ -210,8 +211,10 @@ function hideTaskDescription(e) {
 function removeTask(e) {
     const liEL = e.target.parentElement;
     const id = liEL.id;
+    const userId = document.getElementById("name-field").name;
 
-    const data = JSON.stringify({"taskId": id});
+
+    const data = JSON.stringify({"id": id, "userId" :userId});
 
 
     const xhr = new XMLHttpRequest();
