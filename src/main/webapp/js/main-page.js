@@ -11,7 +11,7 @@ function onMainPageLoad(userDto) {
 
     const nameField = document.getElementById("name-field");
     nameField.textContent = userDto.user.userName;
-    nameField.setAttribute("name",userDto.user.id);
+    nameField.setAttribute("name", userDto.user.id);
 
     const taskULEl = document.getElementById("tasksUl");
     if (taskULEl !== null) {
@@ -45,7 +45,7 @@ function onMainPageLoad(userDto) {
 function createTaskDiv(userDto) {
     clearMessages();
     const taskEl = document.createElement("ul");
-    taskEl.setAttribute("id","tasksUl");
+    taskEl.setAttribute("id", "tasksUl");
     for (let i = 0; i < userDto.tasks.length; i++) {
 
         let taskLi = document.createElement("li");
@@ -96,30 +96,37 @@ function createTaskDiv(userDto) {
 
 }
 
-function createScheduleDiv(userDto){
+function createScheduleDiv(userDto) {
     clearMessages();
     const scheduleEl = document.createElement("ul");
-    scheduleEl.setAttribute("id","schedulesUl");
+    scheduleEl.setAttribute("id", "schedulesUl");
 
-    for (let i = 0; i < userDto.schedules.length ; i++) {
+    for (let i = 0; i < userDto.schedules.length; i++) {
         let scheduleLi = document.createElement("li");
-        scheduleLi.setAttribute("id",userDto.schedules[i].id);
+        scheduleLi.setAttribute("id", userDto.schedules[i].id);
         scheduleLi.setAttribute("class", "schedule-li");
 
 
         let scheduleSpan = document.createElement("span");
         scheduleSpan.textContent = userDto.schedules[i].title;
-        scheduleSpan.addEventListener('click',listingSchedules);
         scheduleSpan.setAttribute("class", "title-span");
         scheduleSpan.classList.add("tooltip");
         let tooltipSpan = document.createElement("span");
-        tooltipSpan.setAttribute("class","tooltiptext");
+        tooltipSpan.setAttribute("class", "tooltiptext");
         tooltipSpan.innerText = userDto.schedules[i].description;
         scheduleSpan.appendChild(tooltipSpan);
-        scheduleSpan.setAttribute("id",userDto.schedules[i].description);
+        scheduleSpan.setAttribute("id", userDto.schedules[i].description);
+        scheduleSpan.addEventListener('click', listingSchedules);
+
+        if (userDto.schedule != null) {
+            if (userDto.schedule.id === userDto.schedules[i].id) {
+                scheduleSpan.removeEventListener('click', listingSchedules);
+                scheduleSpan.addEventListener('click', hideListingSchedules);
+            }
+        }
 
         let deleteScheduleButt = document.createElement("button");
-        deleteScheduleButt.addEventListener('click',removeSchedule);
+        deleteScheduleButt.addEventListener('click', removeSchedule);
         deleteScheduleButt.setAttribute("class", "delete-btn");
 
 
@@ -131,8 +138,9 @@ function createScheduleDiv(userDto){
     scheduleCreateLiEl.setAttribute("class", 'task-create-li');
     const createButton = document.createElement("button");
 
-    createButton.addEventListener('click',showCreateSchedule);
-    createButton.setAttribute("id","to-createSchedule-button");
+
+    createButton.addEventListener('click', showCreateSchedule);
+    createButton.setAttribute("id", "to-createSchedule-button");
     createButton.setAttribute("class", "create-min-btn");
 
     scheduleCreateLiEl.appendChild(createButton);
