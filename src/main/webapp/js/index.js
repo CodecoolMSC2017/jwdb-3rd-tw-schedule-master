@@ -116,8 +116,6 @@ function onLoad() {
     mainDiv = document.getElementById("name-logout-content");
     userContentDivEl = document.getElementById('users-content');
 
-    loadUserCredentials();
-
     const loginButtonEl = document.getElementById('login-button');
     loginButtonEl.addEventListener('click', onLoginButtonClicked);
 
@@ -133,22 +131,27 @@ function onLoad() {
     if (hasAuthorization()) {
         onMainPageLoad(getAuthorization());
     }
-}
 
-function loadUserCredentials() {
-    if (localStorage.getItem('email') != null) {
-        const email = localStorage.getItem('email');
-        const password = localStorage.getItem('password');
+    if (document.documentURI.includes("guest")) {
+        const xhr = new XMLHttpRequest();
+
         const params = new URLSearchParams();
 
-        params.append('email', email);
-        params.append('password', password);
 
-        const xhr = new XMLHttpRequest();
-        xhr.addEventListener('load', onLoginResponse);
+        xhr.addEventListener('load', onGuestResponse);
         xhr.addEventListener('error', onNetworkError);
-        xhr.open('POST', 'login');
-        xhr.send(params);
+        xhr.open('POST', document.documentURI);
+        xhr.send();
+    }
+
+    function onGuestResponse() {
+        if (this.status === OK) {
+            const dto = JSON.parse(this.responseText);
+            listingDays(dto);
+            showContents(['days-content']);
+        } else {
+            onMessageResponse(mainDiv, this);
+        }
     }
 }
 
