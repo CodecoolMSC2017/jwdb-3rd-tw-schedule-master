@@ -523,20 +523,29 @@ function onUpdateScheduleResponse() {
 function add_task(ev) {
     ev.preventDefault();
 
-    const taskId = ev.dataTransfer.getData("text");
-    const hourId = ev.target.parentElement.id;
-    const scheduleId = ev.target.parentElement.parentElement.parentElement.parentElement.id;
+    var txt;
+    let number = prompt("How many hours:", "");
 
-    const params = new URLSearchParams();
-    params.append('taskId', taskId);
-    params.append('hourId', hourId);
-    params.append('scheduleId', scheduleId);
+    if (number == null ||  number.includes(".") || !isNumeric(number) || number == "" ) {
+        newError(mainDiv,"not numeric");
+    } else {
 
-    const xhr = new XMLHttpRequest();
-    xhr.addEventListener('load', onDragResponse);
-    xhr.addEventListener('error', onNetworkError);
-    xhr.open('POST', 'protected/taskHour');
-    xhr.send(params);
+        const taskId = ev.dataTransfer.getData("text");
+        const hourId = ev.target.parentElement.id;
+        const scheduleId = ev.target.parentElement.parentElement.parentElement.parentElement.id;
+
+        const params = new URLSearchParams();
+        params.append('taskId', taskId);
+        params.append('hourId', hourId);
+        params.append('scheduleId', scheduleId);
+        params.append('number',number);
+
+        const xhr = new XMLHttpRequest();
+        xhr.addEventListener('load', onDragResponse);
+        xhr.addEventListener('error', onNetworkError);
+        xhr.open('POST', 'protected/taskHour');
+        xhr.send(params);
+    }
 }
 
 function onDragResponse() {
@@ -557,4 +566,8 @@ function drag_enter_prevent(event) {
 
 function drag_over_prevent(event) {
     event.preventDefault();
+}
+
+function isNumeric(n) {
+  return !isNaN(n);
 }
