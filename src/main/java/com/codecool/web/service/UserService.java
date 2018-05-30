@@ -21,4 +21,6 @@ public interface UserService {
 
     void deleteUser(int userId) throws SQLException;
 
+    User getByEmail(String email) throws SQLException;
+
 }

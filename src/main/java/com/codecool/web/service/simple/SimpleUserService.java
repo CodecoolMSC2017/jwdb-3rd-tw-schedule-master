@@ -49,6 +49,11 @@ public class SimpleUserService implements UserService {
     }
 
     @Override
+    public User getByEmail(String email) throws SQLException {
+        return userDao.getByEmail(email);
+    }
+
+    @Override
     public User findById(int id) throws SQLException {
         return userDao.findById(id);
     }

@@ -96,6 +96,20 @@ class DatabaseUserDao extends AbstractDaoFactory implements UserDao {
         }
     }
 
+    @Override
+    public User getByEmail(String email) throws SQLException {
+        String sql = "SELECT * FROM app_user WHERE email = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, email);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return fetch(resultSet);
+                }
+            }
+        }
+        return null;
+    }
+
     private User fetch(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("id");
         String email = resultSet.getString("email");
