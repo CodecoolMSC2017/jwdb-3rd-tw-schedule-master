@@ -182,6 +182,7 @@ function createTask(){
         params.append('title',title);
         params.append('description',description);
         params.append('color',color);
+        params.append('currentScheduleId', currentScheduleId);
 
         const xhr = new XMLHttpRequest();
         xhr.addEventListener('load',onCreateTaskResponse);
