@@ -46,6 +46,9 @@ public class ScheduleServlet extends AbstractServlet {
 
                 userDto.setSchedule(schedule);
             }
+            if (scheduleIdFromReq == null) {
+                sendMessage(resp, HttpServletResponse.SC_OK, userDto);
+            }
 
             List<Task> taskList = taskService.findAllByUserAndScheduleId(userId, Integer.parseInt(scheduleIdFromReq));
             userDto.setTasks(taskList);
