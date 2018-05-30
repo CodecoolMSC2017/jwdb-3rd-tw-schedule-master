@@ -573,10 +573,6 @@ li:last-child {
     padding-bottom: 5px;
 }
 
-.task-in-table{
-    resize: vertical;
-    overflow: auto;
-}
 
 /*
    ******************
