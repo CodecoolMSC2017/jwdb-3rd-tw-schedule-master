@@ -39,9 +39,6 @@ function onLoginButtonClicked() {
     params.append('email', email);
     params.append('password', password);
 
-    localStorage.setItem('email', email);
-    localStorage.setItem('password', password);
-
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onLoginResponse);
     xhr.addEventListener('error', onNetworkError);
