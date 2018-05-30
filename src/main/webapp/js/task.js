@@ -26,10 +26,13 @@ function updateTask(e) {
 
     spanTask.remove();
     descParEl.remove();
+    ;
+
 
     const titleInputEl = document.createElement("INPUT");
     titleInputEl.setAttribute("type", "text");
     titleInputEl.setAttribute("class", "input-min");
+    titleInputEl.setAttribute("id", "task-title-rename");
     titleInputEl.placeholder = oldTitle;
 
     const closeTaskButt = document.createElement("button");
@@ -50,7 +53,10 @@ function updateTask(e) {
     colorInputEl.setAttribute("class", "input-min");
 
     buttonEl.removeEventListener('click', updateTask);
-    buttonEl.addEventListener('click', applyTaskUpdates);
+    buttonEl.addEventListener('click', applyTaskUpdates)
+
+    liEl.removeAttribute("class");
+    liEl.setAttribute("class", "task-li-update")
 
 
     liEl.insertBefore(breakEl, buttonEl);
@@ -77,8 +83,6 @@ function applyTaskUpdates(e) {
     const oldColor = colorInputField.value;
     const id = liEl.id;
     const userId = document.getElementById("name-field").getAttribute("name");
-    console.log(userId);
-
     if (title == null || title === "" || title === " ") {
         title = oldTitle;
     }
@@ -89,6 +93,9 @@ function applyTaskUpdates(e) {
     if (color == null || color === "" || color === " ") {
         color = oldColor;
     }
+
+    liEl.removeAttribute("class");
+    liEl.setAttribute("class", "task-li");
 
     const data = JSON.stringify({id: id, description: desc, title: title, color: color, userId :userId});
 

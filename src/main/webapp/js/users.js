@@ -19,6 +19,7 @@ function appendUser(user) {
 
     const emailTdEl = document.createElement('td');
     emailTdEl.textContent = user.email;
+    emailTdEl.setAttribute("class", "email-td-el");
 
     const roleTdEl = document.createElement('td');
     roleTdEl.textContent = user.role;
@@ -62,7 +63,6 @@ function createUsersTableHeader() {
     nameThEl.textContent = 'Name';
 
     const emailThEl = document.createElement('th');
-    emailThEl.setAttribute("class", "email-th-el");
     emailThEl.textContent = 'Email';
 
     const roleThEl = document.createElement('th');
@@ -122,6 +122,7 @@ function onDeleteUserResponse(){
 function onAdminLoginResponse() {
     if (this.status === OK) {
         const dto = JSON.parse(this.responseText);
+        removeAllChildren(daysDiv);
         onMainPageLoad(dto);
     } else {
         onMessageResponse(userContentDivEl, this);
