@@ -65,18 +65,21 @@ public class SimpleUserService implements UserService {
     }
 
     private String encrypt(String password) throws NoSuchAlgorithmException {
-        StringBuffer hexString = new StringBuffer();
-        MessageDigest md = MessageDigest.getInstance("MD5");
-        byte[] hash = md.digest();
+        byte[] plainText = password.getBytes();
 
-        for (int i = 0; i < hash.length; i++) {
-            if ((0xff & hash[i]) < 0x10) {
-                hexString.append("0"
-                        + Integer.toHexString((0xFF & hash[i])));
-            } else {
-                hexString.append(Integer.toHexString(0xFF & hash[i]));
+        MessageDigest md = MessageDigest.getInstance("MD5");
+
+        md.reset();
+        md.update(plainText);
+        byte[] encodedPassword = md.digest();
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < encodedPassword.length; i++) {
+            if ((encodedPassword[i] & 0xff) < 0x10) {
+                sb.append("0");
             }
+            sb.append(Long.toString(encodedPassword[i] & 0xff, 16));
         }
-        return hexString.toString();
+        return sb.toString();
     }
 }
