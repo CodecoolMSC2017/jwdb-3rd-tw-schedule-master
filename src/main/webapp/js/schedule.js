@@ -163,6 +163,8 @@ function listingSchedules(e) {
 function onListingResponse() {
     if (this.status === OK) {
         const userDto = JSON.parse(this.responseText);
+        document.getElementById("tasksUl").remove();
+        createTaskDiv(userDto);
         removeAllChildren(daysDiv);
         listingDays(userDto);
     } else {
@@ -172,6 +174,7 @@ function onListingResponse() {
 
 function listingDays(userDto) {
     clearMessages();
+    currentScheduleId = userDto.schedule.id;
     const table = document.createElement("table");
     table.setAttribute("class", "schedule-table");
     table.setAttribute("id", userDto.schedule.id);
@@ -288,7 +291,7 @@ function listingDays(userDto) {
 
                 taskDivEl.style.backgroundColor = task.color;
                 taskDivEl.setAttribute("id", task.id);
-                taskDivEl.setAttribute("class", "task-div-little-div");
+                taskDivEl.setAttribute("class", "task-in-table");
 
                 let taskSpan = document.createElement("span");
                 taskSpan.textContent = task.title;
@@ -337,9 +340,31 @@ function createLink(e) {
 }
 
 function hideListingSchedules(e) {
+    currentScheduleId = null;
     e.target.removeEventListener('click', hideListingSchedules);
     e.target.addEventListener('click', listingSchedules);
     removeAllChildren(daysDiv);
+
+    const xhr = new XMLHttpRequest();
+
+    const params = new URLSearchParams();
+    params.append("scheduleId", null);
+
+    xhr.addEventListener('load', hideListingResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('GET', 'protected/schedule?' + params.toString());
+    xhr.send();
+}
+
+function hideListingResponse(){
+    if (this.status === OK) {
+        const userDto = JSON.parse(this.responseText);
+        document.getElementById("tasksUl").remove();
+        createTaskDiv(userDto);
+    }
+    else {
+        onMessageResponse(mainDiv, this);
+    }
 }
 
 function renameDay(e) {

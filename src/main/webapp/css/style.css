@@ -562,6 +562,17 @@ li:last-child {
     padding-bottom: 5px;
 }
 
+.task-in-table{
+    resize: vertical;
+    overflow: auto;
+}
+
+/*
+   ******************
+         Users
+   ******************
+ */
+
 #users {
     border-collapse: collapse;
     margin-right: auto;
@@ -638,8 +649,3 @@ li:last-child {
     visibility: visible;
     opacity: 1;
 }
-
-
-
-
-
