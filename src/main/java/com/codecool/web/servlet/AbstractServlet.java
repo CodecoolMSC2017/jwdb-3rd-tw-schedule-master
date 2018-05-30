@@ -11,7 +11,6 @@ import com.codecool.web.service.simple.SimpleScheduleService;
 import com.codecool.web.service.simple.SimpleTaskService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.log4j.Logger;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
@@ -23,11 +22,13 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 abstract class AbstractServlet extends HttpServlet {
 
     final ObjectMapper objectMapper = new ObjectMapper();
-    final Logger logger = Logger.getLogger(LoginServlet.class);
+    final Logger logger = LogManager.getLogger(LoginServlet.class);
 
     Connection getConnection(ServletContext sce) throws SQLException {
         DataSource dataSource = (DataSource) sce.getAttribute("dataSource");
