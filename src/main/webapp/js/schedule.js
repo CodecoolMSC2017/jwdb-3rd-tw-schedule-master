@@ -188,7 +188,6 @@ function listingDays(userDto) {
     createTd.rowSpan = "2";
     createTd.appendChild(updateButt);
 
-
     const titleRow = document.createElement("tr");
     titleRow.setAttribute("id", userDto.schedule.id);
     titleRow.setAttribute("class", "name-row");
@@ -347,12 +346,10 @@ function hideListingSchedules(e) {
 
     const xhr = new XMLHttpRequest();
 
-    const params = new URLSearchParams();
-    params.append("scheduleId", null);
 
     xhr.addEventListener('load', hideListingResponse);
     xhr.addEventListener('error', onNetworkError);
-    xhr.open('GET', 'protected/schedule?' + params.toString());
+    xhr.open('GET', 'protected/schedule?');
     xhr.send();
 }
 
