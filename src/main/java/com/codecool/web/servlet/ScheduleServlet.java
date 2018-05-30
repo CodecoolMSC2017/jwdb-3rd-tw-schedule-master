@@ -34,7 +34,7 @@ public class ScheduleServlet extends AbstractServlet {
             User user = getUser(req);
             int userId = user.getId();
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
-            List<Task> tasks = new ArrayList<>();
+            List<Task> tasks = taskService.findAllByUserId(userId);
             UserDto userDto = new UserDto(user, tasks, schedules);
 
             String scheduleIdFromReq = req.getParameter("scheduleId");
@@ -45,15 +45,12 @@ public class ScheduleServlet extends AbstractServlet {
                 scheduleIdFromReq = Integer.toString(schedule.getId());
 
                 userDto.setSchedule(schedule);
-            }
-            if (scheduleIdFromReq == null) {
+                List<Task> taskList = taskService.findAllByUserAndScheduleId(userId, Integer.parseInt(scheduleIdFromReq));
+                userDto.setTasks(taskList);
+                sendMessage(resp, HttpServletResponse.SC_OK, userDto);
+            } else {
                 sendMessage(resp, HttpServletResponse.SC_OK, userDto);
             }
-
-            List<Task> taskList = taskService.findAllByUserAndScheduleId(userId, Integer.parseInt(scheduleIdFromReq));
-            userDto.setTasks(taskList);
-
-            sendMessage(resp, HttpServletResponse.SC_OK, userDto);
         } catch (SQLException ex) {
             handleSqlError(resp, ex);
         }
