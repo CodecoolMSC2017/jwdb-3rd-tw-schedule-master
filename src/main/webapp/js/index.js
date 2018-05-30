@@ -17,6 +17,7 @@ let mainDiv;
 let daysContentDivEl;
 let daysDiv;
 let userContentDivEl;
+let currentScheduleId;
 
 
 
