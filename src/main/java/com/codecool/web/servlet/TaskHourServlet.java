@@ -38,10 +38,10 @@ public class TaskHourServlet extends AbstractServlet {
 
             User user = getUser(req);
             int userId = user.getId();
+            List<Task> taskList = taskService.findAllByUserAndScheduleId(userId,scheduleId);
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
-            List<Task> tasks = taskService.findAllByUserId(userId);
             Schedule schedule = scheduleService.findById(scheduleId);
-            UserDto userDto = new UserDto(user, tasks, schedules);
+            UserDto userDto = new UserDto(user, taskList, schedules);
             userDto.setSchedule(schedule);
             sendMessage(resp, HttpServletResponse.SC_OK, userDto);
         } catch (SQLException e) {
