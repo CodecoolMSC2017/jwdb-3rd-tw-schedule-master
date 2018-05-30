@@ -282,6 +282,7 @@ function listingDays(userDto) {
 
             let hoursTd = document.createElement("td");
             hoursTd.setAttribute("class", "hours-td");
+            hoursTd.setAttribute("id",userDto.schedule.days[i].hours[j].value);
 
             if (userDto.schedule.days[i].hours[j].task != null) {
 
@@ -525,10 +526,13 @@ function add_task(ev) {
 
     var txt;
     let number = prompt("How many hours:", "");
+    const hourValue = ev.target.id;
 
     if (number == null ||  number.includes(".") || !isNumeric(number) || number == "" ) {
         newError(mainDiv,"not numeric");
-    } else {
+    } else if(parseInt(hourValue) + parseInt(number) >= 24){
+        newError(mainDiv,"not enough hours left for that day");
+    }else{
 
         const taskId = ev.dataTransfer.getData("text");
         const hourId = ev.target.parentElement.id;
