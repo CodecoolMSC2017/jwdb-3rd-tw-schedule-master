@@ -524,16 +524,19 @@ function onUpdateScheduleResponse() {
 function add_task(ev) {
     ev.preventDefault();
 
-    var txt;
     let number = prompt("How many hours:", "");
     const hourValue = ev.target.id;
-
-    if (number == null ||  number.includes(".") || !isNumeric(number) || number == "" ) {
-        newError(mainDiv,"not numeric");
-    } else if(parseInt(hourValue) + parseInt(number) >= 24){
+    let parsedNum = parseInt(number);
+    if(number == "0"){
+        newError(mainDiv,"Can not be 0!");
+    }else if (!isNumeric(parsedNum) || parsedNum == "" ) {
+        newError(mainDiv,"Not numeric!");
+    } else if(parseInt(hourValue) + parsedNum >= 24){
         newError(mainDiv,"not enough hours left for that day");
+    }else if(parsedNum < 0){
+        newError(mainDiv,"Can not be minus!")
     }else{
-
+        console.log(parsedNum);
         const taskId = ev.dataTransfer.getData("text");
         const hourId = ev.target.parentElement.id;
         const scheduleId = ev.target.parentElement.parentElement.parentElement.parentElement.id;
@@ -542,7 +545,7 @@ function add_task(ev) {
         params.append('taskId', taskId);
         params.append('hourId', hourId);
         params.append('scheduleId', scheduleId);
-        params.append('number',number);
+        params.append('number',parsedNum);
 
         const xhr = new XMLHttpRequest();
         xhr.addEventListener('load', onDragResponse);
