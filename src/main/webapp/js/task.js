@@ -217,8 +217,8 @@ function hideTaskDescription(e) {
 }
 
 function removeTask(e) {
-    var r = confirm("Press a button!\nEither OK or Cancel.");
-    if (r == true) {
+    //var r = confirm("Press a button!\nEither OK or Cancel.");
+    //if (r == true) {
         const liEL = e.target.parentElement;
         const id = liEL.id;
         const userId = document.getElementById("name-field").getAttribute("name");
@@ -233,7 +233,7 @@ function removeTask(e) {
         xhr.open('DELETE', 'protected/task');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(data);
-    }
+    //}
 }
 
 function onDeleteTaskResponse() {

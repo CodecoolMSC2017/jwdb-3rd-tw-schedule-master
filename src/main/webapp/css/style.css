@@ -542,6 +542,11 @@ li:last-child {
 
 .hours-td {
     border-bottom: 1px solid dimgrey;
+    height : 24px;
+}
+
+.span-hour-title{
+    height: 62px;
 }
 
 .change-sched-fields {
