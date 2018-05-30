@@ -55,8 +55,6 @@ public class TaskServlet extends AbstractServlet {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskService taskService = new SimpleTaskService(connection);
 
-            // Reader reader = req.getReader();
-
             JsonParser jsonParser = objectMapper.getFactory().createParser(req.getInputStream());
             Task task = objectMapper.readValue(jsonParser, Task.class);
             taskService.update(task);
@@ -73,11 +71,11 @@ public class TaskServlet extends AbstractServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskService taskService = new SimpleTaskService(connection);
-            JsonNode jsonNode = createJsonNodeFromRequest(req);
 
-            int taskId = Integer.parseInt(jsonNode.get("taskId").textValue());
+            JsonParser jsonParser = objectMapper.getFactory().createParser(req.getInputStream());
+            Task task = objectMapper.readValue(jsonParser, Task.class);
 
-            taskService.deleteTask(taskId);
+            taskService.deleteTask(task);
 
             doGet(req, resp);
         } catch (SQLException e) {

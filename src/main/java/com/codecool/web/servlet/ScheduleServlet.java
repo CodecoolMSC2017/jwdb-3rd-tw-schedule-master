@@ -91,14 +91,11 @@ public class ScheduleServlet extends AbstractServlet {
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
             List<Task> tasks = taskService.findAllByUserId(userId);
 
-            JsonNode jsonNode = createJsonNodeFromRequest(req);
+            JsonParser jsonParser = objectMapper.getFactory().createParser(req.getInputStream());
+            Schedule schedule = objectMapper.readValue(jsonParser, Schedule.class);
 
-            int scheduleId = Integer.parseInt(jsonNode.get("scheduleId").textValue());
-            String scheduleTitle = jsonNode.get("title").textValue();
-            String scheduleDescription = jsonNode.get("description").textValue();
+            scheduleService.updateSchedule(schedule);
 
-            scheduleService.updateSchedule(scheduleId, scheduleTitle, scheduleDescription);
-            Schedule schedule = scheduleService.findById(scheduleId);
             UserDto userDto = new UserDto(user, tasks, schedules);
             userDto.setSchedule(schedule);
             sendMessage(resp, 200, userDto);

@@ -10,7 +10,7 @@ public interface TaskService {
 
     void addTask(int userId, String title, String description, String color) throws SQLException;
 
-    void deleteTask(int taskId) throws SQLException;
+    void deleteTask(Task task) throws SQLException;
 
     void update(Task task) throws SQLException, TaskAlreadyExistsException;
 

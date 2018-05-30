@@ -84,6 +84,7 @@ li:last-child {
 #logout-button {
     width: 64px;
     height: 64px;
+    cursor: pointer;
 }
 
 #name-logout-table {
@@ -469,10 +470,18 @@ li:last-child {
     cursor: grab;
 }
 
+.task-li-update {
+    height: 170px;
+}
+
 .task-create-li {
     margin-top: 5px;
     border: transparent;
     padding: 0;
+}
+
+#task-title-rename {
+    margin-top: 40px;
 }
 
 /*
@@ -579,7 +588,7 @@ li:last-child {
     color: #763e8d;
 }
 
-.email-th-el {
+.email-td-el {
     cursor: pointer;
 }
 /*
