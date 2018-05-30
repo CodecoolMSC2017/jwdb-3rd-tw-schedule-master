@@ -381,6 +381,17 @@ li:last-child {
     cursor: pointer;
 }
 
+.clock-btn-min{
+    background: url(img/clock.png) center;
+    width: 25px;
+    height: 25px;
+    margin: 5px;
+    display: inline;
+    padding: 0;
+    border: none;
+    cursor: default;
+}
+
 /*
    ******************
        SCHEDULES
