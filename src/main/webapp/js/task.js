@@ -83,8 +83,6 @@ function applyTaskUpdates(e) {
     const oldColor = colorInputField.value;
     const id = liEl.id;
     const userId = document.getElementById("name-field").getAttribute("name");
-    console.log(userId);
-
     if (title == null || title === "" || title === " ") {
         title = oldTitle;
     }
