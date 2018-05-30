@@ -107,26 +107,26 @@ function onCreateScheduleResponse() {
 }
 
 function removeSchedule(e) {
-    var r = confirm("Press a button!\nEither OK or Cancel.");
-    if (r == true) {
+    //var r = confirm("Press a button!\nEither OK or Cancel.");
+    //if (r == true) {
 
-        const liEL = e.target.parentElement;
-        const id = liEL.id;
-        removeAllChildren(daysDiv);
-        const title = liEL.children.item(1).textContent;
-        const desc = liEL.children.item(1).id;
-        const userId = document.getElementById("name-field").name;
+    const liEL = e.target.parentElement;
+    const id = liEL.id;
+    removeAllChildren(daysDiv);
+    const title = liEL.children.item(1).textContent;
+    const desc = liEL.children.item(1).id;
+    const userId = document.getElementById("name-field").name;
 
-        const data = JSON.stringify({"id": id,"userId" :userId,"title": title, "description": desc});
+    const data = JSON.stringify({"id": id, "userId": userId, "title": title, "description": desc});
 
 
-        const xhr = new XMLHttpRequest();
-        xhr.addEventListener('load', onDeleteScheduleResponse);
-        xhr.addEventListener('error', onNetworkError);
-        xhr.open('DELETE', 'protected/schedule');
-        xhr.setRequestHeader("Content-type", "application/json");
-        xhr.send(data);
-    }
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onDeleteScheduleResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('DELETE', 'protected/schedule');
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.send(data);
+    //}
 
 }
 
@@ -196,11 +196,6 @@ function listingDays(userDto) {
 
     let numberOfDays = userDto.schedule.days.length;
 
-    if (numberOfDays > 1) {
-        numberOfDays -= 1;
-    }
-
-
     const titleTd = document.createElement("td");
     titleTd.colSpan = numberOfDays;
 
@@ -220,6 +215,43 @@ function listingDays(userDto) {
     let tr = document.createElement("tr");
     tr.setAttribute("class", "day-row");
     tr.setAttribute('id', userDto.schedule.id);
+
+    let hourFirstTd = document.createElement("td");
+    hourFirstTd.setAttribute("class", "day-td");
+
+    let hourFirstTable = document.createElement("table");
+    hourFirstTable.setAttribute("class", "hours-table");
+
+
+    for (let i = 0; i < 24; i++) {
+        let hourFirstTr = document.createElement("tr");
+        hourFirstTr.setAttribute("class", "hours-row");
+
+        let hourFirstValueTd = document.createElement("td");
+        hourFirstValueTd.setAttribute("class", "hours-td");
+
+        if (i < 10) {
+            hourFirstValueTd.textContent = "0" + i + ":00hr";
+        } else {
+            hourFirstValueTd.textContent = i + ":00hr";
+        }
+        hourFirstTr.appendChild(hourFirstValueTd);
+        hourFirstTable.appendChild(hourFirstTr);
+    }
+
+    let hourButt = document.createElement("button");
+    hourButt.setAttribute("id", "hour-clock");
+    hourButt.setAttribute("class", "clock-btn-min");
+
+    let parTitle = document.createElement("p");
+    parTitle.innerText = "Hours";
+    parTitle.setAttribute("class", "title-par");
+
+    hourFirstTd.appendChild(parTitle);
+    hourFirstTd.appendChild(hourButt);
+    hourFirstTd.appendChild(hourFirstTable);
+
+    tr.appendChild(hourFirstTd);
 
     for (let i = 0; i < userDto.schedule.days.length; i++) {
 
@@ -248,11 +280,8 @@ function listingDays(userDto) {
 
             let hoursTd = document.createElement("td");
             hoursTd.setAttribute("class", "hours-td");
-            hoursTd.textContent = userDto.schedule.days[i].hours[j].value + ":00hr";
 
             if (userDto.schedule.days[i].hours[j].task != null) {
-
-                hoursTd.textContent = "";
 
                 let task = userDto.schedule.days[i].hours[j].task;
                 let taskDivEl = document.createElement("div");
@@ -268,9 +297,9 @@ function listingDays(userDto) {
                 taskDivEl.appendChild(taskSpan);
                 hoursTd.appendChild(taskDivEl);
             }
-            hoursTd.addEventListener('drop', drag_drop);
-            hoursTd.addEventListener('dragenter', drag_enter);
-            hoursTd.addEventListener('dragover', drag_over);
+            hoursTd.addEventListener('drop', add_task);
+            hoursTd.addEventListener('dragenter', drag_enter_prevent);
+            hoursTd.addEventListener('dragover', drag_over_prevent);
             hoursTr.appendChild(hoursTd);
             hoursTable.appendChild(hoursTr);
 
@@ -469,7 +498,7 @@ function onUpdateScheduleResponse() {
 
 }
 
-function drag_drop(ev) {
+function add_task(ev) {
     ev.preventDefault();
 
     const taskId = ev.dataTransfer.getData("text");
@@ -500,10 +529,10 @@ function onDragResponse() {
     }
 }
 
-function drag_enter(event) {
+function drag_enter_prevent(event) {
     event.preventDefault();
 }
 
-function drag_over(event) {
+function drag_over_prevent(event) {
     event.preventDefault();
 }
