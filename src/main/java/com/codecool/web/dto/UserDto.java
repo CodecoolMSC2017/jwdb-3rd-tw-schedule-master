@@ -18,6 +18,9 @@ public class UserDto {
         this.schedules = schedules;
     }
 
+    public UserDto() {
+    }
+
     public User getUser() {
         return user;
     }
@@ -40,5 +43,13 @@ public class UserDto {
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setSchedules(List<Schedule> schedules) {
+        this.schedules = schedules;
     }
 }

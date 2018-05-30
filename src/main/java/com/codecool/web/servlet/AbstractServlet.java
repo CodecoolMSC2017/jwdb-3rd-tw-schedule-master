@@ -75,10 +75,16 @@ abstract class AbstractServlet extends HttpServlet {
             ScheduleService scheduleService = new SimpleScheduleService(connection);
             User user = getUser(req);
             int userId = user.getId();
+            List<Task> tasks ;
+            String currentId = req.getParameter("currentScheduleId");
+            if(currentId == null){
+                 tasks = taskService.findAllByUserId(userId);
+            }
+            else{
+                tasks = taskService.findAllByUserAndScheduleId(userId,Integer.parseInt(currentId));
+            }
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
-            List<Task> tasks = taskService.findAllByUserId(userId);
-            UserDto userdto = new UserDto(user, tasks, schedules);
-            return userdto;
+            return new UserDto(user, tasks, schedules);
 
         }
     }
