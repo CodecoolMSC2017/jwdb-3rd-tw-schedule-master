@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface TaskService {
 
-    void addTask(int userId, String title, String description, String color) throws SQLException;
+    void addTask(int userId, String title, String description, String color) throws SQLException, TaskAlreadyExistsException;
 
     void deleteTask(Task task) throws SQLException;
 

@@ -77,7 +77,7 @@ abstract class AbstractServlet extends HttpServlet {
             int userId = user.getId();
             List<Task> tasks ;
             String currentId = req.getParameter("currentScheduleId");
-            if(currentId == null){
+            if(currentId.equals("null")){
                  tasks = taskService.findAllByUserId(userId);
             }
             else{
@@ -85,7 +85,6 @@ abstract class AbstractServlet extends HttpServlet {
             }
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
             return new UserDto(user, tasks, schedules);
-
         }
     }
 }

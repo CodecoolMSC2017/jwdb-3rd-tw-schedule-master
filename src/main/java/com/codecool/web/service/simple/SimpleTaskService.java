@@ -23,7 +23,11 @@ public class SimpleTaskService implements TaskService {
     }
 
     @Override
-    public void addTask(int userId, String title, String description, String color) throws SQLException {
+    public void addTask(int userId, String title, String description, String color) throws SQLException, TaskAlreadyExistsException {
+        Task check = taskDao.findByTitle(title);
+        if(check != null && check.getUserId() == userId && check.getTitle().equals(title)){
+            throw new TaskAlreadyExistsException();
+        }
         taskDao.add(userId, title, description, color);
     }
 

@@ -47,6 +47,8 @@ public class TaskServlet extends AbstractServlet {
             doGet(req, resp);
         } catch (SQLException ex) {
             handleSqlError(resp, ex);
+        } catch (TaskAlreadyExistsException e) {
+            sendMessage(resp,HttpServletResponse.SC_BAD_REQUEST,e.getMessage());
         }
     }
 
