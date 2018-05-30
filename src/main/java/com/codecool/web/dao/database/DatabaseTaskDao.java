@@ -91,17 +91,17 @@ class DatabaseTaskDao extends AbstractDaoFactory implements TaskDao {
     public List<Task> findByUserIdAndScheduleId(int userId, int scheduleId) throws SQLException {
         List<Task> tasks = new ArrayList<>();
         String sql = "SELECT id,app_user_id,title,description,color,array_agg(schedule_id)\n" +
-                "FROM task\n" +
-                "LEFT JOIN task_hour ON task_id = id\n" +
-                "WHERE app_user_id = ?\n" +
-                "AND id not in (SELECT id\n" +
-                "\tFROM task\n" +
-                "\tLEFT JOIN task_hour ON task_id = id\n" +
-                "\tWHERE schedule_id = ?)\n" +
-                "AND schedule_id <> ?\n" +
-                "OR schedule_id IS NULL\n" +
-                "GROUP BY id\n" +
-                "ORDER BY id";
+                "                FROM task\n" +
+                "                LEFT JOIN task_hour ON task_id = id\n" +
+                "                WHERE app_user_id = ?\n" +
+                "                AND id not in (SELECT id\n" +
+                "               FROM task\n" +
+                "                LEFT JOIN task_hour ON task_id = id\n" +
+                "                WHERE schedule_id = ?)\n" +
+                "                AND (schedule_id <> ?\n" +
+                "                OR schedule_id IS null)\n" +
+                "                GROUP BY id\n" +
+                "                ORDER BY id";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(2, scheduleId);
             statement.setInt(3, scheduleId);
