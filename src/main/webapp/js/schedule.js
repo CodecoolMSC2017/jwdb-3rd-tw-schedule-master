@@ -236,9 +236,9 @@ function listingDays(userDto) {
         hourFirstValueTd.setAttribute("class", "hours-td");
 
         if (i < 10) {
-            hourFirstValueTd.textContent = "0" + i + ":00hr";
+            hourFirstValueTd.textContent = "0" + i + ":00";
         } else {
-            hourFirstValueTd.textContent = i + ":00hr";
+            hourFirstValueTd.textContent = i + ":00";
         }
         hourFirstTr.appendChild(hourFirstValueTd);
         hourFirstTable.appendChild(hourFirstTr);
@@ -283,7 +283,6 @@ function listingDays(userDto) {
         td.appendChild(renameButt);
 
 
-
         for (let j = 0; j < userDto.schedule.days[i].hours.length; j++) {
             let hoursTr = document.createElement("tr");
             hoursTr.setAttribute("id", userDto.schedule.days[i].hours[j].id);
@@ -303,9 +302,11 @@ function listingDays(userDto) {
 
 
                 taskDivEl.setAttribute("class", "task-in-table");
-                taskDivEl.setAttribute('draggable', true);
-                taskDivEl.setAttribute('ondragstart', 'added_drag_start(event)');
-                taskDivEl.setAttribute('ondragend','added_drag_end(event)');
+                if (userDto.user != null) {
+                    taskDivEl.setAttribute('draggable', true);
+                    taskDivEl.setAttribute('ondragstart', 'added_drag_start(event)');
+                    taskDivEl.setAttribute('ondragend', 'added_drag_end(event)');
+                }
 
                 let taskSpan = document.createElement("span");
                 taskSpan.textContent = task.title;
@@ -522,7 +523,7 @@ function applyScheduleUpdates(e) {
         desc = oldDesc;
     }
 
-    const data = JSON.stringify({"scheduleId": id, "description": desc, "title": title, "userId": userId});
+    const data = JSON.stringify({"id": id, "description": desc, "title": title, "userId": userId});
 
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onUpdateScheduleResponse);
@@ -547,32 +548,30 @@ function onUpdateScheduleResponse() {
 
 function add_task(ev) {
     ev.preventDefault();
-
-    if(ev.dataTransfer.getData("added") === true){
-        newError(mainDiv,"You already added this task");
+    const hourValue = ev.target.id;
+    const taskId = ev.dataTransfer.getData("text");
+    if (findTaskAlreadyAddedOrNot(taskId)) {
+        newError(mainDiv, "Task already added to the schedule!");
         return false;
     }
-
     let number = prompt("How long will it take to finish with the task?", "");
-    const hourValue = ev.target.id;
     let parsedNum = parseInt(number);
     if (number === "0") {
         newError(mainDiv, "Number can not be 0!");
     } else if (!isNumeric(parsedNum) || parsedNum === "") {
         newError(mainDiv, "Please enter a number!");
-    } else if (parseInt(hourValue) + parsedNum >= 24) {
+    } else if (parseInt(hourValue) + parsedNum > 24) {
         newError(mainDiv, "Not enough hours left for that day.");
     } else if (parsedNum < 0) {
         newError(mainDiv, "Number can not be negative!")
     } else {
-        const taskId = ev.dataTransfer.getData("text");
         const hourId = ev.target.parentElement.id;
         const scheduleId = ev.target.parentElement.parentElement.parentElement.parentElement.id;
         const dayId = ev.target.parentElement.parentElement.parentElement.firstChild.id;
         const params = new URLSearchParams();
         params.append('taskId', taskId);
         params.append('hourId', hourId);
-        params.append('dayId',dayId);
+        params.append('dayId', dayId);
         params.append('scheduleId', scheduleId);
         params.append('number', parsedNum);
 
@@ -608,27 +607,29 @@ function isNumeric(n) {
     return !isNaN(n);
 }
 
-function added_drag_start(ev){
+function added_drag_start(ev) {
     ev.dataTransfer.dropEffect = "move";
     ev.dataTransfer.setData("text", ev.target.id);
 
-    ev.dataTransfer.setData("description",ev.target.firstChild.firstElementChild.firstChild);
-    console.log(ev.target.firstChild.firstElementChild);
-    console.log(ev.target.firstChild.firstElementChild.firstChild);
-    ev.dataTransfer.setData("added", "true");
-    ev.target.firstChild.firstElementChild.remove();
+    ev.target.firstChild.firstElementChild.removeAttribute("class");
+    ev.target.firstChild.firstElementChild.setAttribute("class", "hidden");
 }
 
-function added_drag_end(ev){
+function added_drag_end(ev) {
     ev.preventDefault();
-    const description = ev.dataTransfer.getData("description");
-    console.log(description);
-    let tooltipSpan = document.createElement("span");
-    tooltipSpan.setAttribute("class", "tooltiptext");
-    tooltipSpan.textContent = description;
+    ev.target.firstChild.firstElementChild.removeAttribute("class");
+    ev.target.firstChild.firstElementChild.classList.add("tooltiptext");
+}
 
-    const taskSpan = ev.target.firstChild;
-
-    taskSpan.appendChild(tooltipSpan);
-
+function findTaskAlreadyAddedOrNot(id) {
+    const list = document.getElementsByClassName("hours-td");
+    for (let i = 0; i < list.length; i++) {
+        if (list[i].firstElementChild !== null) {
+            console.log(list[i].firstElementChild.id == id);
+            if (list[i].firstElementChild.id === id) {
+                return true;
+            }
+        }
+    }
+    return false;
 }

@@ -34,7 +34,7 @@ public class SimpleTaskHourService implements TaskHourService {
 
     @Override
     public void handleTaskConnection(int userId,int dayId,int taskLength,int scheduleId,int taskId,String hourId) throws SQLException, TaskOverlapException, InvalidArgumentException {
-        for (int i = 1; i < taskLength; i++) {
+        for (int i = 0; i < taskLength; i++) {
             String checkHourId = Integer.toString(Integer.parseInt(hourId)+i);
             if(!taskHourDao.validateHourIds(userId,dayId,checkHourId)){
                 throw new TaskOverlapException();

@@ -392,6 +392,17 @@ li:last-child {
     cursor: default;
 }
 
+.calendar-btn-min{
+    background: url(img/calendar.png) center;
+    width: 25px;
+    height: 25px;
+    margin: 5px;
+    display: inline;
+    padding: 0;
+    border: none;
+    cursor: default;
+}
+
 /*
    ******************
        SCHEDULES
@@ -580,6 +591,7 @@ li:last-child {
 
 .task-in-table {
     cursor: grab;
+    cursor: -webkit-grab;
 }
 
 .margined-table {
