@@ -70,6 +70,14 @@
     <div id="name-logout-content" class="content hidden">
         <table id="name-logout-table">
             <tr>
+                <td class="hidden">
+                    <section>
+	                    <span class="trash">
+    	                <span></span>
+    	                    <i></i>
+                        </span>
+                    </section>
+                </td>
                 <td id="name-td">
                     <h2 id="name-field"></h2>
                 </td>
