@@ -188,7 +188,9 @@ function onLoad() {
     if (document.documentURI.includes("guest")) {
         const xhr = new XMLHttpRequest();
 
-        const params = new URLSearchParams();
+        taskDiv.remove();
+        scheduleDiv.remove();
+
 
 
         xhr.addEventListener('load', onGuestResponse);
