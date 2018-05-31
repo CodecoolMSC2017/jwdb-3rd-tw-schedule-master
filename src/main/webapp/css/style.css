@@ -580,6 +580,7 @@ li:last-child {
 
 .task-in-table {
     cursor: grab;
+    cursor: -webkit-grab;
 }
 
 .margined-table {

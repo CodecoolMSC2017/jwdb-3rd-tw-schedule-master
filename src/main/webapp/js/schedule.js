@@ -612,22 +612,14 @@ function added_drag_start(ev){
     ev.dataTransfer.dropEffect = "move";
     ev.dataTransfer.setData("text", ev.target.id);
 
-    ev.dataTransfer.setData("description",ev.target.firstChild.firstElementChild.firstChild);
-    console.log(ev.target.firstChild.firstElementChild);
-    console.log(ev.target.firstChild.firstElementChild.firstChild);
-    ev.dataTransfer.setData("added", "true");
-    ev.target.firstChild.firstElementChild.remove();
+    ev.target.firstChild.firstElementChild.removeAttribute("class");
+    ev.target.firstChild.firstElementChild.setAttribute("class", "hidden");
 }
 
 function added_drag_end(ev){
     ev.preventDefault();
-    const description = ev.dataTransfer.getData("description");
-    console.log(description);
-    let tooltipSpan = document.createElement("span");
-    tooltipSpan.setAttribute("class", "tooltiptext");
-    tooltipSpan.textContent = description;
-
-    const taskSpan = ev.target.firstChild;
+    ev.target.firstChild.firstElementChild.removeAttribute("class");
+    ev.target.firstChild.firstElementChild.classList.add("tooltiptext");
 
     taskSpan.appendChild(tooltipSpan);
 
