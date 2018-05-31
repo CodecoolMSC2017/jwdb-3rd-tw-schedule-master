@@ -358,15 +358,25 @@ function sendId(e){
     params.append('scheduleId', scheduleId);
 
     const xhr = new XMLHttpRequest();
-    xhr.addEventListener('load', createLink);
+    xhr.addEventListener('load', createLinkResponse);
     xhr.addEventListener('error', onNetworkError);
     xhr.open('POST', 'protected/encrypt');
     xhr.send(data);
 }
 
-function createLink() {
+function createLinkResponse(){
+    if (this.status === OK) {
+        const scheduleId = JSON.parse(this.responseText);
+        createLink(scheduleId);
+    }
+    else {
+        onMessageResponse(mainDiv, this);
+    }
+}
+
+function createLink(scheduleId) {
     const linkInputField = document.getElementById("guest-link");
-    linkInputField.value = document.documentURI + "guest?" + params.toString();
+    linkInputField.value = document.documentURI + "guest?" + scheduleId;
     daysDiv.appendChild(linkInputField);
 
 }
@@ -620,6 +630,9 @@ function added_drag_start(ev) {
     ev.dataTransfer.dropEffect = "move";
     ev.dataTransfer.setData("text", ev.target.id);
 
+    const trash = document.getElementById("trash-td");
+    trash.classList.remove("hidden");
+
     ev.target.firstChild.firstElementChild.removeAttribute("class");
     ev.target.firstChild.firstElementChild.setAttribute("class", "hidden");
 }
@@ -628,6 +641,8 @@ function added_drag_end(ev) {
     ev.preventDefault();
     ev.target.firstChild.firstElementChild.removeAttribute("class");
     ev.target.firstChild.firstElementChild.classList.add("tooltiptext");
+    const trash = document.getElementById("trash-td");
+    trash.classList.add("hidden");
 }
 
 function findTaskAlreadyAddedOrNot(id) {

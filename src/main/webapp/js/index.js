@@ -17,6 +17,7 @@ let mainDiv;
 let daysContentDivEl;
 let daysDiv;
 let userContentDivEl;
+let trashEl;
 let currentScheduleId = null;
 
 
@@ -102,6 +103,15 @@ function setUnauthorized() {
     return sessionStorage.removeItem('user');
 }
 
+function drag_enter_trash(ev){
+    ev.preventDefault();
+    const trash = document.getElementById("trash");
+    trash.classList.add('trash-dragged');
+}
+function remove_from_schedule(ev){
+    ev.preventDefault();
+}
+
 function onLoad() {
     loginContentDivEl = document.getElementById('login-content');
     registerContentDivEl = document.getElementById('register-content');
@@ -115,6 +125,11 @@ function onLoad() {
     daysDiv = document.getElementById("days");
     mainDiv = document.getElementById("name-logout-content");
     userContentDivEl = document.getElementById('users-content');
+
+    trashEl = document.getElementById("trash");
+    trashEl.addEventListener('drop',remove_from_schedule);
+    trashEl.addEventListener('dragenter',drag_enter_trash);
+    trashEl.addEventListener('dragover',drag_over_prevent);
 
     const loginButtonEl = document.getElementById('login-button');
     loginButtonEl.addEventListener('click', onLoginButtonClicked);

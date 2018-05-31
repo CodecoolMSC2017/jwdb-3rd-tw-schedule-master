@@ -70,9 +70,9 @@
     <div id="name-logout-content" class="content hidden">
         <table id="name-logout-table">
             <tr>
-                <td class="hidden">
+                <td id="trash-td" class="hidden">
                     <section>
-	                    <span class="trash">
+	                    <span id="trash" class="trash">
     	                <span></span>
     	                    <i></i>
                         </span>
