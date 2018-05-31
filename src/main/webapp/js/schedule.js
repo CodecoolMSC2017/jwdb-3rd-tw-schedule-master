@@ -352,6 +352,8 @@ function sendId(e){
     linkInputField.setAttribute("class", "input");
     linkInputField.setAttribute("type", "text");
 
+    mainDiv.appendChild(linkInputField);
+
     const scheduleId = e.target.parentElement.firstElementChild.id;
 
     const params = new URLSearchParams();
@@ -361,7 +363,7 @@ function sendId(e){
     xhr.addEventListener('load', createLinkResponse);
     xhr.addEventListener('error', onNetworkError);
     xhr.open('POST', 'protected/encrypt');
-    xhr.send(data);
+    xhr.send(params);
 }
 
 function createLinkResponse(){
@@ -376,7 +378,7 @@ function createLinkResponse(){
 
 function createLink(scheduleId) {
     const linkInputField = document.getElementById("guest-link");
-    linkInputField.value = document.documentURI + "guest?" + scheduleId;
+    linkInputField.value = document.documentURI + "guest?" + scheduleId.toString();
     daysDiv.appendChild(linkInputField);
 
 }

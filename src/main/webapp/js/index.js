@@ -105,11 +105,44 @@ function setUnauthorized() {
 
 function drag_enter_trash(ev){
     ev.preventDefault();
-    const trash = document.getElementById("trash");
+    const trash = document.getElementById("trash").firstElementChild;
     trash.classList.add('trash-dragged');
 }
+
+function drag_leave(ev){
+    ev.preventDefault();
+    const trash = document.getElementById("trash").firstElementChild;
+    trash.classList.remove('trash-dragged');
+}
+
 function remove_from_schedule(ev){
     ev.preventDefault();
+    const taskId = ev.dataTransfer.getData('text');
+    const scheduleId = document.getElementById("days").firstElementChild.id;
+
+    const trash = document.getElementById("trash").firstElementChild;
+    trash.removeAttribute("class");
+
+    const data = JSON.stringify({"taskId": taskId, "scheduleId": scheduleId});
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onDeleteFromScheduleResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('DELETE', 'protected/taskHour');
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.send(data);
+}
+
+function onDeleteFromScheduleResponse() {
+    if (this.status === OK) {
+        const userDto = JSON.parse(this.responseText);
+        removeAllChildren(daysDiv);
+        document.getElementById("tasksUl").remove();
+        createTaskDiv(userDto);
+        listingDays(userDto);
+    }
+    else {
+        onMessageResponse(mainDiv, this);
+    }
 }
 
 function onLoad() {
@@ -130,6 +163,7 @@ function onLoad() {
     trashEl.addEventListener('drop',remove_from_schedule);
     trashEl.addEventListener('dragenter',drag_enter_trash);
     trashEl.addEventListener('dragover',drag_over_prevent);
+    trash.addEventListener('dragleave',drag_leave);
 
     const loginButtonEl = document.getElementById('login-button');
     loginButtonEl.addEventListener('click', onLoginButtonClicked);
