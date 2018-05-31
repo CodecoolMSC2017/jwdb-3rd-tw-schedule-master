@@ -1,6 +1,5 @@
 package com.codecool.web.model;
 
-import java.util.Objects;
 
 public class Task extends AbstractModel {
 
@@ -8,6 +7,7 @@ public class Task extends AbstractModel {
     private String title;
     private String description;
     private String color;
+    private String scheduleId;
 
     public Task(int id, int userId, String title, String description, String color) {
         super(id);
@@ -50,5 +50,13 @@ public class Task extends AbstractModel {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getScheduleId() {
+        return scheduleId;
+    }
+
+    public void setScheduleId(String scheduleId) {
+        this.scheduleId = scheduleId;
     }
 }

@@ -100,7 +100,6 @@ function applyTaskUpdates(e) {
 
     liEl.removeAttribute("class");
     liEl.setAttribute("class", "task-li");
-    console.log(scheduleId);
 
     const data = JSON.stringify({id: id, description: desc, title: title, color: color, userId :userId ,scheduleId : scheduleId });
 
@@ -229,8 +228,13 @@ function removeTask(e) {
         const id = liEL.id;
         const userId = document.getElementById("name-field").getAttribute("name");
 
+        let scheduleId = null;
 
-        const data = JSON.stringify({"id": id, "userId" :userId});
+        if(daysDiv.firstElementChild !== null){
+            scheduleId = daysDiv.firstElementChild.id;
+        }
+
+        const data = JSON.stringify({"id": id, "userId" :userId, "scheduleId" :scheduleId});
 
 
         const xhr = new XMLHttpRequest();
