@@ -1,5 +1,6 @@
 package com.codecool.web.servlet;
 
+import com.codecool.web.dto.MessageDto;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +15,7 @@ public class EncryptServlet extends AbstractServlet{
         encryptor.setPassword("password");
         String scheduleId = req.getParameter("scheduleId");
         String encrypted = encryptor.encrypt(scheduleId);
-        sendMessage(resp,HttpServletResponse.SC_OK,encrypted);
+        MessageDto messageDto = new MessageDto(encrypted);
+        sendMessage(resp,HttpServletResponse.SC_OK,messageDto);
     }
 }
