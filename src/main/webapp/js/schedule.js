@@ -300,6 +300,8 @@ function listingDays(userDto) {
 
                 taskDivEl.style.backgroundColor = task.color;
                 taskDivEl.setAttribute("id", task.id);
+
+
                 taskDivEl.setAttribute("class", "task-in-table");
                 taskDivEl.setAttribute('draggable', true);
                 taskDivEl.setAttribute('ondragstart', 'drag_start(event)');
@@ -307,6 +309,12 @@ function listingDays(userDto) {
                 let taskSpan = document.createElement("span");
                 taskSpan.textContent = task.title;
                 taskSpan.setAttribute('class', 'task-title-span');
+
+                taskSpan.classList.add("tooltip");
+                let tooltipSpan = document.createElement("span");
+                tooltipSpan.setAttribute("class", "tooltiptext");
+                tooltipSpan.innerText = userDto.schedule.days[i].hours[j].task.description;
+                taskSpan.appendChild(tooltipSpan);
 
                 taskDivEl.appendChild(taskSpan);
                 hoursTd.appendChild(taskDivEl);
@@ -540,17 +548,17 @@ function add_task(ev) {
     ev.preventDefault();
     console.log(ev);
 
-    let number = prompt("How many hours:", "");
+    let number = prompt("How long will it take to finish with the task?", "");
     const hourValue = ev.target.id;
     let parsedNum = parseInt(number);
     if (number === "0") {
-        newError(mainDiv, "Can not be 0!");
+        newError(mainDiv, "Number can not be 0!");
     } else if (!isNumeric(parsedNum) || parsedNum === "") {
-        newError(mainDiv, "Not numeric!");
+        newError(mainDiv, "Please enter a number!");
     } else if (parseInt(hourValue) + parsedNum >= 24) {
-        newError(mainDiv, "not enough hours left for that day");
+        newError(mainDiv, "Not enough hours left for that day.");
     } else if (parsedNum < 0) {
-        newError(mainDiv, "Can not be minus!")
+        newError(mainDiv, "Number can not be negative!")
     } else {
         const taskId = ev.dataTransfer.getData("text");
         console.log(ev);
