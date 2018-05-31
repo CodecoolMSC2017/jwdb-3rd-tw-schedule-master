@@ -15,7 +15,6 @@ import com.codecool.web.service.simple.SimpleTaskService;
 import com.codecool.web.service.simple.SimpleUserService;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -76,7 +75,7 @@ public final class LoginServlet extends AbstractServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             logger.trace("GET login");
             UserService userService = new SimpleUserService(connection);
@@ -99,7 +98,7 @@ public final class LoginServlet extends AbstractServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             UserService userService = new SimpleUserService(connection);
 
