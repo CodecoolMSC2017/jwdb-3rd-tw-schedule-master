@@ -41,7 +41,7 @@ function showCreateSchedule() {
 
     const inputNumberOfDays = document.createElement("INPUT");
     inputNumberOfDays.setAttribute("type", "number");
-    inputNumberOfDays.setAttribute("id", "schedule-days")
+    inputNumberOfDays.setAttribute("id", "schedule-days");
     inputNumberOfDays.setAttribute("class", "input-min");
     inputNumberOfDays.placeholder = "Number of Days";
     inputNumberOfDays.max = 7;
@@ -107,26 +107,26 @@ function onCreateScheduleResponse() {
 }
 
 function removeSchedule(e) {
-    //var r = confirm("Press a button!\nEither OK or Cancel.");
-    //if (r == true) {
+    let r = confirm("Press a button!\nEither OK or Cancel.");
+    if (r === true) {
 
-    const liEL = e.target.parentElement;
-    const id = liEL.id;
-    removeAllChildren(daysDiv);
-    const title = liEL.children.item(1).textContent;
-    const desc = liEL.children.item(1).id;
-    const userId = document.getElementById("name-field").name;
+        const liEL = e.target.parentElement;
+        const id = liEL.id;
+        removeAllChildren(daysDiv);
+        const title = liEL.children.item(1).textContent;
+        const desc = liEL.children.item(1).id;
+        const userId = document.getElementById("name-field").name;
 
-    const data = JSON.stringify({"id": id, "userId": userId, "title": title, "description": desc});
+        const data = JSON.stringify({"id": id, "userId": userId, "title": title, "description": desc});
 
 
-    const xhr = new XMLHttpRequest();
-    xhr.addEventListener('load', onDeleteScheduleResponse);
-    xhr.addEventListener('error', onNetworkError);
-    xhr.open('DELETE', 'protected/schedule');
-    xhr.setRequestHeader("Content-type", "application/json");
-    xhr.send(data);
-    //}
+        const xhr = new XMLHttpRequest();
+        xhr.addEventListener('load', onDeleteScheduleResponse);
+        xhr.addEventListener('error', onNetworkError);
+        xhr.open('DELETE', 'protected/schedule');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(data);
+    }
 
 }
 
@@ -177,6 +177,7 @@ function listingDays(userDto) {
     currentScheduleId = userDto.schedule.id;
     const table = document.createElement("table");
     table.setAttribute("class", "schedule-table");
+    table.classList.add("margined-table");
     table.setAttribute("id", userDto.schedule.id);
 
     const updateButt = document.createElement("button");
@@ -186,7 +187,9 @@ function listingDays(userDto) {
     const createTd = document.createElement("td");
     createTd.setAttribute("class", "change-sched-fields");
     createTd.rowSpan = "2";
-    createTd.appendChild(updateButt);
+    if (userDto.user != null) {
+        createTd.appendChild(updateButt);
+    }
 
     const titleRow = document.createElement("tr");
     titleRow.setAttribute("id", userDto.schedule.id);
@@ -270,9 +273,15 @@ function listingDays(userDto) {
 
         let renameButt = document.createElement("button");
         renameButt.setAttribute("id", userDto.schedule.days[i].title);
-        renameButt.setAttribute("class", "change-btn-min");
-        renameButt.addEventListener('click', renameDay);
+
+        if (userDto.user != null) {
+            renameButt.setAttribute("class", "change-btn-min");
+            renameButt.addEventListener('click', renameDay);
+        } else {
+            renameButt.setAttribute("class", "calendar-btn-min")
+        }
         td.appendChild(renameButt);
+
 
 
         for (let j = 0; j < userDto.schedule.days[i].hours.length; j++) {
@@ -282,6 +291,7 @@ function listingDays(userDto) {
 
             let hoursTd = document.createElement("td");
             hoursTd.setAttribute("class", "hours-td");
+            hoursTd.setAttribute("id", userDto.schedule.days[i].hours[j].value);
 
             if (userDto.schedule.days[i].hours[j].task != null) {
 
@@ -291,6 +301,8 @@ function listingDays(userDto) {
                 taskDivEl.style.backgroundColor = task.color;
                 taskDivEl.setAttribute("id", task.id);
                 taskDivEl.setAttribute("class", "task-in-table");
+                taskDivEl.setAttribute('draggable', true);
+                taskDivEl.setAttribute('ondragstart', 'drag_start(event)');
 
                 let taskSpan = document.createElement("span");
                 taskSpan.textContent = task.title;
@@ -311,14 +323,16 @@ function listingDays(userDto) {
     }
     table.appendChild(tr);
     daysDiv.appendChild(table);
+    if (userDto.user != null) {
 
-    const guestButton = document.createElement("button");
-    guestButton.setAttribute("class", "btn");
-    guestButton.innerText = "Create Guest Link";
+        const guestButton = document.createElement("button");
+        guestButton.setAttribute("class", "btn");
+        guestButton.innerText = "Create Guest Link";
 
-    guestButton.addEventListener('click', createLink);
+        guestButton.addEventListener('click', createLink);
 
-    daysDiv.appendChild(guestButton);
+        daysDiv.appendChild(guestButton);
+    }
 }
 
 function createLink(e) {
@@ -333,7 +347,7 @@ function createLink(e) {
     const params = new URLSearchParams();
     params.append('scheduleId', scheduleId);
 
-    linkInputField.value = "localhost:8080/schedule-master/guest?" + params.toString();
+    linkInputField.value = document.documentURI + "guest?" + params.toString();
     daysDiv.appendChild(linkInputField);
 
 }
@@ -353,7 +367,7 @@ function hideListingSchedules(e) {
     xhr.send();
 }
 
-function hideListingResponse(){
+function hideListingResponse() {
     if (this.status === OK) {
         const userDto = JSON.parse(this.responseText);
         document.getElementById("tasksUl").remove();
@@ -399,9 +413,11 @@ function applyDayUpdates(e) {
     const id = titleInputField.id;
     const scheduleId = scheduleTitleField.id;
 
+
     if (title === "" || title === " ") {
         title = oldTitle;
     }
+
 
     const data = JSON.stringify({"id": id, "title": title, "scheduleId": scheduleId});
     const xhr = new XMLHttpRequest();
@@ -522,21 +538,37 @@ function onUpdateScheduleResponse() {
 
 function add_task(ev) {
     ev.preventDefault();
+    console.log(ev);
 
-    const taskId = ev.dataTransfer.getData("text");
-    const hourId = ev.target.parentElement.id;
-    const scheduleId = ev.target.parentElement.parentElement.parentElement.parentElement.id;
+    let number = prompt("How many hours:", "");
+    const hourValue = ev.target.id;
+    let parsedNum = parseInt(number);
+    if (number === "0") {
+        newError(mainDiv, "Can not be 0!");
+    } else if (!isNumeric(parsedNum) || parsedNum === "") {
+        newError(mainDiv, "Not numeric!");
+    } else if (parseInt(hourValue) + parsedNum >= 24) {
+        newError(mainDiv, "not enough hours left for that day");
+    } else if (parsedNum < 0) {
+        newError(mainDiv, "Can not be minus!")
+    } else {
+        const taskId = ev.dataTransfer.getData("text");
+        console.log(ev);
+        const hourId = ev.target.parentElement.id;
+        const scheduleId = ev.target.parentElement.parentElement.parentElement.parentElement.id;
 
-    const params = new URLSearchParams();
-    params.append('taskId', taskId);
-    params.append('hourId', hourId);
-    params.append('scheduleId', scheduleId);
+        const params = new URLSearchParams();
+        params.append('taskId', taskId);
+        params.append('hourId', hourId);
+        params.append('scheduleId', scheduleId);
+        params.append('number', parsedNum);
 
-    const xhr = new XMLHttpRequest();
-    xhr.addEventListener('load', onDragResponse);
-    xhr.addEventListener('error', onNetworkError);
-    xhr.open('POST', 'protected/taskHour');
-    xhr.send(params);
+        const xhr = new XMLHttpRequest();
+        xhr.addEventListener('load', onDragResponse);
+        xhr.addEventListener('error', onNetworkError);
+        xhr.open('POST', 'protected/taskHour');
+        xhr.send(params);
+    }
 }
 
 function onDragResponse() {
@@ -557,4 +589,8 @@ function drag_enter_prevent(event) {
 
 function drag_over_prevent(event) {
     event.preventDefault();
+}
+
+function isNumeric(n) {
+    return !isNaN(n);
 }

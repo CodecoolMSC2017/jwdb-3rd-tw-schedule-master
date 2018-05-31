@@ -61,16 +61,16 @@ public final class LoginServlet extends AbstractServlet {
             logger.info("User with username: " + user.getUserName() + " logged in");
             sendMessage(resp, HttpServletResponse.SC_OK, new UserDto(user, allTask, schedules));
         } catch (SQLException ex) {
-            logger.error(ex.getMessage());
+            logger.error(ex.getMessage(), ex);
             handleSqlError(resp, ex);
         } catch (UserNotFoundException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             sendMessage(resp, 404, "User not found");
         } catch (WrongPasswordException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             sendMessage(resp, 409, "Wrong password");
         } catch (NoSuchAlgorithmException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             sendMessage(resp, HttpServletResponse.SC_EXPECTATION_FAILED, "Unexpected error occurred");
         }
     }

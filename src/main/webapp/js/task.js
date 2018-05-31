@@ -22,11 +22,11 @@ function updateTask(e) {
 
     const oldTitle = spanTask.id;
     const oldDesc = descParEl.textContent;
-    const oldColor = liEl.style.backgroundColor;
+    const oldColor = rgb2hex(liEl.style.backgroundColor);
+    console.log(oldColor);
 
     spanTask.remove();
     descParEl.remove();
-    ;
 
 
     const titleInputEl = document.createElement("INPUT");
@@ -53,10 +53,10 @@ function updateTask(e) {
     colorInputEl.setAttribute("class", "input-min");
 
     buttonEl.removeEventListener('click', updateTask);
-    buttonEl.addEventListener('click', applyTaskUpdates)
+    buttonEl.addEventListener('click', applyTaskUpdates);
 
     liEl.removeAttribute("class");
-    liEl.setAttribute("class", "task-li-update")
+    liEl.setAttribute("class", "task-li-update");
 
 
     liEl.insertBefore(breakEl, buttonEl);
@@ -218,8 +218,8 @@ function hideTaskDescription(e) {
 }
 
 function removeTask(e) {
-    //var r = confirm("Press a button!\nEither OK or Cancel.");
-    //if (r == true) {
+    let r = confirm("Press a button!\nEither OK or Cancel.");
+    if (r === true) {
         const liEL = e.target.parentElement;
         const id = liEL.id;
         const userId = document.getElementById("name-field").getAttribute("name");
@@ -234,7 +234,7 @@ function removeTask(e) {
         xhr.open('DELETE', 'protected/task');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(data);
-    //}
+    }
 }
 
 function onDeleteTaskResponse() {
@@ -259,5 +259,17 @@ function closeChangeTask() {
     xhr.addEventListener('error', onNetworkError);
     xhr.open('GET', 'protected/task');
     xhr.send();
+}
+
+function rgb2hex(rgb) {
+    if (/^#[0-9A-F]{6}$/i.test(rgb)) return rgb;
+
+    rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+
+    function hex(x) {
+        return ("0" + parseInt(x).toString(16)).slice(-2);
+    }
+
+    return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
 }
 

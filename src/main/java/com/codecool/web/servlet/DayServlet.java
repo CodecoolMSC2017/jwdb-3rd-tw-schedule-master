@@ -23,7 +23,7 @@ import java.util.List;
 public class DayServlet extends AbstractServlet {
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException { // TODO fix rename day and schedule
         try (Connection connection = getConnection(req.getServletContext())) {
             ScheduleService scheduleService = new SimpleScheduleService(connection);
             TaskService taskService = new SimpleTaskService(connection);
