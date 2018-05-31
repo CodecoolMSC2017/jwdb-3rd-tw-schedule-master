@@ -26,7 +26,7 @@ public interface ScheduleService {
 
     Day addDay(int scheduleId, String title, int userId)throws SQLException, DayAlreadyExistsException;
 
-    void updateDay(int dayId, String title, int userId)throws SQLException, DayAlreadyExistsException;
+    void updateDay(Day day, int userId)throws SQLException, DayAlreadyExistsException;
 
     Day findDayById(int id)throws SQLException;
 
