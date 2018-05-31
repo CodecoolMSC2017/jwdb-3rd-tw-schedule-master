@@ -236,9 +236,9 @@ function listingDays(userDto) {
         hourFirstValueTd.setAttribute("class", "hours-td");
 
         if (i < 10) {
-            hourFirstValueTd.textContent = "0" + i + ":00hr";
+            hourFirstValueTd.textContent = "0" + i + ":00";
         } else {
-            hourFirstValueTd.textContent = i + ":00hr";
+            hourFirstValueTd.textContent = i + ":00";
         }
         hourFirstTr.appendChild(hourFirstValueTd);
         hourFirstTable.appendChild(hourFirstTr);
@@ -283,7 +283,6 @@ function listingDays(userDto) {
         td.appendChild(renameButt);
 
 
-
         for (let j = 0; j < userDto.schedule.days[i].hours.length; j++) {
             let hoursTr = document.createElement("tr");
             hoursTr.setAttribute("id", userDto.schedule.days[i].hours[j].id);
@@ -303,9 +302,11 @@ function listingDays(userDto) {
 
 
                 taskDivEl.setAttribute("class", "task-in-table");
-                taskDivEl.setAttribute('draggable', true);
-                taskDivEl.setAttribute('ondragstart', 'added_drag_start(event)');
-                taskDivEl.setAttribute('ondragend','added_drag_end(event)');
+                if (userDto.user != null) {
+                    taskDivEl.setAttribute('draggable', true);
+                    taskDivEl.setAttribute('ondragstart', 'added_drag_start(event)');
+                    taskDivEl.setAttribute('ondragend', 'added_drag_end(event)');
+                }
 
                 let taskSpan = document.createElement("span");
                 taskSpan.textContent = task.title;
@@ -547,14 +548,13 @@ function onUpdateScheduleResponse() {
 
 function add_task(ev) {
     ev.preventDefault();
-
-    if(ev.dataTransfer.getData("added") === true){
-        newError(mainDiv,"You already added this task");
+    const hourValue = ev.target.id;
+    const taskId = ev.dataTransfer.getData("text");
+    if (findTaskAlreadyAddedOrNot(taskId)) {
+        newError(mainDiv, "Task already added to the schedule!");
         return false;
     }
-
     let number = prompt("How long will it take to finish with the task?", "");
-    const hourValue = ev.target.id;
     let parsedNum = parseInt(number);
     if (number === "0") {
         newError(mainDiv, "Number can not be 0!");
@@ -565,14 +565,13 @@ function add_task(ev) {
     } else if (parsedNum < 0) {
         newError(mainDiv, "Number can not be negative!")
     } else {
-        const taskId = ev.dataTransfer.getData("text");
         const hourId = ev.target.parentElement.id;
         const scheduleId = ev.target.parentElement.parentElement.parentElement.parentElement.id;
         const dayId = ev.target.parentElement.parentElement.parentElement.firstChild.id;
         const params = new URLSearchParams();
         params.append('taskId', taskId);
         params.append('hourId', hourId);
-        params.append('dayId',dayId);
+        params.append('dayId', dayId);
         params.append('scheduleId', scheduleId);
         params.append('number', parsedNum);
 
@@ -608,7 +607,7 @@ function isNumeric(n) {
     return !isNaN(n);
 }
 
-function added_drag_start(ev){
+function added_drag_start(ev) {
     ev.dataTransfer.dropEffect = "move";
     ev.dataTransfer.setData("text", ev.target.id);
 
@@ -616,11 +615,21 @@ function added_drag_start(ev){
     ev.target.firstChild.firstElementChild.setAttribute("class", "hidden");
 }
 
-function added_drag_end(ev){
+function added_drag_end(ev) {
     ev.preventDefault();
     ev.target.firstChild.firstElementChild.removeAttribute("class");
     ev.target.firstChild.firstElementChild.classList.add("tooltiptext");
+}
 
-    taskSpan.appendChild(tooltipSpan);
-
+function findTaskAlreadyAddedOrNot(id) {
+    const list = document.getElementsByClassName("hours-td");
+    for (let i = 0; i < list.length; i++) {
+        if (list[i].firstElementChild !== null) {
+            console.log(list[i].firstElementChild.id == id);
+            if (list[i].firstElementChild.id === id) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
