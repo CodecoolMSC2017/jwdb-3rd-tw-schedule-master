@@ -31,21 +31,25 @@ public class TaskHourServlet extends AbstractServlet {
             TaskHourService taskHourService = new SimpleTaskHourService(connection);
             ScheduleService scheduleService = new SimpleScheduleService(connection);
             TaskService taskService = new SimpleTaskService(connection);
-            int scheduleId = Integer.parseInt(req.getParameter("scheduleId"));
-            int taskId = Integer.parseInt(req.getParameter("taskId"));
-            int taskLength = Integer.parseInt(req.getParameter("number"));
-            String hourId = req.getParameter("hourId");
-            int dayId = Integer.parseInt(req.getParameter("dayId"));
-            User user = getUser(req);
-            int userId = user.getId();
-            taskHourService.handleTaskConnection(userId,dayId,taskLength,scheduleId,taskId,hourId);
-            List<Task> taskList = taskService.findAllByUserAndScheduleId(userId,scheduleId);
-            List<Schedule> schedules = scheduleService.findAllByUserId(userId);
-            Schedule schedule = scheduleService.findById(scheduleId);
-            UserDto userDto = new UserDto(user, taskList, schedules);
-            userDto.setSchedule(schedule);
+            if (req.getParameter("scheduleId").equals("")) {
+                sendMessage(resp, HttpServletResponse.SC_BAD_REQUEST, new TaskOverlapException().getMessage());
+            } else {
+                int scheduleId = Integer.parseInt(req.getParameter("scheduleId"));
+                int taskId = Integer.parseInt(req.getParameter("taskId"));
+                int taskLength = Integer.parseInt(req.getParameter("number"));
+                String hourId = req.getParameter("hourId");
+                int dayId = Integer.parseInt(req.getParameter("dayId"));
+                User user = getUser(req);
+                int userId = user.getId();
+                taskHourService.handleTaskConnection(userId, dayId, taskLength, scheduleId, taskId, hourId);
+                List<Task> taskList = taskService.findAllByUserAndScheduleId(userId, scheduleId);
+                List<Schedule> schedules = scheduleService.findAllByUserId(userId);
+                Schedule schedule = scheduleService.findById(scheduleId);
+                UserDto userDto = new UserDto(user, taskList, schedules);
+                userDto.setSchedule(schedule);
 
-            sendMessage(resp, HttpServletResponse.SC_OK, userDto);
+                sendMessage(resp, HttpServletResponse.SC_OK, userDto);
+            }
         } catch (SQLException e) {
             handleSqlError(resp, e);
         } catch (InvalidArgumentException e) {

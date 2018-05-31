@@ -523,7 +523,7 @@ function applyScheduleUpdates(e) {
         desc = oldDesc;
     }
 
-    const data = JSON.stringify({"scheduleId": id, "description": desc, "title": title, "userId": userId});
+    const data = JSON.stringify({"id": id, "description": desc, "title": title, "userId": userId});
 
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onUpdateScheduleResponse);

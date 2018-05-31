@@ -55,6 +55,10 @@ public class ScheduleServlet extends AbstractServlet {
                 tasks = taskService.findAllByUserId(userId);
             }
 
+            if (req.getAttribute("scheduleId") != null) {
+                int id = (Integer) req.getAttribute("scheduleId");
+                userDto.setSchedule(scheduleService.findById(id));
+            }
             userDto.setTasks(tasks);
             sendMessage(resp, HttpServletResponse.SC_OK, userDto);
         } catch (SQLException ex) {
@@ -101,7 +105,7 @@ public class ScheduleServlet extends AbstractServlet {
             Schedule schedule = objectMapper.readValue(jsonParser, Schedule.class);
 
             scheduleService.updateSchedule(schedule);
-
+            req.setAttribute("scheduleId", schedule.getId());
 
             doGet(req, resp);
         } catch (SQLException e) {
@@ -109,7 +113,6 @@ public class ScheduleServlet extends AbstractServlet {
         } catch (ScheduleAlreadyExistsException e) {
             sendMessage(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         }
-
     }
 
     @Override
