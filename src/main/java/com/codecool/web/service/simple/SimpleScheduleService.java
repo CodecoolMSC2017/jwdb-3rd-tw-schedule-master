@@ -67,14 +67,15 @@ public class SimpleScheduleService implements ScheduleService {
         String title = schedule.getTitle();
         String description = schedule.getDescription();
 
+        Schedule scheduleToUpdate = scheduleDao.findById(scheduleId);
         Schedule check = scheduleDao.findByTitle(title);
-        String scheduleTile = schedule.getTitle();
-        String scheduleDescription = schedule.getDescription();
-        if (scheduleTile.equals(title) && !scheduleDescription.equals(description)) {
+        String currentTitle = scheduleToUpdate.getTitle();
+        String currentDescription = scheduleToUpdate.getDescription();
+        if (currentTitle.equals(title) && !currentDescription.equals(description)) {
             scheduleDao.updateDescription(scheduleId, description);
-        } else if (!scheduleTile.equals(title) && scheduleDescription.equals(description) && check == null) {
+        } else if (!currentTitle.equals(title) && currentDescription.equals(description) && check == null) {
             scheduleDao.updateTitle(scheduleId, title);
-        } else if (!scheduleTile.equals(title) && !scheduleDescription.equals(description) && check == null) {
+        } else if (!currentTitle.equals(title) && !currentDescription.equals(description) && check == null) {
             scheduleDao.updateTitle(scheduleId, title);
             scheduleDao.updateDescription(scheduleId, description);
         }else if(check != null){
