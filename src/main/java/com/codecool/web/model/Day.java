@@ -14,6 +14,9 @@ public class Day extends AbstractModel {
         this.title = title;
     }
 
+    public Day() {
+    }
+
     public int getScheduleId() {
         return scheduleId;
     }
@@ -28,5 +31,13 @@ public class Day extends AbstractModel {
 
     public void setHours(List<Hour> hours) {
         this.hours = hours;
+    }
+
+    public void setScheduleId(int scheduleId) {
+        this.scheduleId = scheduleId;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

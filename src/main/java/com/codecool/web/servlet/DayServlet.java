@@ -2,6 +2,7 @@ package com.codecool.web.servlet;
 
 import com.codecool.web.dto.UserDto;
 import com.codecool.web.exception.DayAlreadyExistsException;
+import com.codecool.web.model.Day;
 import com.codecool.web.model.Schedule;
 import com.codecool.web.model.Task;
 import com.codecool.web.model.User;
@@ -9,6 +10,7 @@ import com.codecool.web.service.ScheduleService;
 import com.codecool.web.service.TaskService;
 import com.codecool.web.service.simple.SimpleScheduleService;
 import com.codecool.web.service.simple.SimpleTaskService;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import javax.servlet.annotation.WebServlet;
@@ -30,14 +32,11 @@ public class DayServlet extends AbstractServlet {
             User user = getUser(req);
             int userId = user.getId();
 
-            JsonNode jsonNode = createJsonNodeFromRequest(req);
+            JsonParser jsonParser = objectMapper.getFactory().createParser(req.getInputStream());
+            Day day = objectMapper.readValue(jsonParser, Day.class);
 
-            int dayId = Integer.parseInt(jsonNode.get("dayId").textValue());
-            String dayTitle = jsonNode.get("title").textValue();
-            int scheduleId = Integer.parseInt(jsonNode.get("scheduleId").textValue());
-
-            scheduleService.updateDay(dayId, dayTitle, userId);
-            Schedule schedule = scheduleService.findById(scheduleId);
+            scheduleService.updateDay(day, userId);
+            Schedule schedule = scheduleService.findById(day.getScheduleId());
 
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
             List<Task> tasks = taskService.findAllByUserId(userId);
