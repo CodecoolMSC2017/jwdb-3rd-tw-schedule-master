@@ -3,6 +3,7 @@ package com.codecool.web.service.simple;
 import com.codecool.web.dao.TaskHourDao;
 import com.codecool.web.dao.database.AbstractDaoFactory;
 import com.codecool.web.exception.InvalidArgumentException;
+import com.codecool.web.exception.TaskOverlapException;
 import com.codecool.web.service.TaskHourService;
 
 import java.sql.Connection;
@@ -17,19 +18,8 @@ public class SimpleTaskHourService implements TaskHourService {
     }
 
     @Override
-    public void disconnect(String disconnectType, int id) throws SQLException {
-        switch (disconnectType) {
-            case "task":
-                taskHourDao.deleteByTaskId(id);
-                break;
-            case "schedule":
-                taskHourDao.deleteByScheduleId(id);
-                break;
-            default:
-                throw new IllegalArgumentException();
-
-        }
-
+    public void disconnect(int id) throws SQLException {
+        taskHourDao.deleteByTaskId(id);
     }
 
     @Override
@@ -41,6 +31,23 @@ public class SimpleTaskHourService implements TaskHourService {
     public void connectTaskToSchedule(int scheduleId, int taskId, String hourId) throws SQLException, InvalidArgumentException {
         taskHourDao.add(taskId, scheduleId, hourId);
     }
+
+    @Override
+    public void handleTaskConnection(int userId,int dayId,int taskLength,int scheduleId,int taskId,String hourId) throws SQLException, TaskOverlapException, InvalidArgumentException {
+        for (int i = 1; i < taskLength; i++) {
+            String checkHourId = Integer.toString(Integer.parseInt(hourId)+i);
+            if(!taskHourDao.validateHourIds(userId,dayId,checkHourId)){
+                throw new TaskOverlapException();
+            }
+        }
+        String hourIds = hourId;
+        for (int i = 1; i < taskLength; i++) {
+             hourIds += ","+Integer.toString(Integer.parseInt(hourId)+i);
+        }
+        connectTaskToSchedule(scheduleId,taskId,hourIds);
+    }
+
+
 
 
 }

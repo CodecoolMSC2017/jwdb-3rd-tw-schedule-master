@@ -22,6 +22,8 @@ public interface TaskHourDao {
 
     List<String> findHoursByTaskAndScheduleId(int taskId, int scheduleId)throws SQLException;
 
+    Boolean validateHourIds(int userId,int dayId, String hourId) throws SQLException;
+
 
 
 }

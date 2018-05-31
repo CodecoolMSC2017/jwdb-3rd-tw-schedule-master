@@ -1,9 +1,6 @@
 package com.codecool.web.service.simple;
 
-import com.codecool.web.dao.DayDao;
-import com.codecool.web.dao.HourDao;
-import com.codecool.web.dao.ScheduleDao;
-import com.codecool.web.dao.TaskHourDao;
+import com.codecool.web.dao.*;
 import com.codecool.web.dao.database.AbstractDaoFactory;
 import com.codecool.web.exception.DayAlreadyExistsException;
 import com.codecool.web.exception.ScheduleAlreadyExistsException;
@@ -24,12 +21,14 @@ public class SimpleScheduleService implements ScheduleService {
     private final DayDao dayDao;
     private final HourDao hourDao;
     private final TaskHourDao taskHourDao;
+    private final TaskDao taskDao;
 
     public SimpleScheduleService(Connection connection) {
         scheduleDao = (ScheduleDao) AbstractDaoFactory.getDao("schedule", connection);
         dayDao = (DayDao) AbstractDaoFactory.getDao("day", connection);
         hourDao = (HourDao) AbstractDaoFactory.getDao("hour", connection);
         taskHourDao = (TaskHourDao) AbstractDaoFactory.getDao("taskHour", connection);
+        taskDao = (TaskDao) AbstractDaoFactory.getDao("task", connection);
     }
 
     @Override
@@ -38,7 +37,7 @@ public class SimpleScheduleService implements ScheduleService {
         if (numOfDays > 7 || numOfDays == 0) {
             throw new WrongNumOfDaysException();
         }
-        if(check != null && check.getUserId() == userId){
+        if (check != null && check.getUserId() == userId) {
             throw new ScheduleAlreadyExistsException();
         }
         Schedule schedule = scheduleDao.add(userId, title, description);
@@ -78,7 +77,7 @@ public class SimpleScheduleService implements ScheduleService {
         } else if (!currentTitle.equals(title) && !currentDescription.equals(description) && check == null) {
             scheduleDao.updateTitle(scheduleId, title);
             scheduleDao.updateDescription(scheduleId, description);
-        }else if(check != null){
+        } else if (check != null) {
             throw new ScheduleAlreadyExistsException();
         }
     }
@@ -86,7 +85,7 @@ public class SimpleScheduleService implements ScheduleService {
     @Override
     public Schedule findById(int scheduleId) throws SQLException {
         Schedule schedule = scheduleDao.findById(scheduleId);
-        List<Task> tasks = taskHourDao.findTaskByScheduleId(schedule.getId());
+        List<Task> tasks = taskDao.findByUserId(schedule.getUserId());
         List<Day> days = dayDao.findByScheduleId(scheduleId);
         for (Day day : days) {
             List<Hour> hours = hourDao.findByDayId(day.getId());
@@ -136,7 +135,7 @@ public class SimpleScheduleService implements ScheduleService {
 
         if (day != null) {
             Schedule schedule = scheduleDao.findById(day.getScheduleId());
-            if (schedule.getUserId() == userId && schedule.getId() == scheduleId){
+            if (schedule.getUserId() == userId && schedule.getId() == scheduleId) {
                 throw new DayAlreadyExistsException();
             }
         }
@@ -150,7 +149,7 @@ public class SimpleScheduleService implements ScheduleService {
 
         if (day != null) {
             Schedule schedule = scheduleDao.findById(day.getScheduleId());
-            if ( schedule.getUserId() == userId){
+            if (schedule.getUserId() == userId) {
                 throw new DayAlreadyExistsException();
             }
         }

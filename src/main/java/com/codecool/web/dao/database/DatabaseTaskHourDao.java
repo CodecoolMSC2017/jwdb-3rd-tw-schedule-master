@@ -104,6 +104,28 @@ class DatabaseTaskHourDao extends AbstractDaoFactory implements TaskHourDao {
 
     }
 
+    @Override
+    public Boolean validateHourIds(int userId, int dayId, String hourId) throws SQLException {
+        hourId = "%"+hourId+"%";
+        String sql = "SELECT * FROM task_hour " +
+                "LEFT JOIN schedule ON schedule.id = schedule_id " +
+                "LEFT JOIN day ON day.schedule_id = schedule.id " +
+                "WHERE app_user_id = ? " +
+                "AND day.id = ? " +
+                "AND hour_ids LIKE ? ";
+        try(PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setInt(1,userId);
+            statement.setInt(2,dayId);
+            statement.setString(3,hourId);
+            try(ResultSet resultSet = statement.executeQuery()){
+                if(resultSet.next()){
+                    return false;
+                }
+                return true;
+            }
+        }
+    }
+
     private String join(String... ids) throws InvalidArgumentException {
         String idString = "";
         if (ids.length == 0) {
