@@ -35,6 +35,10 @@ public class TaskServlet extends AbstractServlet {
                 int userId = user.getId();
                 List<Task> tasks ;
                 String currentId = req.getParameter("currentScheduleId");
+                if(currentId == null){
+                    currentId = (String) req.getAttribute("currentScheduleId");
+                    req.removeAttribute("currentScheduleId");
+                }
                 if (currentId == null || currentId.equals("null")) {
                     tasks = taskService.findAllByUserId(userId);
                 }
@@ -98,7 +102,13 @@ public class TaskServlet extends AbstractServlet {
             JsonParser jsonParser = objectMapper.getFactory().createParser(req.getInputStream());
             Task task = objectMapper.readValue(jsonParser, Task.class);
 
+            if(task.getScheduleId() != null){
+                req.setAttribute("currentScheduleId",task.getScheduleId());
+            }
+
             taskService.deleteTask(task);
+
+
 
             doGet(req, resp);
         } catch (SQLException e) {
