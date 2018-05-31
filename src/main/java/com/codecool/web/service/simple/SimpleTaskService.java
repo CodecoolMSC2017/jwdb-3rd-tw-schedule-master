@@ -58,6 +58,9 @@ public class SimpleTaskService implements TaskService {
             taskDao.updateDescription(taskId, description);
         } else if (!currentTitle.equals(title) && currentDescription.equals(description) && currentColor.equals(color) && check == null) {
             taskDao.updateTitle(taskId, title);
+        } else if (!currentTitle.equals(title) && !currentDescription.equals(description) && currentColor.equals(color) && check == null) {
+            taskDao.updateTitle(taskId, title);
+            taskDao.updateDescription(taskId, description);
         } else if (!currentTitle.equals(title) && !currentDescription.equals(description) && !currentColor.equals(color) && check == null) {
             taskDao.updateTitle(taskId, title);
             taskDao.updateDescription(taskId, description);
