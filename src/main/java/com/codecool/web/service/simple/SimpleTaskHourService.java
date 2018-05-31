@@ -18,8 +18,8 @@ public class SimpleTaskHourService implements TaskHourService {
     }
 
     @Override
-    public void disconnect(int id) throws SQLException {
-        taskHourDao.deleteByTaskId(id);
+    public void disconnect(int taskId, int scheduleId) throws SQLException {
+        taskHourDao.delete(taskId,scheduleId);
     }
 
     @Override

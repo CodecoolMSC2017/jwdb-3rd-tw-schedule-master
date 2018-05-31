@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public interface TaskHourService {
 
-    void disconnect(int id) throws SQLException;
+    void disconnect(int taskId, int scheduleId) throws SQLException;
 
     void updateHours(int scheduleId, int taskId, String... newHourIds) throws SQLException, InvalidArgumentException;
 

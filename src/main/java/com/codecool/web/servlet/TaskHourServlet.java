@@ -81,8 +81,9 @@ public class TaskHourServlet extends AbstractServlet {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskHourService taskHourService = new SimpleTaskHourService(connection);
             JsonNode jsonNode = createJsonNodeFromRequest(req);
-            int id = Integer.parseInt(jsonNode.get("id").textValue());
-            taskHourService.disconnect(id);
+            int taskId = Integer.parseInt(jsonNode.get("taskId").textValue());
+            int scheduleId = Integer.parseInt(jsonNode.get("scheduleId").textValue());
+            taskHourService.disconnect(taskId,scheduleId);
         } catch (SQLException e) {
             handleSqlError(resp, e);
         }
