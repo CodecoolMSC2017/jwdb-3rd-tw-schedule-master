@@ -91,7 +91,7 @@ public class TaskHourServlet extends AbstractServlet {
             List<Task> taskList = taskService.findAllByUserAndScheduleId(userId, scheduleId);
             List<Schedule> schedules = scheduleService.findAllByUserId(userId);
             UserDto userDto = new UserDto(user, taskList, schedules);
-            Schedule schedule = scheduleService.findById(Integer.parseInt(req.getParameter("scheduleId")));
+            Schedule schedule = scheduleService.findById(scheduleId);
             userDto.setSchedule(schedule);
             sendMessage(resp,HttpServletResponse.SC_OK,userDto);
 
