@@ -560,7 +560,7 @@ function add_task(ev) {
         newError(mainDiv, "Number can not be 0!");
     } else if (!isNumeric(parsedNum) || parsedNum === "") {
         newError(mainDiv, "Please enter a number!");
-    } else if (parseInt(hourValue) + parsedNum >= 24) {
+    } else if (parseInt(hourValue) + parsedNum > 24) {
         newError(mainDiv, "Not enough hours left for that day.");
     } else if (parsedNum < 0) {
         newError(mainDiv, "Number can not be negative!")
