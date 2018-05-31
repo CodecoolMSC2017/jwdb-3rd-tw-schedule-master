@@ -339,14 +339,14 @@ function listingDays(userDto) {
         guestButton.setAttribute("class", "btn");
         guestButton.innerText = "Create Guest Link";
 
-        guestButton.addEventListener('click', createLink);
+        guestButton.addEventListener('click', sendId);
 
         daysDiv.appendChild(guestButton);
     }
 }
 
-function createLink(e) {
-    e.target.removeEventListener('click', createLink);
+function sendId(e){
+    e.target.removeEventListener('click',sendId);
     const linkInputField = document.createElement("INPUT");
     linkInputField.setAttribute("id", "guest-link");
     linkInputField.setAttribute("class", "input");
@@ -357,6 +357,15 @@ function createLink(e) {
     const params = new URLSearchParams();
     params.append('scheduleId', scheduleId);
 
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', createLink);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('POST', 'protected/encrypt');
+    xhr.send(data);
+}
+
+function createLink() {
+    const linkInputField = document.getElementById("guest-link");
     linkInputField.value = document.documentURI + "guest?" + params.toString();
     daysDiv.appendChild(linkInputField);
 
