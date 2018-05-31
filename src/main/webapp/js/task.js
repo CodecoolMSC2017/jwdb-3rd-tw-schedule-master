@@ -74,7 +74,6 @@ function applyTaskUpdates(e) {
     const descInputField = liEl.children.item(1);
     const colorInputField = liEl.children.item(2);
 
-
     let title = titleInputField.value;
     const oldTitle = titleInputField.placeholder;
     let desc = descInputField.value;
@@ -97,7 +96,7 @@ function applyTaskUpdates(e) {
     liEl.removeAttribute("class");
     liEl.setAttribute("class", "task-li");
 
-    const data = JSON.stringify({id: id, description: desc, title: title, color: color, userId :userId});
+    const data = JSON.stringify({id: id, description: desc, title: title, color: color, userId :userId ,scheduleId : currentScheduleId });
 
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onUpdateTaskResponse);
