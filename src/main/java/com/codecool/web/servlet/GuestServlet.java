@@ -27,7 +27,7 @@ public class GuestServlet extends AbstractServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             ScheduleService scheduleService = new SimpleScheduleService(connection);
             StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
