@@ -70,14 +70,6 @@
     <div id="name-logout-content" class="content hidden">
         <table id="name-logout-table">
             <tr>
-                <td id="trash-td" class="hidden">
-                    <section>
-	                    <span id="trash" class="trash">
-    	                <span></span>
-    	                    <i></i>
-                        </span>
-                    </section>
-                </td>
                 <td id="name-td">
                     <h2 id="name-field"></h2>
                 </td>
@@ -112,7 +104,16 @@
                         <button id="schedules-button" class="container">Schedules</button>
                     </div>
                 </div>
+                <div id="trash-td" class="hidden">
+                    <section>
+	                    <span id="trash" class="trash">
+    	                <span></span>
+    	                    <i></i>
+                        </span>
+                    </section>
+                </div>
             </td>
+
             <td class="middle-td" valign="top">
                 <div id="days-content" class="content hidden">
                     <div id="days">

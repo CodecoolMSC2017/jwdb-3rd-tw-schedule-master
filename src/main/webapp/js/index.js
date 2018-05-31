@@ -103,16 +103,18 @@ function setUnauthorized() {
     return sessionStorage.removeItem('user');
 }
 
-function drag_enter_trash(ev){
+function drag_over_trash(ev) {
     ev.preventDefault();
     const trash = document.getElementById("trash").firstElementChild;
-    trash.classList.add('trash-dragged');
+    trash.style.transform = "rotate(-45deg)";
+    trash.style.transition = "transform 250ms";
 }
 
 function drag_leave(ev){
     ev.preventDefault();
     const trash = document.getElementById("trash").firstElementChild;
-    trash.classList.remove('trash-dragged');
+    trash.style.transform = "rotate(0deg)";
+    trash.style.transition = "transform 250ms";
 }
 
 function remove_from_schedule(ev){
@@ -122,6 +124,8 @@ function remove_from_schedule(ev){
 
     const trash = document.getElementById("trash").firstElementChild;
     trash.removeAttribute("class");
+    trash.style.transform = "rotate(0deg)";
+    trash.style.transition = "transform 250ms";
 
     const data = JSON.stringify({"taskId": taskId, "scheduleId": scheduleId});
     const xhr = new XMLHttpRequest();
@@ -161,8 +165,8 @@ function onLoad() {
 
     trashEl = document.getElementById("trash");
     trashEl.addEventListener('drop',remove_from_schedule);
-    trashEl.addEventListener('dragenter',drag_enter_trash);
-    trashEl.addEventListener('dragover',drag_over_prevent);
+    trashEl.addEventListener('dragenter', drag_enter_prevent);
+    trashEl.addEventListener('dragover', drag_over_trash);
     trash.addEventListener('dragleave',drag_leave);
 
     const loginButtonEl = document.getElementById('login-button');

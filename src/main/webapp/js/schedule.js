@@ -378,7 +378,11 @@ function createLinkResponse(){
 
 function createLink(scheduleId) {
     const linkInputField = document.getElementById("guest-link");
-    linkInputField.value = document.documentURI + "guest?" + scheduleId.toString();
+
+    const params = new URLSearchParams();
+    params.append('scheduleId', scheduleId.message);
+
+    linkInputField.value = document.documentURI + "guest?" + params.toString();
     daysDiv.appendChild(linkInputField);
 
 }
