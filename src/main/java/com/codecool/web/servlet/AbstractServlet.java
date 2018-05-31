@@ -11,6 +11,8 @@ import com.codecool.web.service.simple.SimpleScheduleService;
 import com.codecool.web.service.simple.SimpleTaskService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
@@ -22,8 +24,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 
 abstract class AbstractServlet extends HttpServlet {
 
@@ -78,7 +78,7 @@ abstract class AbstractServlet extends HttpServlet {
             int userId = user.getId();
             List<Task> tasks ;
             String currentId = req.getParameter("currentScheduleId");
-            if(currentId.equals("null")){
+            if (currentId == null || currentId.equals("null")) {
                  tasks = taskService.findAllByUserId(userId);
             }
             else{

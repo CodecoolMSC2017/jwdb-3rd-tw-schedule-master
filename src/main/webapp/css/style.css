@@ -501,6 +501,11 @@ li:last-child {
    ******************
  */
 
+#days {
+    text-align: center;
+}
+
+
 .schedule-table {
     border-collapse: collapse;
     margin-right: auto;
@@ -571,6 +576,14 @@ li:last-child {
 
 .desc-td {
     padding-bottom: 5px;
+}
+
+.task-in-table {
+    cursor: grab;
+}
+
+.margined-table {
+    margin-left: 120px;
 }
 
 
