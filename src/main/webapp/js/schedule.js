@@ -304,7 +304,7 @@ function listingDays(userDto) {
 
                 taskDivEl.setAttribute("class", "task-in-table");
                 taskDivEl.setAttribute('draggable', true);
-                taskDivEl.setAttribute('ondragstart', 'drag_start(event)');
+                taskDivEl.setAttribute('ondragstart', 'added_drag_start(event)');
 
                 let taskSpan = document.createElement("span");
                 taskSpan.textContent = task.title;
@@ -546,7 +546,11 @@ function onUpdateScheduleResponse() {
 
 function add_task(ev) {
     ev.preventDefault();
-    console.log(ev);
+
+    if(ev.dataTransfer.getData("added") === true){
+        newError(mainDiv,"You already added this task");
+        return false;
+    }
 
     let number = prompt("How long will it take to finish with the task?", "");
     const hourValue = ev.target.id;
@@ -564,10 +568,11 @@ function add_task(ev) {
         console.log(ev);
         const hourId = ev.target.parentElement.id;
         const scheduleId = ev.target.parentElement.parentElement.parentElement.parentElement.id;
-
+        const dayId = ev.target.parentElement.parentElement.parentElement.firstChild.id;
         const params = new URLSearchParams();
         params.append('taskId', taskId);
         params.append('hourId', hourId);
+        params.append('dayId',dayId);
         params.append('scheduleId', scheduleId);
         params.append('number', parsedNum);
 
@@ -601,4 +606,14 @@ function drag_over_prevent(event) {
 
 function isNumeric(n) {
     return !isNaN(n);
+}
+
+function added_drag_start(ev){
+    ev.dataTransfer.dropEffect = "move";
+    ev.dataTransfer.setData("text", ev.target.id);
+
+    ev.dataTransfer.setData("description",ev.target.firstChild.firstElementChild.textContent);
+
+    ev.dataTransfer.setData("added", "true");
+    ev.target.firstChild.firstElementChild.remove();
 }
