@@ -70,14 +70,16 @@ public class SimpleScheduleService implements ScheduleService {
         Schedule check = scheduleDao.findByTitle(title);
         String currentTitle = scheduleToUpdate.getTitle();
         String currentDescription = scheduleToUpdate.getDescription();
-        if (currentTitle.equals(title) && !currentDescription.equals(description)) {
-            scheduleDao.updateDescription(scheduleId, description);
-        } else if (!currentTitle.equals(title) && currentDescription.equals(description) && check == null) {
-            scheduleDao.updateTitle(scheduleId, title);
-        } else if (!currentTitle.equals(title) && !currentDescription.equals(description) && check == null) {
-            scheduleDao.updateTitle(scheduleId, title);
-            scheduleDao.updateDescription(scheduleId, description);
-        } else if (check != null) {
+        if (check == null || check.getId() == scheduleId) {
+            if (currentTitle.equals(title) && !currentDescription.equals(description)) {
+                scheduleDao.updateDescription(scheduleId, description);
+            } else if (!currentTitle.equals(title) && currentDescription.equals(description) && check == null) {
+                scheduleDao.updateTitle(scheduleId, title);
+            } else if (!currentTitle.equals(title) && !currentDescription.equals(description) && check == null) {
+                scheduleDao.updateTitle(scheduleId, title);
+                scheduleDao.updateDescription(scheduleId, description);
+            }
+        } else {
             throw new ScheduleAlreadyExistsException();
         }
     }
@@ -148,7 +150,7 @@ public class SimpleScheduleService implements ScheduleService {
         int dayId = day.getId();
         Day dayToUpdate = dayDao.findDayByTitle(title);
 
-        if (dayToUpdate != null) {
+        if (dayToUpdate != null && dayToUpdate.getId() != dayId) {
             Schedule schedule = scheduleDao.findById(dayToUpdate.getScheduleId());
             if (schedule.getUserId() == userId) {
                 throw new DayAlreadyExistsException();
