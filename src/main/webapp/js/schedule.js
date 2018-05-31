@@ -177,7 +177,6 @@ function listingDays(userDto) {
     currentScheduleId = userDto.schedule.id;
     const table = document.createElement("table");
     table.setAttribute("class", "schedule-table");
-    table.classList.add("margined-table");
     table.setAttribute("id", userDto.schedule.id);
 
     const updateButt = document.createElement("button");
@@ -201,6 +200,12 @@ function listingDays(userDto) {
 
     let numberOfDays = userDto.schedule.days.length;
 
+    console.log(userDto.user);
+
+    if (userDto.user == undefined) {
+        numberOfDays += 1;
+    }
+
     const titleTd = document.createElement("td");
     titleTd.colSpan = numberOfDays;
 
@@ -211,7 +216,9 @@ function listingDays(userDto) {
     descriptionTd.textContent = userDto.schedule.description;
 
     titleRow.appendChild(titleTd);
-    titleRow.appendChild(createTd);
+    if (userDto.user != null) {
+        titleRow.appendChild(createTd);
+    }
     descriptionRow.appendChild(descriptionTd);
 
     table.appendChild(titleRow);
@@ -300,9 +307,8 @@ function listingDays(userDto) {
                 taskDivEl.style.backgroundColor = task.color;
                 taskDivEl.setAttribute("id", task.id);
 
-
-                taskDivEl.setAttribute("class", "task-in-table");
                 if (userDto.user != null) {
+                    taskDivEl.setAttribute("class", "task-in-table");
                     taskDivEl.setAttribute('draggable', true);
                     taskDivEl.setAttribute('ondragstart', 'added_drag_start(event)');
                     taskDivEl.setAttribute('ondragend', 'added_drag_end(event)');
@@ -345,8 +351,8 @@ function listingDays(userDto) {
     }
 }
 
-function sendId(e){
-    e.target.removeEventListener('click',sendId);
+function sendId(e) {
+    e.target.removeEventListener('click', sendId);
     const linkInputField = document.createElement("INPUT");
     linkInputField.setAttribute("id", "guest-link");
     linkInputField.setAttribute("class", "input");
@@ -366,7 +372,7 @@ function sendId(e){
     xhr.send(params);
 }
 
-function createLinkResponse(){
+function createLinkResponse() {
     if (this.status === OK) {
         const scheduleId = JSON.parse(this.responseText);
         createLink(scheduleId);
@@ -492,6 +498,7 @@ function updateScheduleFields(e) {
     const oldDesc = descEl.textContent;
     const colspan = titleEl.colSpan;
 
+
     titleEl.remove();
     descEl.remove();
 
@@ -573,6 +580,10 @@ function onUpdateScheduleResponse() {
 
 function add_task(ev) {
     ev.preventDefault();
+    if (ev.target.firstChild != null) {
+        newError(mainDiv, "You already added a task for this hour!");
+        return false;
+    }
     const hourValue = ev.target.id;
     const taskId = ev.dataTransfer.getData("text");
     if (findTaskAlreadyAddedOrNot(taskId)) {
