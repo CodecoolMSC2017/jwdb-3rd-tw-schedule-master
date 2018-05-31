@@ -305,6 +305,7 @@ function listingDays(userDto) {
                 taskDivEl.setAttribute("class", "task-in-table");
                 taskDivEl.setAttribute('draggable', true);
                 taskDivEl.setAttribute('ondragstart', 'added_drag_start(event)');
+                taskDivEl.setAttribute('ondragend','added_drag_end(event)');
 
                 let taskSpan = document.createElement("span");
                 taskSpan.textContent = task.title;
@@ -521,7 +522,7 @@ function applyScheduleUpdates(e) {
         desc = oldDesc;
     }
 
-    const data = JSON.stringify({"id": id, "description": desc, "title": title, "userId": userId});
+    const data = JSON.stringify({"scheduleId": id, "description": desc, "title": title, "userId": userId});
 
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onUpdateScheduleResponse);
@@ -565,7 +566,6 @@ function add_task(ev) {
         newError(mainDiv, "Number can not be negative!")
     } else {
         const taskId = ev.dataTransfer.getData("text");
-        console.log(ev);
         const hourId = ev.target.parentElement.id;
         const scheduleId = ev.target.parentElement.parentElement.parentElement.parentElement.id;
         const dayId = ev.target.parentElement.parentElement.parentElement.firstChild.id;
@@ -612,8 +612,23 @@ function added_drag_start(ev){
     ev.dataTransfer.dropEffect = "move";
     ev.dataTransfer.setData("text", ev.target.id);
 
-    ev.dataTransfer.setData("description",ev.target.firstChild.firstElementChild.textContent);
-
+    ev.dataTransfer.setData("description",ev.target.firstChild.firstElementChild.firstChild);
+    console.log(ev.target.firstChild.firstElementChild);
+    console.log(ev.target.firstChild.firstElementChild.firstChild);
     ev.dataTransfer.setData("added", "true");
     ev.target.firstChild.firstElementChild.remove();
+}
+
+function added_drag_end(ev){
+    ev.preventDefault();
+    const description = ev.dataTransfer.getData("description");
+    console.log(description);
+    let tooltipSpan = document.createElement("span");
+    tooltipSpan.setAttribute("class", "tooltiptext");
+    tooltipSpan.textContent = description;
+
+    const taskSpan = ev.target.firstChild;
+
+    taskSpan.appendChild(tooltipSpan);
+
 }
