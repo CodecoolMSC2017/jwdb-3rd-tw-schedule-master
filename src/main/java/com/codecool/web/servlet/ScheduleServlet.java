@@ -102,9 +102,8 @@ public class ScheduleServlet extends AbstractServlet {
 
             scheduleService.updateSchedule(schedule);
 
-            UserDto userDto = new UserDto(user, tasks, schedules);
-            userDto.setSchedule(schedule);
-            sendMessage(resp, 200, userDto);
+
+            doGet(req, resp);
         } catch (SQLException e) {
             handleSqlError(resp, e);
         } catch (ScheduleAlreadyExistsException e) {
