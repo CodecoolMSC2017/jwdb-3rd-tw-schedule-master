@@ -80,10 +80,19 @@ public class TaskHourServlet extends AbstractServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskHourService taskHourService = new SimpleTaskHourService(connection);
+            TaskService taskService = new SimpleTaskService(connection);
+            ScheduleService scheduleService = new SimpleScheduleService(connection);
             JsonNode jsonNode = createJsonNodeFromRequest(req);
             int taskId = Integer.parseInt(jsonNode.get("taskId").textValue());
             int scheduleId = Integer.parseInt(jsonNode.get("scheduleId").textValue());
             taskHourService.disconnect(taskId,scheduleId);
+            User user = getUser(req);
+            int userId = user.getId();
+            List<Task> taskList = taskService.findAllByUserAndScheduleId(userId, scheduleId);
+            List<Schedule> schedules = scheduleService.findAllByUserId(userId);
+            UserDto userDto = new UserDto(user, taskList, schedules);
+            sendMessage(resp,HttpServletResponse.SC_OK,userDto);
+
         } catch (SQLException e) {
             handleSqlError(resp, e);
         }
