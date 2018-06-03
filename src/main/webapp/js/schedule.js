@@ -141,13 +141,6 @@ function onDeleteScheduleResponse() {
 }
 
 function listingSchedules(e) {
-    const btnList = document.getElementsByClassName("show-schedule-span");
-    for (let i = 0; i < btnList.length; i++) {
-        btnList[i].removeEventListener('click', hideListingSchedules);
-        btnList[i].addEventListener('click', listingSchedules);
-    }
-    e.target.removeEventListener('click', listingSchedules);
-    e.target.addEventListener('click', hideListingSchedules);
     const idSchedule = e.target.parentElement.id;
     const xhr = new XMLHttpRequest();
 
@@ -167,6 +160,8 @@ function onListingResponse() {
         createTaskDiv(userDto);
         removeAllChildren(daysDiv);
         listingDays(userDto);
+        document.getElementById("schedulesUl").remove();
+        createScheduleDiv(userDto);
     } else {
         onMessageResponse(mainDiv, this);
     }
@@ -326,6 +321,8 @@ function listingDays(userDto) {
 
                 taskDivEl.appendChild(taskSpan);
                 hoursTd.appendChild(taskDivEl);
+
+
             }
             hoursTd.addEventListener('drop', add_task);
             hoursTd.addEventListener('dragenter', drag_enter_prevent);
@@ -395,8 +392,6 @@ function createLink(scheduleId) {
 
 function hideListingSchedules(e) {
     currentScheduleId = null;
-    e.target.removeEventListener('click', hideListingSchedules);
-    e.target.addEventListener('click', listingSchedules);
     removeAllChildren(daysDiv);
 
     const xhr = new XMLHttpRequest();
@@ -413,6 +408,8 @@ function hideListingResponse() {
         const userDto = JSON.parse(this.responseText);
         document.getElementById("tasksUl").remove();
         createTaskDiv(userDto);
+        document.getElementById("schedulesUl").remove();
+        createScheduleDiv(userDto);
     }
     else {
         onMessageResponse(mainDiv, this);
@@ -569,9 +566,9 @@ function onUpdateScheduleResponse() {
     if (this.status === OK) {
         const userDto = JSON.parse(this.responseText);
         removeAllChildren(daysDiv);
+        listingDays(userDto);
         document.getElementById("schedulesUl").remove();
         createScheduleDiv(userDto);
-        listingDays(userDto);
     } else {
         onMessageResponse(mainDiv, this);
     }

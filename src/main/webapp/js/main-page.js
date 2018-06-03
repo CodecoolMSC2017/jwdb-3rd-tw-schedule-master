@@ -117,13 +117,9 @@ function createScheduleDiv(userDto) {
         scheduleSpan.appendChild(tooltipSpan);
         scheduleSpan.setAttribute("id", userDto.schedules[i].description);
         scheduleSpan.addEventListener('click', listingSchedules);
-        let scheduleId = null;
-        if (daysDiv.firstElementChild !== null) {
-            scheduleId = daysDiv.firstElementChild !== null;
-        }
 
         if (userDto.schedule != null) {
-            if (scheduleId === userDto.schedules[i].id) {
+            if (currentScheduleId == userDto.schedules[i].id) {
                 scheduleSpan.removeEventListener('click', listingSchedules);
                 scheduleSpan.addEventListener('click', hideListingSchedules);
             }
