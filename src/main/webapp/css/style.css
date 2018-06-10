@@ -584,11 +584,18 @@ li:last-child {
     background-color: white;
     text-align: center;
     width: 100%;
+    border-collapse: unset;
 }
 
+.hours-row {
+    text-align: center;
+    vertical-align: center;
+}
 .hours-td {
     border-bottom: 1px solid dimgrey;
-    height : 24px;
+    border-top: 1px solid dimgrey;
+    height: 26px;
+    width: 98%;
 }
 
 .span-hour-title{
