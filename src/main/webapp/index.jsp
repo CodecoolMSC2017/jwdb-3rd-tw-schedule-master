@@ -17,6 +17,7 @@
     <c:url value="/js/task.js" var="taskScriptUrl"/>
     <c:url value="/js/schedule.js" var="scheduleScriptUrl"/>
     <c:url value="/js/users.js" var="usersScriptUrl"/>
+    <c:url value="/js/google-user.js" var="googleUsersScriptUrl"/>
     <c:url value="https://apis.google.com/js/platform.js" var="googleScriptUrl"/>
 
     <link rel="stylesheet" type="text/css" href="${styleUrl}">
@@ -28,6 +29,7 @@
     <script src="${scheduleScriptUrl}"></script>
     <script src="${taskScriptUrl}"></script>
     <script src="${mainPageScriptUrl}"></script>
+    <script src="${googleUsersScriptUrl}"></script>
     <script src="${googleScriptUrl}" async defer></script>
     <link rel="shortcut icon" type="image/png" href="icons/favicon.png"/>
     <title>Schedule Master</title>
