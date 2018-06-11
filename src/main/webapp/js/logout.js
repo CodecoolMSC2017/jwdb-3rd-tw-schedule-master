@@ -1,6 +1,10 @@
 function onLogoutResponse() {
     if (this.status === OK) {
         setUnauthorized();
+        const auth2 = gapi.auth2.getAuthInstance();
+        if(auth2 != null) {
+        auth2.disconnect();
+        }
         clearMessages();
 
         showContents(['login-content']);

@@ -53,7 +53,7 @@ public class GoogleLoginServlet extends AbstractServlet {
 
             // (Receive idTokenString by HTTPS POST)
 
-            String idTokenString = req.getParameter("idTokenString");
+            String idTokenString = req.getParameter("idToken");
             GoogleIdToken idToken = verifier.verify(idTokenString);
             if (idToken != null) {
                 GoogleIdToken.Payload payload = idToken.getPayload();

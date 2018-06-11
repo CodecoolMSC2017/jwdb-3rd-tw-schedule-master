@@ -1,15 +1,9 @@
 function onSignIn(googleUser) {
-  const profile = googleUser.getBasicProfile();
-
-  const params = new URLSearchParams();
-  params.append('name', profile.getName());
-  params.append('email', profile.getEmail());
-
-  const xhr = new XMLHttpRequest();
-
+  const id_token = googleUser.getAuthResponse().id_token;
+  const  xhr = new XMLHttpRequest();
+  xhr.open('POST', 'googleLogin');
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
   xhr.addEventListener('load', onLoginResponse);
-  xhr.addEventListener('error', onNetworkError);
-    xhr.open('POST', 'googleLogin');
-  xhr.send(params);
-
+   xhr.addEventListener('error', onNetworkError);
+  xhr.send('idToken=' + id_token);
 }
