@@ -40,6 +40,8 @@ function onMainPageLoad(userDto) {
     scheduleButtonEl = document.getElementById('schedules-button');
     scheduleButtonEl.addEventListener('click', hideSchedule);
 
+    removeAllChildren(daysDiv);
+
 }
 
 function createTaskDiv(userDto) {
