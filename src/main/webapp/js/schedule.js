@@ -354,26 +354,6 @@ function listingDays(userDto) {
 
 function sendId(e) {
     e.target.removeEventListener('click', sendId);
-    const linkInputField = document.createElement("INPUT");
-    linkInputField.setAttribute("id", "guest-link");
-    linkInputField.setAttribute("class", "input");
-    linkInputField.setAttribute("type", "text");
-
-    const copyButt = document.createElement('button');
-    copyButt.setAttribute("class","copy-btn");
-    copyButt.addEventListener('click',copyToClipBoard);
-    const guestTable = document.createElement('table');
-    const guestTr = document.createElement('tr');
-    const linkTd = document.createElement('td');
-    const copyTd = document.createElement('td');
-
-    linkTd.appendChild(linkInputField);
-    copyTd.appendChild(copyButt);
-    guestTr.appendChild(linkTd);
-    guestTr.appendChild(copyTd);
-    guestTable.appendChild(guestTr);
-
-    mainDiv.appendChild(guestTable);
 
     const scheduleId = e.target.parentElement.firstElementChild.id;
 
@@ -387,10 +367,15 @@ function sendId(e) {
     xhr.send(params);
 }
 
-function copyToClipBoard(){
+function copyToClipBoard(e) {
     const copyText = document.getElementById("guest-link");
     copyText.select();
     document.execCommand("copy");
+    e.target.firstElementChild.innerText = "Copied!";
+}
+
+function copyTextBack(e) {
+    e.target.firstElementChild.innerText = "Copy to Clipboard";
 }
 
 function createLinkResponse() {
@@ -404,13 +389,40 @@ function createLinkResponse() {
 }
 
 function createLink(scheduleId) {
-    const linkInputField = document.getElementById("guest-link");
+
+    const linkInputField = document.createElement("INPUT");
+    linkInputField.setAttribute("id", "guest-link");
+    linkInputField.setAttribute("class", "input");
+    linkInputField.setAttribute("type", "text");
+
+    const copyButt = document.createElement('button');
+    copyButt.setAttribute("class", "copy-btn");
+    copyButt.classList.add("tooltip");
+    copyButt.addEventListener('click', copyToClipBoard);
+    copyButt.addEventListener('mouseleave', copyTextBack);
+
+    const guestTable = document.createElement('table');
+    guestTable.setAttribute("id", "guest-table");
+    const guestTr = document.createElement('tr');
+    const linkTd = document.createElement('td');
+    const copyTd = document.createElement('td');
+
+
+    let tooltipSpan = document.createElement("span");
+    tooltipSpan.setAttribute("class", "tooltiptext");
+    tooltipSpan.innerText = "Copy to Clipboard";
+    copyButt.appendChild(tooltipSpan);
 
     const params = new URLSearchParams();
     params.append('scheduleId', scheduleId.message);
-
     linkInputField.value = document.documentURI + "guest?" + params.toString();
-    daysDiv.appendChild(linkInputField);
+
+    linkTd.appendChild(linkInputField);
+    copyTd.appendChild(copyButt);
+    guestTr.appendChild(linkTd);
+    guestTr.appendChild(copyTd);
+    guestTable.appendChild(guestTr);
+    daysDiv.appendChild(guestTable);
 
 }
 
@@ -677,16 +689,4 @@ function added_drag_end(ev) {
     ev.target.firstElementChild.classList.add("tooltiptext");
     const trash = document.getElementById("trash-td");
     trash.classList.add("hidden");
-}
-
-function findTaskAlreadyAddedOrNot(id) {
-    const list = document.getElementsByClassName("hours-td");
-    for (let i = 0; i < list.length; i++) {
-        if (list[i].firstElementChild !== null) {
-            if (list[i].getAttribute("name") == id) {
-                return true;
-            }
-        }
-    }
-    return false;
 }
