@@ -9,7 +9,7 @@ function onSignIn(googleUser) {
 
   xhr.addEventListener('load', onLoginResponse);
   xhr.addEventListener('error', onNetworkError);
-  xhr.open('POST', '/googleLogin');
+    xhr.open('POST', 'googleLogin');
   xhr.send(params);
 
 }
