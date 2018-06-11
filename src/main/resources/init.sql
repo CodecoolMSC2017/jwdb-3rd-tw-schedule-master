@@ -10,15 +10,8 @@ CREATE TABLE app_user (
 	id SERIAL PRIMARY KEY,
 	email TEXT NOT NULL,
 	user_name TEXT NOT NULL,
-	password TEXT NOT NULL,
+	password TEXT,
 	role TEXT NOT NULL
-);
-
-CREATE TABLE google (
-	app_user_id INTEGER,
-	google_id INTEGER PRIMARY KEY,
-	gmail TEXT,
-	FOREIGN KEY (app_user_id) REFERENCES app_user("id")
 );
 
 CREATE TABLE schedule (

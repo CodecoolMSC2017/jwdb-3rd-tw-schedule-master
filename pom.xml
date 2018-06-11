@@ -81,6 +81,11 @@
             <artifactId>jasypt</artifactId>
             <version>1.9.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.api-client</groupId>
+            <artifactId>google-api-client</artifactId>
+            <version>1.23.0</version>
+        </dependency>
     </dependencies>
 
     <build>
