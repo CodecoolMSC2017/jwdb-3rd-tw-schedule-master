@@ -423,6 +423,9 @@ function createLink(scheduleId) {
     guestTr.appendChild(copyTd);
     guestTable.appendChild(guestTr);
     daysDiv.appendChild(guestTable);
+    const shareDiv = document.getElementById("share-div");
+    shareDiv.classList.remove("hidden");
+    shareDiv.firstElementChild.setAttribute("data-href", document.documentURI + "guest?" + params.toString());
 
 }
 
