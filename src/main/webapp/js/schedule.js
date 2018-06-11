@@ -359,7 +359,12 @@ function sendId(e) {
     linkInputField.setAttribute("class", "input");
     linkInputField.setAttribute("type", "text");
 
+    const copyButt = document.createElement('button');
+    copyButt.setAttribute("class","copy-btn");
+    copyButt.addEventListener('click',copyToClipBoard);
+
     mainDiv.appendChild(linkInputField);
+    mainDiv.appendChild(copyButt);
 
     const scheduleId = e.target.parentElement.firstElementChild.id;
 
@@ -371,6 +376,12 @@ function sendId(e) {
     xhr.addEventListener('error', onNetworkError);
     xhr.open('POST', 'protected/encrypt');
     xhr.send(params);
+}
+
+function copyToClipBoard(){
+    const copyText = document.getElementById("guest-link");
+    copyText.select();
+    document.execCommand("copy");
 }
 
 function createLinkResponse() {
