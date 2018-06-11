@@ -223,6 +223,11 @@ li:last-child {
     transition: color .5s;
 }
 
+.g-signin2 {
+    text-align: center;
+    text-align: -moz-center;
+}
+
 /*
    ******************
      MAIN ELEMENTS

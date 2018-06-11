@@ -587,10 +587,6 @@ function add_task(ev) {
     }
     const hourValue = ev.target.id;
     const taskId = ev.dataTransfer.getData("text");
-    if (findTaskAlreadyAddedOrNot(taskId)) {
-        newError(mainDiv, "Task already added to the schedule!");
-        return false;
-    }
     let number = prompt("How long will it take to finish with the task?", "");
     let parsedNum = parseInt(number);
     if (number === "0") {
