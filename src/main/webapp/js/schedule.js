@@ -362,9 +362,18 @@ function sendId(e) {
     const copyButt = document.createElement('button');
     copyButt.setAttribute("class","copy-btn");
     copyButt.addEventListener('click',copyToClipBoard);
+    const guestTable = document.createElement('table');
+    const guestTr = document.createElement('tr');
+    const linkTd = document.createElement('td');
+    const copyTd = document.createElement('td');
 
-    mainDiv.appendChild(linkInputField);
-    mainDiv.appendChild(copyButt);
+    linkTd.appendChild(linkInputField);
+    copyTd.appendChild(copyButt);
+    guestTr.appendChild(linkTd);
+    guestTr.appendChild(copyTd);
+    guestTable.appendChild(guestTr);
+
+    mainDiv.appendChild(guestTable);
 
     const scheduleId = e.target.parentElement.firstElementChild.id;
 
