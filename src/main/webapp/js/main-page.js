@@ -119,7 +119,7 @@ function createScheduleDiv(userDto) {
         scheduleSpan.addEventListener('click', listingSchedules);
 
         if (userDto.schedule != null) {
-            if (userDto.schedule.id === userDto.schedules[i].id) {
+            if (currentScheduleId == userDto.schedules[i].id) {
                 scheduleSpan.removeEventListener('click', listingSchedules);
                 scheduleSpan.addEventListener('click', hideListingSchedules);
             }

@@ -167,7 +167,7 @@ function onLoad() {
     trashEl.addEventListener('drop',remove_from_schedule);
     trashEl.addEventListener('dragenter', drag_enter_prevent);
     trashEl.addEventListener('dragover', drag_over_trash);
-    trash.addEventListener('dragleave',drag_leave);
+    trashEl.addEventListener('dragleave', drag_leave);
 
     const loginButtonEl = document.getElementById('login-button');
     loginButtonEl.addEventListener('click', onLoginButtonClicked);

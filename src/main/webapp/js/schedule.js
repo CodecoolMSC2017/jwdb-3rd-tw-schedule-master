@@ -141,13 +141,6 @@ function onDeleteScheduleResponse() {
 }
 
 function listingSchedules(e) {
-    const btnList = document.getElementsByClassName("show-schedule-span");
-    for (let i = 0; i < btnList.length; i++) {
-        btnList[i].removeEventListener('click', hideListingSchedules);
-        btnList[i].addEventListener('click', listingSchedules);
-    }
-    e.target.removeEventListener('click', listingSchedules);
-    e.target.addEventListener('click', hideListingSchedules);
     const idSchedule = e.target.parentElement.id;
     const xhr = new XMLHttpRequest();
 
@@ -167,6 +160,8 @@ function onListingResponse() {
         createTaskDiv(userDto);
         removeAllChildren(daysDiv);
         listingDays(userDto);
+        document.getElementById("schedulesUl").remove();
+        createScheduleDiv(userDto);
     } else {
         onMessageResponse(mainDiv, this);
     }
@@ -199,8 +194,6 @@ function listingDays(userDto) {
     descriptionRow.setAttribute("class", "desc-row");
 
     let numberOfDays = userDto.schedule.days.length;
-
-    console.log(userDto.user);
 
     if (userDto.user == undefined) {
         numberOfDays += 1;
@@ -299,38 +292,46 @@ function listingDays(userDto) {
             hoursTd.setAttribute("class", "hours-td");
             hoursTd.setAttribute("id", userDto.schedule.days[i].hours[j].value);
 
-            if (userDto.schedule.days[i].hours[j].task != null) {
+            if (userDto.schedule.days[i].hours[j].task != null && userDto.schedule.days[i].hours[j].task !== "deleted") {
 
                 let task = userDto.schedule.days[i].hours[j].task;
-                let taskDivEl = document.createElement("div");
 
-                taskDivEl.style.backgroundColor = task.color;
-                taskDivEl.setAttribute("id", task.id);
+                hoursTd.style.backgroundColor = task.color;
+                hoursTd.setAttribute("name", task.id);
 
                 if (userDto.user != null) {
-                    taskDivEl.setAttribute("class", "task-in-table");
-                    taskDivEl.setAttribute('draggable', true);
-                    taskDivEl.setAttribute('ondragstart', 'added_drag_start(event)');
-                    taskDivEl.setAttribute('ondragend', 'added_drag_end(event)');
+                    hoursTd.classList.add("task-in-table");
+                    hoursTd.setAttribute('draggable', true);
+                    hoursTd.setAttribute('ondragstart', 'added_drag_start(event)');
+                    hoursTd.setAttribute('ondragend', 'added_drag_end(event)');
                 }
 
-                let taskSpan = document.createElement("span");
-                taskSpan.textContent = task.title;
-                taskSpan.setAttribute('class', 'task-title-span');
+                hoursTd.textContent = task.title;
 
-                taskSpan.classList.add("tooltip");
+                let next = j + 1;
+                let rowspan = 1;
+                while (userDto.schedule.days[i].hours[next] != null && userDto.schedule.days[i].hours[next].task != null && userDto.schedule.days[i].hours[next].task.id === userDto.schedule.days[i].hours[j].task.id) {
+                    rowspan++;
+                    userDto.schedule.days[i].hours[next].task = "deleted";
+                    next++;
+                }
+
+                hoursTd.classList.add("tooltip");
                 let tooltipSpan = document.createElement("span");
                 tooltipSpan.setAttribute("class", "tooltiptext");
                 tooltipSpan.innerText = userDto.schedule.days[i].hours[j].task.description;
-                taskSpan.appendChild(tooltipSpan);
-
-                taskDivEl.appendChild(taskSpan);
-                hoursTd.appendChild(taskDivEl);
+                hoursTd.appendChild(tooltipSpan);
+                hoursTd.rowSpan = rowspan;
+                let height = rowspan * 28;
+                hoursTd.style.height = height.toString() + "px";
             }
-            hoursTd.addEventListener('drop', add_task);
-            hoursTd.addEventListener('dragenter', drag_enter_prevent);
-            hoursTd.addEventListener('dragover', drag_over_prevent);
-            hoursTr.appendChild(hoursTd);
+            hoursTr.addEventListener('drop', add_task);
+            hoursTr.addEventListener('dragenter', drag_enter_prevent);
+            hoursTr.addEventListener('dragover', drag_over_prevent);
+
+            if (userDto.schedule.days[i].hours[j].task == null || userDto.schedule.days[i].hours[j].task !== "deleted") {
+                hoursTr.appendChild(hoursTd);
+            }
             hoursTable.appendChild(hoursTr);
 
         }
@@ -395,8 +396,6 @@ function createLink(scheduleId) {
 
 function hideListingSchedules(e) {
     currentScheduleId = null;
-    e.target.removeEventListener('click', hideListingSchedules);
-    e.target.addEventListener('click', listingSchedules);
     removeAllChildren(daysDiv);
 
     const xhr = new XMLHttpRequest();
@@ -413,6 +412,8 @@ function hideListingResponse() {
         const userDto = JSON.parse(this.responseText);
         document.getElementById("tasksUl").remove();
         createTaskDiv(userDto);
+        document.getElementById("schedulesUl").remove();
+        createScheduleDiv(userDto);
     }
     else {
         onMessageResponse(mainDiv, this);
@@ -569,9 +570,9 @@ function onUpdateScheduleResponse() {
     if (this.status === OK) {
         const userDto = JSON.parse(this.responseText);
         removeAllChildren(daysDiv);
+        listingDays(userDto);
         document.getElementById("schedulesUl").remove();
         createScheduleDiv(userDto);
-        listingDays(userDto);
     } else {
         onMessageResponse(mainDiv, this);
     }
@@ -645,19 +646,19 @@ function isNumeric(n) {
 
 function added_drag_start(ev) {
     ev.dataTransfer.dropEffect = "move";
-    ev.dataTransfer.setData("text", ev.target.id);
+    ev.dataTransfer.setData("text", ev.target.getAttribute("name"));
 
     const trash = document.getElementById("trash-td");
     trash.classList.remove("hidden");
 
-    ev.target.firstChild.firstElementChild.removeAttribute("class");
-    ev.target.firstChild.firstElementChild.setAttribute("class", "hidden");
+    ev.target.firstElementChild.removeAttribute("class");
+    ev.target.firstElementChild.setAttribute("class", "hidden");
 }
 
 function added_drag_end(ev) {
     ev.preventDefault();
-    ev.target.firstChild.firstElementChild.removeAttribute("class");
-    ev.target.firstChild.firstElementChild.classList.add("tooltiptext");
+    ev.target.firstElementChild.removeAttribute("class");
+    ev.target.firstElementChild.classList.add("tooltiptext");
     const trash = document.getElementById("trash-td");
     trash.classList.add("hidden");
 }
@@ -666,8 +667,7 @@ function findTaskAlreadyAddedOrNot(id) {
     const list = document.getElementsByClassName("hours-td");
     for (let i = 0; i < list.length; i++) {
         if (list[i].firstElementChild !== null) {
-            console.log(list[i].firstElementChild.id == id);
-            if (list[i].firstElementChild.id === id) {
+            if (list[i].getAttribute("name") == id) {
                 return true;
             }
         }

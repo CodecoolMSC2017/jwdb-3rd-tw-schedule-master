@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS task;
 DROP TABLE IF EXISTS hour;
 DROP TABLE IF EXISTS day;
 DROP TABLE IF EXISTS schedule;
+DROP TABLE IF EXISTS google;
 DROP TABLE IF EXISTS app_user;
 
 CREATE TABLE app_user (
@@ -11,6 +12,13 @@ CREATE TABLE app_user (
 	user_name TEXT NOT NULL,
 	password TEXT NOT NULL,
 	role TEXT NOT NULL
+);
+
+CREATE TABLE google (
+	app_user_id INTEGER,
+	google_id INTEGER PRIMARY KEY,
+	gmail TEXT,
+	FOREIGN KEY (app_user_id) REFERENCES app_user("id")
 );
 
 CREATE TABLE schedule (
@@ -55,9 +63,9 @@ CREATE TABLE task_hour (
 
 INSERT INTO app_user (email, user_name, password, role)  VALUES
 	('admin@admin.com', 'admin', '5f4dcc3b5aa765d61d8327deb882cf99', 'admin'), --1
-	('david@gmail.com', 'David', '5f4dcc3b5aa765d61d8327deb882cf99', 'user'),	--2
-	('kenez@gmail.com', 'Kenez', '5f4dcc3b5aa765d61d8327deb882cf99', 'user'),	--3
-	('norbi@gmail.com', 'Norbi', '5f4dcc3b5aa765d61d8327deb882cf99', 'user');	--4
+	('david@gmail.com', 'David', '5f4dcc3b5aa765d61d8327deb882cf99', 'user'), --2
+	('kenez@gmail.com', 'Kenez', '5f4dcc3b5aa765d61d8327deb882cf99', 'user'), --3
+	('norbi@gmail.com', 'Norbi', '5f4dcc3b5aa765d61d8327deb882cf99', 'user'); --4
 
 INSERT INTO schedule (app_user_id, title, description) VALUES
 	(2, 'Work', 'my working day'), --1
@@ -80,5 +88,5 @@ INSERT INTO task (app_user_id, title, description, color) VALUES
 	(3, 'fap', 'playing gay games', '#ffffff'); --2
 
 INSERT INTO task_hour (task_id, schedule_id, hour_ids) VALUES
-	(1, 1, '1,2'),
-	(1, 2, '3');
+	(1, 1, '1,2'), --1
+	(1, 2, '3'); --2
