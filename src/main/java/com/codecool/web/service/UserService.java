@@ -23,4 +23,6 @@ public interface UserService {
 
     User getByEmail(String email) throws SQLException;
 
+    User connectWithGoogle(String userName, String email)throws SQLException;
+
 }
