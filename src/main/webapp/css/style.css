@@ -226,6 +226,7 @@ li:last-child {
 .g-signin2 {
     text-align: center;
     text-align: -moz-center;
+    text-align: -webkit-center;
 }
 
 /*
@@ -417,6 +418,18 @@ li:last-child {
 
 .calendar-btn-min{
     background: url(img/calendar.png) center;
+    width: 25px;
+    height: 25px;
+    margin: 5px;
+    display: inline;
+    padding: 0;
+    border: none;
+    cursor: default;
+    outline: none;
+}
+
+.copy-btn {
+    background: url(img/copy.png) center;
     width: 25px;
     height: 25px;
     margin: 5px;
