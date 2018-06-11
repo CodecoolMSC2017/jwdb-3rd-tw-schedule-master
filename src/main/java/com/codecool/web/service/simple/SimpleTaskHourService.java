@@ -19,35 +19,33 @@ public class SimpleTaskHourService implements TaskHourService {
 
     @Override
     public void disconnect(int taskId, int scheduleId) throws SQLException {
-        taskHourDao.delete(taskId,scheduleId);
+        taskHourDao.delete(taskId, scheduleId);
     }
 
-    @Override
-    public void updateHours(int scheduleId, int taskId, String... newHourIds) throws SQLException, InvalidArgumentException {
-        taskHourDao.update(taskId, scheduleId, newHourIds);
-    }
 
     @Override
-    public void connectTaskToSchedule(int scheduleId, int taskId, String hourId) throws SQLException, InvalidArgumentException {
+    public void connectTaskToSchedule(int scheduleId, int taskId, String hourId) throws SQLException {
         taskHourDao.add(taskId, scheduleId, hourId);
     }
 
     @Override
-    public void handleTaskConnection(int userId,int dayId,int taskLength,int scheduleId,int taskId,String hourId) throws SQLException, TaskOverlapException, InvalidArgumentException {
+    public void handleTaskConnection(int userId, int dayId, int taskLength, int scheduleId, int taskId, String hourId) throws SQLException, TaskOverlapException, InvalidArgumentException {
         for (int i = 0; i < taskLength; i++) {
-            String checkHourId = Integer.toString(Integer.parseInt(hourId)+i);
-            if(!taskHourDao.validateHourIds(userId,dayId,checkHourId)){
+            String checkHourId = Integer.toString(Integer.parseInt(hourId) + i);
+            if (!taskHourDao.validateHourIds(userId, dayId, checkHourId)) {
                 throw new TaskOverlapException();
             }
         }
         String hourIds = hourId;
         for (int i = 1; i < taskLength; i++) {
-             hourIds += ","+Integer.toString(Integer.parseInt(hourId)+i);
+            hourIds += "," + Integer.toString(Integer.parseInt(hourId) + i);
         }
-        connectTaskToSchedule(scheduleId,taskId,hourIds);
+        if (taskHourDao.isConnectionExists(taskId, scheduleId)) {
+            taskHourDao.update(taskId, scheduleId, hourIds);
+        } else if (!taskHourDao.isConnectionExists(taskId, scheduleId)) {
+            connectTaskToSchedule(scheduleId, taskId, hourIds);
+        }
     }
-
-
 
 
 }

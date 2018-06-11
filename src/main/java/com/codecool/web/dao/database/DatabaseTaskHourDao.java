@@ -57,10 +57,10 @@ class DatabaseTaskHourDao extends AbstractDaoFactory implements TaskHourDao {
 
 
     @Override
-    public void update(int taskId, int scheduleId, String... hourIds) throws SQLException, InvalidArgumentException {
+    public void update(int taskId, int scheduleId, String hourId) throws SQLException, InvalidArgumentException {
         String sql = "UPDATE task_hour SET hour_ids = ? WHERE task_id = ? AND schedule_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, join(hourIds));
+            statement.setString(1, hourId);
             statement.setInt(2, taskId);
             statement.setInt(3, scheduleId);
             statement.executeUpdate();
@@ -87,11 +87,11 @@ class DatabaseTaskHourDao extends AbstractDaoFactory implements TaskHourDao {
         List<String> hourIds = new ArrayList<>();
         String hours = "";
         String sql = "SELECT hour_ids FROM task_hour RIGHT JOIN task ON task.id = task_id WHERE task.id = ? AND schedule_id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)){
-            statement.setInt(1,taskId);
-            statement.setInt(2,scheduleId);
-            try(ResultSet resultSet = statement.executeQuery()){
-                if(resultSet.next()){
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, taskId);
+            statement.setInt(2, scheduleId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
                     hours = resultSet.getString("hour_ids");
 
                 }
@@ -106,37 +106,38 @@ class DatabaseTaskHourDao extends AbstractDaoFactory implements TaskHourDao {
 
     @Override
     public Boolean validateHourIds(int userId, int dayId, String hourId) throws SQLException {
-        hourId = "%"+hourId+"%";
+        hourId = "%" + hourId + "%";
         String sql = "SELECT * FROM task_hour " +
                 "LEFT JOIN schedule ON schedule.id = schedule_id " +
                 "LEFT JOIN day ON day.schedule_id = schedule.id " +
                 "WHERE app_user_id = ? " +
                 "AND day.id = ? " +
                 "AND hour_ids LIKE ? ";
-        try(PreparedStatement statement = connection.prepareStatement(sql)){
-            statement.setInt(1,userId);
-            statement.setInt(2,dayId);
-            statement.setString(3,hourId);
-            try(ResultSet resultSet = statement.executeQuery()){
-                if(resultSet.next()){
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, userId);
+            statement.setInt(2, dayId);
+            statement.setString(3, hourId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
                     return false;
                 }
                 return true;
             }
         }
     }
-
-    private String join(String... ids) throws InvalidArgumentException {
-        String idString = "";
-        if (ids.length == 0) {
-            throw new InvalidArgumentException();
-        } else {
-            for (String id : ids) {
-                idString += id + ",";
+    @Override
+    public Boolean isConnectionExists(int taskId, int scheduleId) throws SQLException {
+        String sql = "SELECT schedule_id,task_id FROM task_hour WHERE task_id = ? AND schedule_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, taskId);
+            statement.setInt(2, scheduleId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return true;
+                }
+                return false;
             }
 
-            return idString.trim();
         }
-
     }
 }

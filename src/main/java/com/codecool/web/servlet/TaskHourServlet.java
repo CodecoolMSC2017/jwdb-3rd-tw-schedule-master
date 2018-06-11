@@ -60,23 +60,6 @@ public class TaskHourServlet extends AbstractServlet {
     }
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        try (Connection connection = getConnection(req.getServletContext())) {
-            TaskHourService taskHourService = new SimpleTaskHourService(connection);
-            int scheduleId = Integer.parseInt(req.getParameter("scheduleId"));
-            int taskId = Integer.parseInt(req.getParameter("taskId"));
-            String[] newHourIds = req.getParameter("hourIds").split(",");
-
-            taskHourService.updateHours(scheduleId, taskId, newHourIds);
-
-        } catch (SQLException e) {
-            handleSqlError(resp, e);
-        } catch (InvalidArgumentException e) {
-            sendMessage(resp, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-        }
-    }
-
-    @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskHourService taskHourService = new SimpleTaskHourService(connection);
