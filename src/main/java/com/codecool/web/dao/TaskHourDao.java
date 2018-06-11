@@ -16,13 +16,15 @@ public interface TaskHourDao {
 
     void deleteByScheduleId(int scheduleId)throws SQLException;
 
-    void update(int taskId, int scheduleId, String... hourIds) throws SQLException, InvalidArgumentException;
+    void update(int taskId, int scheduleId, String hourId) throws SQLException, InvalidArgumentException;
 
     List<Task> findTaskByScheduleId(int scheduleId)throws SQLException;
 
     List<String> findHoursByTaskAndScheduleId(int taskId, int scheduleId)throws SQLException;
 
     Boolean validateHourIds(int userId,int dayId, String hourId) throws SQLException;
+
+    Boolean isConnectionExists(int taskId, int scheduleId) throws SQLException;
 
 
 

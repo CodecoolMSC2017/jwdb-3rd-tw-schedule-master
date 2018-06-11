@@ -54,6 +54,14 @@ public class SimpleUserService implements UserService {
     }
 
     @Override
+    public User connectWithGoogle(String userName, String email) throws SQLException {
+        if (userDao.findByEmail(email) == null) {
+            userDao.insert(email, userName, null, "user");
+        }
+        return userDao.findByEmail(email);
+    }
+
+    @Override
     public User findById(int id) throws SQLException {
         return userDao.findById(id);
     }

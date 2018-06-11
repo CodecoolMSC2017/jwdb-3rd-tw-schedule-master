@@ -6,6 +6,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-signin-client_id"
+          content="144891204676-idis83roj0hnbo5vhpbo9mimppi5c0q0.apps.googleusercontent.com">
     <c:url value="/css/style.css" var="styleUrl"/>
     <c:url value="/js/index.js" var="indexScriptUrl"/>
     <c:url value="/js/login.js" var="loginScriptUrl"/>
@@ -15,6 +17,8 @@
     <c:url value="/js/task.js" var="taskScriptUrl"/>
     <c:url value="/js/schedule.js" var="scheduleScriptUrl"/>
     <c:url value="/js/users.js" var="usersScriptUrl"/>
+    <c:url value="/js/google-user.js" var="googleUsersScriptUrl"/>
+    <c:url value="https://apis.google.com/js/platform.js" var="googleScriptUrl"/>
 
     <link rel="stylesheet" type="text/css" href="${styleUrl}">
     <script src="${indexScriptUrl}"></script>
@@ -25,6 +29,8 @@
     <script src="${scheduleScriptUrl}"></script>
     <script src="${taskScriptUrl}"></script>
     <script src="${mainPageScriptUrl}"></script>
+    <script src="${googleUsersScriptUrl}"></script>
+    <script src="${googleScriptUrl}" async defer></script>
     <link rel="shortcut icon" type="image/png" href="icons/favicon.png"/>
     <title>Schedule Master</title>
 </head>
@@ -44,6 +50,7 @@
                 class="register-link"
                 href=javascript:void(0); onclick="toRegistration();">register</a>
             one</p>
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
     </div>
 </div>
 
