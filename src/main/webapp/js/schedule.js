@@ -509,7 +509,7 @@ function applyDayUpdates(e) {
     const tdEl = e.target.parentElement;
     const titleInputField = tdEl.firstChild;
     const scheduleTitleField = tdEl.parentElement.parentElement.firstChild;
-    const dateField = document.getElementById("datepicker");
+    const dateField = titleInputField.parentElement.children.item(1);
 
 
     let title = titleInputField.value;
@@ -527,6 +527,7 @@ function applyDayUpdates(e) {
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onUpdateDayResponse);
     xhr.addEventListener('error', onNetworkError);
+    console.log(date);
     if (date === "") {
         xhr.open('DELETE', 'protected/date');
         xhr.setRequestHeader("Content-type", "application/json");

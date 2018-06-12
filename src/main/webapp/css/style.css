@@ -163,6 +163,7 @@ li:last-child {
     box-shadow: none;
 }
 
+
 .input-miniature {
     text-align: center;
     background-color: white;
@@ -177,6 +178,22 @@ li:last-child {
 }
 
 .input-miniature:focus {
+    border: 1px solid #d62c1a;
+    box-shadow: none;
+}
+
+#datepicker {
+    display: block;
+    padding: 5px 0;
+    width: 140px;
+    margin-top: 3px;
+    background-color: white;
+    border: 1px solid transparent;
+    border-radius: 1px;
+    transition: border .5s;
+}
+
+#datepicker:focus {
     border: 1px solid #d62c1a;
     box-shadow: none;
 }
