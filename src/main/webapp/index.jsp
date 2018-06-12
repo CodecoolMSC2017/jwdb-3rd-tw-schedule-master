@@ -53,7 +53,7 @@
                 class="register-link"
                 href=javascript:void(0); onclick="toRegistration();">register</a>
             one</p>
-        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        <div class="g-signin2" data-onsuccess="onSignIn" data-width="250" data-height="50"></div>
     </div>
 </div>
 
