@@ -102,7 +102,7 @@ class DatabaseDayDao extends AbstractDaoFactory implements DayDao {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, dayId);
             statement.setDate(2, dueDate);
-            statement.executeQuery();
+            statement.executeUpdate();
         }
     }
 
@@ -112,7 +112,7 @@ class DatabaseDayDao extends AbstractDaoFactory implements DayDao {
         try(PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setDate(1,dueDate);
             statement.setInt(2,dayId);
-            statement.executeQuery();
+            statement.executeUpdate();
         }
     }
 
