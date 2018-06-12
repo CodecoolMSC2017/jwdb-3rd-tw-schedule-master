@@ -275,7 +275,7 @@ function listingDays(userDto) {
             titleParEl.classList.add("tooltip");
             let tooltipSpan = document.createElement("span");
             tooltipSpan.setAttribute("class", "tooltiptext");
-            tooltipSpan.innerText = userDto.schedule.days[i].dueDate;
+            tooltipSpan.innerText = timeConverter(userDto.schedule.days[i].dueDate);
             titleParEl.appendChild(tooltipSpan);
         }
 
@@ -561,6 +561,15 @@ function getCurrentDate() {
 
     today = yyyy + '-' + mm + '-' + dd;
     return today;
+}
+
+function timeConverter(UNIX_timestamp) {
+    const a = new Date(UNIX_timestamp * 1000);
+    const year = a.getFullYear();
+    const month = a.getMonth();
+    const date = a.getDate();
+    const time = year + '-' + month + '-' + date;
+    return time;
 }
 
 function onUpdateDayResponse() {
