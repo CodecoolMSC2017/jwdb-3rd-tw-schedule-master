@@ -271,6 +271,14 @@ function listingDays(userDto) {
         titleParEl.setAttribute("class", "title-par");
         td.appendChild(titleParEl);
 
+        if (userDto.schedule.days[i].dueDate != null) {
+            titleParEl.classList.add("tooltip");
+            let tooltipSpan = document.createElement("span");
+            tooltipSpan.setAttribute("class", "tooltiptext");
+            tooltipSpan.innerText = userDto.schedule.days[i].dueDate;
+            titleParEl.appendChild(tooltipSpan);
+        }
+
         let renameButt = document.createElement("button");
         renameButt.setAttribute("id", userDto.schedule.days[i].title);
 
@@ -460,6 +468,10 @@ function renameDay(e) {
     const tdEl = buttonEl.parentElement;
 
     const titleEl = tdEl.firstChild;
+    let oldDate = null;
+    if (titleEl.firstElementChild != null) {
+        oldDate = titleEl.firstElementChild.innerText;
+    }
     const oldTitle = buttonEl.id;
 
 
@@ -473,16 +485,21 @@ function renameDay(e) {
     newTitle.setAttribute("class", "input-miniature");
 
     const newDate = document.createElement("INPUT");
-    newDate.setAttribute("type","date");
+    newDate.setAttribute("type", "date");
     newDate.setAttribute("id", "datepicker");
-    newDate.value = getCurrentDate();
-    newDate.setAttribute("min",getCurrentDate());
+    if (oldDate == null) {
+        newDate.value = getCurrentDate();
+    } else {
+        newDate.value = oldDate;
+    }
+
+    newDate.setAttribute("min", getCurrentDate());
 
     buttonEl.removeEventListener('click', renameDay);
     buttonEl.addEventListener('click', applyDayUpdates);
 
     tdEl.insertBefore(newTitle, buttonEl);
-    tdEl.insertBefore(newDate,buttonEl);
+    tdEl.insertBefore(newDate, buttonEl);
     tdEl.insertBefore(document.createElement("br"), buttonEl);
 
 }
@@ -499,40 +516,49 @@ function applyDayUpdates(e) {
     const oldTitle = titleInputField.placeholder;
     const id = titleInputField.id;
     const scheduleId = scheduleTitleField.id;
-    const date = dateField.value;
+    let date = dateField.value;
 
-    if(date === ""){
-        date = null;
-    }
     if (title === "" || title === " ") {
         title = oldTitle;
     }
 
 
-    const data = JSON.stringify({"id": id, "title": title, "scheduleId": scheduleId,"dueDate":date});
+    const data = JSON.stringify({"id": id, "title": title, "scheduleId": scheduleId, "dueDate": date});
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onUpdateDayResponse);
     xhr.addEventListener('error', onNetworkError);
-    xhr.open('PUT', 'protected/day');
-    xhr.setRequestHeader("Content-type", "application/json");
-    xhr.send(data);
+    if (date === "") {
+        xhr.open('DELETE', 'protected/date');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(data);
+    } else if (date === getCurrentDate()) {
+        xhr.open('POST', 'protected/date');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(data);
+    } else {
+        xhr.open('PUT', 'protected/date');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(data);
+    }
+
+
 }
 
-function getCurrentDate(){
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth()+1;
-    var yyyy = today.getFullYear();
+function getCurrentDate() {
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1;
+    let yyyy = today.getFullYear();
 
-    if(dd<10) {
-        dd = '0'+dd;
+    if (dd < 10) {
+        dd = '0' + dd;
     }
 
-    if(mm<10) {
-        mm = '0'+mm;
+    if (mm < 10) {
+        mm = '0' + mm;
     }
 
-    today = yyyy + '-' + mm + '-' + dd ;
+    today = yyyy + '-' + mm + '-' + dd;
     return today;
 }
 
