@@ -38,9 +38,7 @@ public class DayServlet extends AbstractServlet {
             scheduleService.updateDay(day, userId);
             Schedule schedule = scheduleService.findById(day.getScheduleId());
 
-            List<Schedule> schedules = scheduleService.findAllByUserId(userId);
-            List<Task> tasks = taskService.findAllByUserId(userId);
-            UserDto userDto = new UserDto(user, tasks, schedules);
+            UserDto userDto = getDatas(resp,req);
             userDto.setSchedule(schedule);
 
             sendMessage(resp, HttpServletResponse.SC_OK, userDto);
