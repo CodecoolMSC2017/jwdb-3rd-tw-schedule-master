@@ -472,37 +472,68 @@ function renameDay(e) {
     newTitle.setAttribute("id", id);
     newTitle.setAttribute("class", "input-miniature");
 
+    const newDate = document.createElement("INPUT");
+    newDate.setAttribute("type","date");
+    newDate.setAttribute("id", "datepicker");
+    newDate.value = getCurrentDate();
+    newDate.setAttribute("min",getCurrentDate());
+
     buttonEl.removeEventListener('click', renameDay);
     buttonEl.addEventListener('click', applyDayUpdates);
 
     tdEl.insertBefore(newTitle, buttonEl);
+    tdEl.insertBefore(newDate,buttonEl);
     tdEl.insertBefore(document.createElement("br"), buttonEl);
 
 }
+
 
 function applyDayUpdates(e) {
     const tdEl = e.target.parentElement;
     const titleInputField = tdEl.firstChild;
     const scheduleTitleField = tdEl.parentElement.parentElement.firstChild;
+    const dateField = document.getElementById("datepicker");
+
 
     let title = titleInputField.value;
     const oldTitle = titleInputField.placeholder;
     const id = titleInputField.id;
     const scheduleId = scheduleTitleField.id;
+    const date = dateField.value;
 
-
+    if(date === ""){
+        date = null;
+    }
     if (title === "" || title === " ") {
         title = oldTitle;
     }
 
 
-    const data = JSON.stringify({"id": id, "title": title, "scheduleId": scheduleId});
+    const data = JSON.stringify({"id": id, "title": title, "scheduleId": scheduleId,"dueDate":date});
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onUpdateDayResponse);
     xhr.addEventListener('error', onNetworkError);
     xhr.open('PUT', 'protected/day');
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.send(data);
+}
+
+function getCurrentDate(){
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1;
+    var yyyy = today.getFullYear();
+
+    if(dd<10) {
+        dd = '0'+dd;
+    }
+
+    if(mm<10) {
+        mm = '0'+mm;
+    }
+
+    today = yyyy + '-' + mm + '-' + dd ;
+    return today;
 }
 
 function onUpdateDayResponse() {
