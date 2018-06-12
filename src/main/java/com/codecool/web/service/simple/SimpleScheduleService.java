@@ -146,28 +146,21 @@ public class SimpleScheduleService implements ScheduleService {
     }
 
     @Override
-    public void updateDay(Day day, int userId) throws SQLException, DayAlreadyExistsException {
-        String title = day.getTitle();
-        int dayId = day.getId();
-        Day dayToUpdate = dayDao.findDayByTitle(title);
-
-        if (dayToUpdate != null && dayToUpdate.getId() != dayId) {
-            Schedule schedule = scheduleDao.findById(dayToUpdate.getScheduleId());
-            if (schedule.getUserId() == userId) {
-                throw new DayAlreadyExistsException();
-            }
-        }
-        dayDao.update(dayId, title);
-    }
-
-    @Override
     public Day findDayById(int id) throws SQLException {
-        return dayDao.findById(id);
+        Day day = dayDao.findById(id);
+        if(dayDao.getDateByDayId(id) != null )
+        day.setDueDate(dayDao.getDateByDayId(id));
+        return day;
     }
 
     @Override
     public List<Day> findDayByScheduleId(int scheduleId) throws SQLException {
-        return dayDao.findByScheduleId(scheduleId);
+        List<Day> days = dayDao.findByScheduleId(scheduleId);
+        for(Day day : days){
+            if(dayDao.getDateByDayId(day.getId()) != null )
+                day.setDueDate(dayDao.getDateByDayId(day.getId()));
+        }
+        return days;
     }
 
     @Override
@@ -181,23 +174,40 @@ public class SimpleScheduleService implements ScheduleService {
     }
 
     @Override
-    public void addDueDate(int dayId, Date dueDate) throws SQLException {
-        dayDao.addDueDate(dayId, dueDate);
+    public void addDueDate(Day day, int userId, Date dueDate) throws SQLException, DayAlreadyExistsException {
+        dayDao.addDueDate(day.getId(), dueDate);
+        updateDay(day,userId);
     }
 
     @Override
-    public void updateDueDate(int dayId, Date dueDate) throws SQLException {
-        dayDao.updateDueDate(dayId,dueDate);
+    public void updateDueDate(Day day, int userId, Date dueDate) throws SQLException, DayAlreadyExistsException {
+        dayDao.updateDueDate(day.getId(),dueDate);
+        updateDay(day,userId);
     }
 
     @Override
-    public void deleteDueDateByDayId(int dayId) throws SQLException {
-        dayDao.deleteDueDateByDayId(dayId);
+    public void deleteDueDateByDayId(Day day, int userId) throws SQLException, DayAlreadyExistsException {
+        dayDao.deleteDueDateByDayId(day.getId());
+        updateDay(day,userId);
     }
 
     @Override
     public Boolean isExists(int dayId) throws SQLException {
         return dayDao.isExists(dayId);
+    }
+
+    private void updateDay(Day day, int userId) throws SQLException, DayAlreadyExistsException {
+        String title = day.getTitle();
+        int dayId = day.getId();
+        Day dayToUpdate = dayDao.findDayByTitle(title);
+
+        if (dayToUpdate != null && dayToUpdate.getId() != dayId) {
+            Schedule schedule = scheduleDao.findById(dayToUpdate.getScheduleId());
+            if (schedule.getUserId() == userId) {
+                throw new DayAlreadyExistsException();
+            }
+        }
+        dayDao.update(dayId, title);
     }
 }
 

@@ -30,4 +30,6 @@ public interface DayDao {
 
     Boolean isExists(int dayId)throws SQLException;
 
+    Date getDateByDayId(int dayId)throws SQLException;
+
 }

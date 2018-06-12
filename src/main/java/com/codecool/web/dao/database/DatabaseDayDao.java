@@ -138,4 +138,18 @@ class DatabaseDayDao extends AbstractDaoFactory implements DayDao {
             }
         }
     }
+
+    @Override
+    public Date getDateByDayId(int dayId) throws SQLException {
+        String sql = "SELECT due_date FROM alert WHERE day_id = ?";
+        try(PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setInt(1,dayId);
+            try(ResultSet resultSet = statement.executeQuery()){
+                if(resultSet.next()){
+                    return resultSet.getDate("due_date");
+                }
+                return null;
+            }
+        }
+    }
 }

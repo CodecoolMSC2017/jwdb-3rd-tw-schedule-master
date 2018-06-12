@@ -27,8 +27,6 @@ public interface ScheduleService {
 
     Day addDay(int scheduleId, String title, int userId)throws SQLException, DayAlreadyExistsException;
 
-    void updateDay(Day day, int userId)throws SQLException, DayAlreadyExistsException;
-
     Day findDayById(int id)throws SQLException;
 
     List<Day> findDayByScheduleId(int scheduleId)throws SQLException;
@@ -37,11 +35,11 @@ public interface ScheduleService {
 
     List<Hour> findHoursByDayId(int dayId)throws SQLException;
 
-    void addDueDate(int dayId, Date dueDate) throws SQLException;
+    void addDueDate(Day day, int userId, Date dueDate) throws SQLException, DayAlreadyExistsException;
 
-    void updateDueDate(int dayId, Date dueDate)throws SQLException;
+    void updateDueDate(Day day, int userId, Date dueDate) throws SQLException, DayAlreadyExistsException;
 
-    void deleteDueDateByDayId(int dayId)throws SQLException;
+    void deleteDueDateByDayId(Day day, int userId) throws SQLException, DayAlreadyExistsException;
 
     Boolean isExists(int dayId)throws SQLException;
 }

@@ -46,4 +46,8 @@ public class Day extends AbstractModel {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
 }
