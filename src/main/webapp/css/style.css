@@ -430,13 +430,11 @@ li:last-child {
 
 .copy-btn {
     background: url(img/copy.png) center;
-    width: 25px;
-    height: 25px;
-    margin: 5px;
-    display: inline;
+    width: 35px;
+    height: 35px;
     padding: 0;
     border: none;
-    cursor: default;
+    cursor: pointer;
     outline: none;
 }
 
@@ -640,6 +638,11 @@ li:last-child {
 
 .margined-table {
     margin-left: 120px;
+}
+
+#guest-table {
+    margin-left: auto;
+    margin-right: auto;
 }
 
 

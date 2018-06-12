@@ -7,8 +7,10 @@ import com.codecool.web.model.Task;
 import com.codecool.web.model.User;
 import com.codecool.web.service.ScheduleService;
 import com.codecool.web.service.TaskService;
+import com.codecool.web.service.UserService;
 import com.codecool.web.service.simple.SimpleScheduleService;
 import com.codecool.web.service.simple.SimpleTaskService;
+import com.codecool.web.service.simple.SimpleUserService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
@@ -70,23 +72,17 @@ abstract class AbstractServlet extends HttpServlet {
         return objectMapper.readTree(json);
     }
 
-    UserDto getDatas(HttpServletRequest req) throws SQLException {
+    UserDto getDatas(HttpServletResponse resp, HttpServletRequest req) throws SQLException {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskService taskService = new SimpleTaskService(connection);
             ScheduleService scheduleService = new SimpleScheduleService(connection);
-            User user = getUser(req);
-            int userId = user.getId();
-            List<Task> tasks ;
-            String currentId = req.getParameter("currentScheduleId");
-            if (currentId == null || currentId.equals("null")) {
-                 tasks = taskService.findAllByUserId(userId);
-            }
-            else{
-                tasks = taskService.findAllByUserAndScheduleId(userId,Integer.parseInt(currentId));
-            }
-            List<Schedule> schedules = scheduleService.findAllByUserId(userId);
-            return new UserDto(user, tasks, schedules);
+             User user = (User) req.getSession().getAttribute("user");
+
+            List<Task> allTask = taskService.findAllByUserId(user.getId());
+            List<Schedule> schedules = scheduleService.findAllByUserId(user.getId());
+           return new UserDto(user,allTask,schedules);
         }
     }
 }
+
 
