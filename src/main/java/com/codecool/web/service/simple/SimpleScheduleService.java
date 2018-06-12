@@ -148,18 +148,12 @@ public class SimpleScheduleService implements ScheduleService {
     @Override
     public Day findDayById(int id) throws SQLException {
         Day day = dayDao.findById(id);
-        if(dayDao.getDateByDayId(id) != null )
-        day.setDueDate(dayDao.getDateByDayId(id));
         return day;
     }
 
     @Override
     public List<Day> findDayByScheduleId(int scheduleId) throws SQLException {
         List<Day> days = dayDao.findByScheduleId(scheduleId);
-        for(Day day : days){
-            if(dayDao.getDateByDayId(day.getId()) != null )
-                day.setDueDate(dayDao.getDateByDayId(day.getId()));
-        }
         return days;
     }
 

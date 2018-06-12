@@ -93,7 +93,11 @@ class DatabaseDayDao extends AbstractDaoFactory implements DayDao {
         int id = resultSet.getInt("id");
         int scheduleId = resultSet.getInt("schedule_id");
         String title = resultSet.getString("title");
-        return new Day(id, scheduleId, title);
+        Day day = new Day(id, scheduleId, title);
+        if(isExists(day.getId())){
+            day.setDueDate(getDateByDayId(day.getId()));
+        }
+        return day;
     }
 
     @Override
