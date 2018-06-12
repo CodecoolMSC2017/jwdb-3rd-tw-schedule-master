@@ -12,6 +12,7 @@ import com.codecool.web.model.Task;
 import com.codecool.web.service.ScheduleService;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -177,6 +178,11 @@ public class SimpleScheduleService implements ScheduleService {
     @Override
     public List<Hour> findHoursByDayId(int dayId) throws SQLException {
         return hourDao.findByDayId(dayId);
+    }
+
+    @Override
+    public void addDueDate(int dayId, Date dueDate) throws SQLException {
+        dayDao.addDueDate(dayId, dueDate);
     }
 }
 

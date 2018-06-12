@@ -95,4 +95,14 @@ class DatabaseDayDao extends AbstractDaoFactory implements DayDao {
         String title = resultSet.getString("title");
         return new Day(id, scheduleId, title);
     }
+
+    @Override
+    public void addDueDate(int dayId, Date dueDate) throws SQLException {
+        String sql = "INSERT INTO alert(day_id, due_date) VALUES(?,?)";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, dayId);
+            statement.setDate(2, dueDate);
+            statement.executeQuery();
+        }
+    }
 }

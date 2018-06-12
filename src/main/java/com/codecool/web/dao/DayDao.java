@@ -2,6 +2,7 @@ package com.codecool.web.dao;
 
 import com.codecool.web.model.Day;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface DayDao {
     List<Day> findByScheduleId(int scheduleId) throws SQLException;
 
     Day findDayByTitle(String title) throws SQLException;
+
+    void addDueDate(int dayId, Date dueDate) throws SQLException;
 }
