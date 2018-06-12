@@ -18,7 +18,6 @@
     <c:url value="/js/schedule.js" var="scheduleScriptUrl"/>
     <c:url value="/js/users.js" var="usersScriptUrl"/>
     <c:url value="/js/google-user.js" var="googleUsersScriptUrl"/>
-    <c:url value="https://apis.google.com/js/platform.js" var="googleScriptUrl"/>
 
     <link rel="stylesheet" type="text/css" href="${styleUrl}">
     <script src="${indexScriptUrl}"></script>
@@ -30,7 +29,11 @@
     <script src="${taskScriptUrl}"></script>
     <script src="${mainPageScriptUrl}"></script>
     <script src="${googleUsersScriptUrl}"></script>
-    <script src="${googleScriptUrl}" async defer></script>
+    <script src="https://apis.google.com/js/platform.js" async defer>
+        {
+            lang: 'en-GB'
+        }
+    </script>
     <link rel="shortcut icon" type="image/png" href="icons/favicon.png"/>
     <title>Schedule Master</title>
 </head>
@@ -124,6 +127,9 @@
             <td class="middle-td" valign="top">
                 <div id="days-content" class="content hidden">
                     <div id="days">
+                    </div>
+                    <div id="share-div" class="content hidden">
+                        <div class="g-plus" data-action="share" data-height="24"></div>
                     </div>
                 </div>
             </td>
