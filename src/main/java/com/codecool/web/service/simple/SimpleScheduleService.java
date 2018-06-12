@@ -184,5 +184,20 @@ public class SimpleScheduleService implements ScheduleService {
     public void addDueDate(int dayId, Date dueDate) throws SQLException {
         dayDao.addDueDate(dayId, dueDate);
     }
+
+    @Override
+    public void updateDueDate(int dayId, Date dueDate) throws SQLException {
+        dayDao.updateDueDate(dayId,dueDate);
+    }
+
+    @Override
+    public void deleteDueDateByDayId(int dayId) throws SQLException {
+        dayDao.deleteDueDateByDayId(dayId);
+    }
+
+    @Override
+    public Boolean isExists(int dayId) throws SQLException {
+        return dayDao.isExists(dayId);
+    }
 }
 

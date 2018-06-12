@@ -1,5 +1,6 @@
 package com.codecool.web.servlet;
 
+import com.codecool.web.dao.DayDao;
 import com.codecool.web.dto.UserDto;
 import com.codecool.web.exception.DayAlreadyExistsException;
 import com.codecool.web.model.Day;
@@ -30,10 +31,19 @@ public class DayServlet extends AbstractServlet {
             JsonParser jsonParser = objectMapper.getFactory().createParser(req.getInputStream());
             Day day = objectMapper.readValue(jsonParser, Day.class);
 
-            if (day.getDueDate() != null) {
+            if (day.getDueDate() != null && !scheduleService.isExists(day.getId())) {
                 int dayId = day.getId();
                 Date dueDate = day.getDueDate();
                 scheduleService.addDueDate(dayId, dueDate);
+            }
+            else if(day.getDueDate() != null && scheduleService.isExists(day.getId())) {
+                int dayId = day.getId();
+                Date dueDate = day.getDueDate();
+                scheduleService.updateDueDate(dayId, dueDate);
+            }
+            else if(day.getDueDate() == null && scheduleService.isExists(day.getId())) {
+                int dayId = day.getId();
+                scheduleService.deleteDueDateByDayId(dayId);
             }
 
             scheduleService.updateDay(day, userId);

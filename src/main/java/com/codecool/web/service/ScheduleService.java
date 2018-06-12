@@ -38,4 +38,10 @@ public interface ScheduleService {
     List<Hour> findHoursByDayId(int dayId)throws SQLException;
 
     void addDueDate(int dayId, Date dueDate) throws SQLException;
+
+    void updateDueDate(int dayId, Date dueDate)throws SQLException;
+
+    void deleteDueDateByDayId(int dayId)throws SQLException;
+
+    Boolean isExists(int dayId)throws SQLException;
 }
