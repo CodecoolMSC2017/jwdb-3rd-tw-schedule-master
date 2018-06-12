@@ -1,5 +1,6 @@
 package com.codecool.web.model;
 
+import java.sql.Date;
 import java.util.List;
 
 public class Day extends AbstractModel {
@@ -7,6 +8,7 @@ public class Day extends AbstractModel {
     private int scheduleId;
     private String title ;
     private List<Hour> hours;
+    private Date dueDate;
 
     public Day(int id, int scheduleId, String title) {
         super(id);
@@ -27,6 +29,10 @@ public class Day extends AbstractModel {
 
     public List<Hour> getHours() {
         return hours;
+    }
+
+    public Date getDueDate() {
+        return dueDate;
     }
 
     public void setHours(List<Hour> hours) {

@@ -33,10 +33,6 @@ import java.util.List;
 public class GoogleLoginServlet extends AbstractServlet {
 
     final String CLIENT_ID = "144891204676-idis83roj0hnbo5vhpbo9mimppi5c0q0.apps.googleusercontent.com";
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp);
-    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {

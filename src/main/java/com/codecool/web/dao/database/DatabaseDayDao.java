@@ -95,4 +95,47 @@ class DatabaseDayDao extends AbstractDaoFactory implements DayDao {
         String title = resultSet.getString("title");
         return new Day(id, scheduleId, title);
     }
+
+    @Override
+    public void addDueDate(int dayId, Date dueDate) throws SQLException {
+        String sql = "INSERT INTO alert(day_id, due_date) VALUES(?,?)";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, dayId);
+            statement.setDate(2, dueDate);
+            statement.executeQuery();
+        }
+    }
+
+    @Override
+    public void updateDueDate(int dayId, Date dueDate) throws SQLException {
+        String sql = "UPDATE alert SET due_date = ? WHERE day_id = ?";
+        try(PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setDate(1,dueDate);
+            statement.setInt(2,dayId);
+            statement.executeQuery();
+        }
+    }
+
+    @Override
+    public void deleteDueDateByDayId(int dayId) throws SQLException {
+        String sql = "DELETE FROM alert WHERE day_id = ?";
+        try(PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setInt(1,dayId);
+            statement.executeUpdate();
+        }
+    }
+
+    @Override
+    public Boolean isExists(int dayId) throws SQLException {
+        String sql = "SELECT due_date FROM alert WHERE day_id = ?";
+        try(PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setInt(1,dayId);
+            try(ResultSet resultSet = statement.executeQuery()){
+                if(resultSet.next()){
+                    return true;
+                }
+                return false;
+            }
+        }
+    }
 }

@@ -7,6 +7,7 @@ import com.codecool.web.model.Day;
 import com.codecool.web.model.Hour;
 import com.codecool.web.model.Schedule;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -36,5 +37,11 @@ public interface ScheduleService {
 
     List<Hour> findHoursByDayId(int dayId)throws SQLException;
 
+    void addDueDate(int dayId, Date dueDate) throws SQLException;
 
+    void updateDueDate(int dayId, Date dueDate)throws SQLException;
+
+    void deleteDueDateByDayId(int dayId)throws SQLException;
+
+    Boolean isExists(int dayId)throws SQLException;
 }

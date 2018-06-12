@@ -29,6 +29,12 @@ CREATE TABLE day (
 	FOREIGN KEY (schedule_id) REFERENCES schedule("id") ON DELETE CASCADE
 );
 
+CREATE TABLE alert (
+    day_id INTEGER NOT NULL,
+    due_date DATE NOT NULL,
+    FOREIGN KEY (day_id) REFERENCES day("id") ON DELETE CASCADE
+);
+
 CREATE TABLE hour (
 	id SERIAL PRIMARY KEY NOT NULL,
 	day_id INTEGER NOT NULL,
