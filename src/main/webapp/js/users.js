@@ -26,7 +26,7 @@ function appendUser(user) {
 
     const removeButt = document.createElement('td');
     const removeUserButt = document.createElement("button");
-    removeUserButt.addEventListener('click', removeUser);
+    removeUserButt.addEventListener('click', ConfirmRemoveUser);
     removeUserButt.setAttribute("class", "delete-btn-min");
     removeButt.appendChild(removeUserButt);
 
@@ -91,9 +91,13 @@ function showAsUser(e){
     xhr.send();
 }
 
+function ConfirmRemoveUser(e) {
+    const name = e.target.parentElement.parentElement.firstElementChild.textContent;
+    Confirm('Are you sure to delete this user?', 'The user named ' + name + ' will be deleted.', 'OK', 'Cancel', function () {
+        removeUser(e);
+    });
+}
 function removeUser(e) {
-    var r = confirm("Press a button!\nEither OK or Cancel.");
-    if (r == true) {
         const trEl = e.target.parentElement.parentElement;
         const id = trEl.id;
 
@@ -107,7 +111,6 @@ function removeUser(e) {
         xhr.open('DELETE', 'login');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(data);
-    }
 }
 
 function onDeleteUserResponse(){

@@ -18,8 +18,12 @@
     <c:url value="/js/schedule.js" var="scheduleScriptUrl"/>
     <c:url value="/js/users.js" var="usersScriptUrl"/>
     <c:url value="/js/google-user.js" var="googleUsersScriptUrl"/>
+    <c:url value="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" var="jQueryScriptUrl"/>
+
 
     <link rel="stylesheet" type="text/css" href="${styleUrl}">
+
+
     <script src="${indexScriptUrl}"></script>
     <script src="${usersScriptUrl}"></script>
     <script src="${loginScriptUrl}"></script>
@@ -29,6 +33,7 @@
     <script src="${taskScriptUrl}"></script>
     <script src="${mainPageScriptUrl}"></script>
     <script src="${googleUsersScriptUrl}"></script>
+    <script src="${jQueryScriptUrl}"></script>
     <script src="https://apis.google.com/js/platform.js" async defer>
         {
             lang: 'en-GB'

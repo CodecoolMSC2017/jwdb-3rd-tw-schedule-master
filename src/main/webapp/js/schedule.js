@@ -107,27 +107,34 @@ function onCreateScheduleResponse() {
 }
 
 function removeSchedule(e) {
-    let r = confirm("Press a button!\nEither OK or Cancel.");
-    if (r === true) {
 
-        const liEL = e.target.parentElement;
-        const id = liEL.id;
-        removeAllChildren(daysDiv);
-        const title = liEL.children.item(1).textContent;
-        const desc = liEL.children.item(1).id;
-        const userId = document.getElementById("name-field").name;
-
-        const data = JSON.stringify({"id": id, "userId": userId, "title": title, "description": desc});
+    const liEL = e.target.parentElement;
+    const id = liEL.id;
+    const title = liEL.children.item(1).textContent;
 
 
-        const xhr = new XMLHttpRequest();
-        xhr.addEventListener('load', onDeleteScheduleResponse);
-        xhr.addEventListener('error', onNetworkError);
-        xhr.open('DELETE', 'protected/schedule');
-        xhr.setRequestHeader("Content-type", "application/json");
-        xhr.send(data);
-    }
+    removeAllChildren(daysDiv);
 
+    const desc = liEL.children.item(1).id;
+    const userId = document.getElementById("name-field").name;
+
+    const data = JSON.stringify({"id": id, "userId": userId, "title": title, "description": desc});
+
+
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onDeleteScheduleResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('DELETE', 'protected/schedule');
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.send(data);
+
+}
+
+function ConfirmRemoveSchedule(e) {
+    const title = e.target.parentElement.children.item(1).textContent;
+    Confirm('Are you sure to delete this schedule?', 'The schedule named ' + title + '  will be deleted.', 'OK', 'Cancel', function () {
+        removeSchedule(e);
+    });
 }
 
 function onDeleteScheduleResponse() {
@@ -273,13 +280,9 @@ function listingDays(userDto) {
         td.appendChild(titleParEl);
 
         if (userDto.schedule.days[i].dueDate != null) {
-            titleParEl.classList.add("tooltip");
-            let tooltipSpan = document.createElement("span");
-            tooltipSpan.setAttribute("class", "tooltiptext");
-            const date = new Date(userDto.schedule.days[i].dueDate);
-            const formatedDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-            tooltipSpan.innerText = formatedDate;
-            titleParEl.appendChild(tooltipSpan);
+
+            const formatedDate = formatDate(userDto.schedule.days[i].dueDate);
+            titleParEl.setAttribute("name", formatedDate);
         }
 
         let renameButt = document.createElement("button");
@@ -378,6 +381,25 @@ function sendId(e) {
     xhr.send(params);
 }
 
+function formatDate(seconds) {
+
+    const date = new Date(seconds);
+
+    let yyyy = date.getFullYear();
+    let mm = date.getMonth() + 1;
+    let dd = date.getDate();
+
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+
+    return yyyy + "-" + mm + "-" + dd;
+}
+
 function copyToClipBoard(e) {
     const copyText = document.getElementById("guest-link");
     copyText.select();
@@ -472,8 +494,9 @@ function renameDay(e) {
 
     const titleEl = tdEl.firstChild;
     let oldDate = null;
-    if (titleEl.firstElementChild != null) {
-        oldDate = titleEl.firstElementChild.innerText;
+    if (titleEl.getAttribute("name") != null) {
+        oldDate = titleEl.getAttribute("name");
+        console.log(oldDate);
     }
     const oldTitle = buttonEl.id;
 

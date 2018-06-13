@@ -1,13 +1,11 @@
-
-
-function showTasks(){
+function showTasks() {
     const taskEl = document.getElementById("tasksUl");
     taskEl.classList.remove('hidden');
     taskButtonEl.removeEventListener('click', showTasks);
     taskButtonEl.addEventListener('click', hideTasks);
 }
 
-function hideTasks(){
+function hideTasks() {
     const taskEl = document.getElementById("tasksUl");
     taskEl.classList.add('hidden');
     taskButtonEl.removeEventListener('click', hideTasks);
@@ -75,7 +73,7 @@ function applyTaskUpdates(e) {
 
     let scheduleId = null;
 
-    if(daysDiv.firstElementChild !== null){
+    if (daysDiv.firstElementChild !== null) {
         scheduleId = daysDiv.firstElementChild.id;
     }
 
@@ -101,32 +99,39 @@ function applyTaskUpdates(e) {
     liEl.removeAttribute("class");
     liEl.setAttribute("class", "task-li");
 
-    const data = JSON.stringify({id: id, description: desc, title: title, color: color, userId :userId ,scheduleId : scheduleId });
+    const data = JSON.stringify({
+        id: id,
+        description: desc,
+        title: title,
+        color: color,
+        userId: userId,
+        scheduleId: scheduleId
+    });
 
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onUpdateTaskResponse);
     xhr.addEventListener('error', onNetworkError);
-    xhr.open('PUT','protected/task');
+    xhr.open('PUT', 'protected/task');
     xhr.setRequestHeader('Content-type', 'application/json');
     xhr.send(data);
 }
 
 function onUpdateTaskResponse() {
-    if(this.status === OK){
+    if (this.status === OK) {
         const userDto = JSON.parse(this.responseText);
         document.getElementById("tasksUl").remove();
         createTaskDiv(userDto);
-    }else{
+    } else {
         onMessageResponse(mainDiv, this);
     }
 }
 
-function showCreateTask(){
+function showCreateTask() {
     const toCreateTaskButt = document.getElementById("to-createTask-button");
     toCreateTaskButt.removeEventListener('click', showCreateTask);
 
-    const createTaskDiv= document.createElement("div");
-    createTaskDiv.setAttribute("id","create-task");
+    const createTaskDiv = document.createElement("div");
+    createTaskDiv.setAttribute("id", "create-task");
     createTaskDiv.setAttribute("class", "create-div");
 
     const closeTaskButt = document.createElement("button");
@@ -134,19 +139,19 @@ function showCreateTask(){
     closeTaskButt.setAttribute("class", "close-btn");
 
     const inputTitle = document.createElement("INPUT");
-    inputTitle.setAttribute("type","text");
+    inputTitle.setAttribute("type", "text");
     inputTitle.setAttribute("id", "task-title");
     inputTitle.setAttribute("class", "input-min");
     inputTitle.placeholder = "Title";
 
     const inputDescript = document.createElement("INPUT");
-    inputDescript.setAttribute("type","text");
-    inputDescript.setAttribute("id","task-desc");
+    inputDescript.setAttribute("type", "text");
+    inputDescript.setAttribute("id", "task-desc");
     inputDescript.setAttribute("class", "input-min");
     inputDescript.placeholder = "Description";
 
     const inputColor = document.createElement("INPUT");
-    inputColor.setAttribute("type","color");
+    inputColor.setAttribute("type", "color");
     inputColor.setAttribute("id", "task-color");
     inputColor.setAttribute("class", "input-min");
     inputColor.placeholder = "Color";
@@ -155,7 +160,7 @@ function showCreateTask(){
     const breakEl = document.createElement("br");
 
     const createTaskButt = document.createElement("button");
-    createTaskButt.addEventListener('click',createTask);
+    createTaskButt.addEventListener('click', createTask);
     createTaskButt.setAttribute('id', 'task-create-btn');
     createTaskButt.setAttribute("class", "create-btn");
     createTaskButt.textContent = "Create";
@@ -170,7 +175,7 @@ function showCreateTask(){
     taskContentDivEl.appendChild(createTaskDiv);
 }
 
-function createTask(){
+function createTask() {
     const toCreateTaskButt = document.getElementById("to-createTask-button");
     toCreateTaskButt.addEventListener('click', showCreateTask);
 
@@ -181,30 +186,30 @@ function createTask(){
     const title = taskTitleInputEl.value;
     const description = taskDescInputEl.value;
     const color = taskColorInputEl.value;
-    if(title !== "" && description !== "" && color !== ""){
+    if (title !== "" && description !== "" && color !== "") {
         const params = new URLSearchParams();
-        params.append('title',title);
-        params.append('description',description);
-        params.append('color',color);
+        params.append('title', title);
+        params.append('description', description);
+        params.append('color', color);
         params.append('currentScheduleId', currentScheduleId);
 
         const xhr = new XMLHttpRequest();
-        xhr.addEventListener('load',onCreateTaskResponse);
+        xhr.addEventListener('load', onCreateTaskResponse);
         xhr.addEventListener('error', onNetworkError);
-        xhr.open('POST','protected/task');
+        xhr.open('POST', 'protected/task');
         xhr.send(params)
-    }else{
+    } else {
         newError(mainDiv, "Please fill all the fields");
-     }
+    }
 }
 
-function onCreateTaskResponse(){
-    if(this.status === OK){
+function onCreateTaskResponse() {
+    if (this.status === OK) {
         const userDto = JSON.parse(this.responseText);
         document.getElementById("create-task").remove();
         document.getElementById("tasksUl").remove();
         createTaskDiv(userDto);
-    }else{
+    } else {
         onMessageResponse(mainDiv, this);
     }
 }
@@ -222,19 +227,17 @@ function hideTaskDescription(e) {
 }
 
 function removeTask(e) {
-    let r = confirm("Press a button!\nEither OK or Cancel.");
-    if (r === true) {
         const liEL = e.target.parentElement;
         const id = liEL.id;
         const userId = document.getElementById("name-field").getAttribute("name");
 
         let scheduleId = null;
 
-        if(daysDiv.firstElementChild !== null){
+    if (daysDiv.firstElementChild !== null) {
             scheduleId = daysDiv.firstElementChild.id;
         }
 
-        const data = JSON.stringify({"id": id, "userId" :userId, "scheduleId" :scheduleId});
+    const data = JSON.stringify({"id": id, "userId": userId, "scheduleId": scheduleId});
 
 
         const xhr = new XMLHttpRequest();
@@ -243,7 +246,13 @@ function removeTask(e) {
         xhr.open('DELETE', 'protected/task');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(data);
-    }
+}
+
+function ConfirmRemoveTask(e) {
+    const title = e.target.parentElement.firstElementChild.id;
+    Confirm('Are you sure to delete this task?', 'The task named ' + title + ' will be deleted.', 'OK', 'Cancel', function () {
+        removeTask(e);
+    });
 }
 
 function onDeleteTaskResponse() {
