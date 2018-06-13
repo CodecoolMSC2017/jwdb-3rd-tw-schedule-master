@@ -30,6 +30,7 @@ public class TaskHourServlet extends AbstractServlet {
         try (Connection connection = getConnection(req.getServletContext())) {
             TaskHourService taskHourService = new SimpleTaskHourService(connection);
             ScheduleService scheduleService = new SimpleScheduleService(connection);
+            TaskService taskService = new SimpleTaskService(connection);
             if (req.getParameter("scheduleId").equals("")) {
                 sendMessage(resp, HttpServletResponse.SC_BAD_REQUEST, new TaskOverlapException().getMessage());
             } else {
@@ -42,8 +43,10 @@ public class TaskHourServlet extends AbstractServlet {
                 int userId = user.getId();
                 taskHourService.handleTaskConnection(userId, dayId, taskLength, scheduleId, taskId, hourId);
 
+                List<Task> taskList = taskService.findAllByUserAndScheduleId(userId, scheduleId);
+                List<Schedule> schedules = scheduleService.findAllByUserId(userId);
                 Schedule schedule = scheduleService.findById(scheduleId);
-                UserDto userDto = getDatas(resp,req);
+                UserDto userDto = new UserDto(user, taskList, schedules);
                 userDto.setSchedule(schedule);
 
                 sendMessage(resp, HttpServletResponse.SC_OK, userDto);
