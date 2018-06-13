@@ -100,9 +100,16 @@ li:last-child {
 
 #name-td {
     text-align: center;
-    width: 70%;
+    width: 60%;
 }
 
+#profile-pic {
+    border-radius: 50%;
+}
+
+#name-field {
+    text-shadow: 1px 1px black;
+}
 /*
    ******************
      REGISTER-LOGIN
@@ -868,7 +875,7 @@ li:last-child {
     border-bottom: 1px solid #e5e5e5
 }
 
-.dialog-ovelay .dialog .red {
+.dialog-ovelay .dialog .blue {
     padding: 10px 8px;
     background-color: #20acf9;
     border-bottom: 1px solid #e5e5e5
