@@ -244,6 +244,7 @@ function listingDays(userDto) {
         hourFirstTable.appendChild(hourFirstTr);
     }
 
+
     let hourButt = document.createElement("button");
     hourButt.setAttribute("id", "hour-clock");
     hourButt.setAttribute("class", "clock-btn-min");
@@ -275,7 +276,9 @@ function listingDays(userDto) {
             titleParEl.classList.add("tooltip");
             let tooltipSpan = document.createElement("span");
             tooltipSpan.setAttribute("class", "tooltiptext");
-            tooltipSpan.innerText = timeConverter(userDto.schedule.days[i].dueDate);
+            const date = new Date(userDto.schedule.days[i].dueDate);
+            const formatedDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+            tooltipSpan.innerText = formatedDate;
             titleParEl.appendChild(tooltipSpan);
         }
 
