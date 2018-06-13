@@ -13,6 +13,16 @@ function onMainPageLoad(userDto) {
     nameField.textContent = userDto.user.userName;
     nameField.setAttribute("name", userDto.user.id);
 
+    if (imageUrl != null) {
+        const imgTd = document.getElementById("picture-td");
+        const img = document.createElement("img");
+        img.src = imageUrl;
+        img.setAttribute("id", "profile-pic");
+        imgTd.appendChild(img);
+
+    }
+
+
     const taskULEl = document.getElementById("tasksUl");
     if (taskULEl !== null) {
         taskULEl.remove();

@@ -4,6 +4,8 @@ function onLogoutResponse() {
         const auth2 = gapi.auth2.getAuthInstance();
         if(auth2 != null) {
         auth2.disconnect();
+            imageUrl = null;
+            removeAllChildren(document.getElementById("picture-td"));
         }
         clearMessages();
 
