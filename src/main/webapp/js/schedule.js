@@ -1,3 +1,5 @@
+let dayId = null;
+
 function showSchedule() {
     const scheduleEl = document.getElementById("schedulesUl");
     scheduleEl.classList.remove('hidden');
@@ -107,27 +109,34 @@ function onCreateScheduleResponse() {
 }
 
 function removeSchedule(e) {
-    let r = confirm("Press a button!\nEither OK or Cancel.");
-    if (r === true) {
 
-        const liEL = e.target.parentElement;
-        const id = liEL.id;
-        removeAllChildren(daysDiv);
-        const title = liEL.children.item(1).textContent;
-        const desc = liEL.children.item(1).id;
-        const userId = document.getElementById("name-field").name;
-
-        const data = JSON.stringify({"id": id, "userId": userId, "title": title, "description": desc});
+    const liEL = e.target.parentElement;
+    const id = liEL.id;
+    const title = liEL.children.item(1).textContent;
 
 
-        const xhr = new XMLHttpRequest();
-        xhr.addEventListener('load', onDeleteScheduleResponse);
-        xhr.addEventListener('error', onNetworkError);
-        xhr.open('DELETE', 'protected/schedule');
-        xhr.setRequestHeader("Content-type", "application/json");
-        xhr.send(data);
-    }
+    removeAllChildren(daysDiv);
 
+    const desc = liEL.children.item(1).id;
+    const userId = document.getElementById("name-field").name;
+
+    const data = JSON.stringify({"id": id, "userId": userId, "title": title, "description": desc});
+
+
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onDeleteScheduleResponse);
+    xhr.addEventListener('error', onNetworkError);
+    xhr.open('DELETE', 'protected/schedule');
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.send(data);
+
+}
+
+function ConfirmRemoveSchedule(e) {
+    const title = e.target.parentElement.firstElementChild.id;
+    Confirm('Are you sure to delete this schedule?', 'The schedule named ' + title + '  will be deleted.', 'OK', 'Cancel', function () {
+        removeSchedule(e);
+    });
 }
 
 function onDeleteScheduleResponse() {
@@ -273,13 +282,9 @@ function listingDays(userDto) {
         td.appendChild(titleParEl);
 
         if (userDto.schedule.days[i].dueDate != null) {
-            titleParEl.classList.add("tooltip");
-            let tooltipSpan = document.createElement("span");
-            tooltipSpan.setAttribute("class", "tooltiptext");
-            const date = new Date(userDto.schedule.days[i].dueDate);
-            const formatedDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
-            tooltipSpan.innerText = formatedDate;
-            titleParEl.appendChild(tooltipSpan);
+
+            const formatedDate = formatDate(userDto.schedule.days[i].dueDate);
+            titleParEl.setAttribute("name", formatedDate);
         }
 
         let renameButt = document.createElement("button");
@@ -336,7 +341,7 @@ function listingDays(userDto) {
                 let height = rowspan * 28;
                 hoursTd.style.height = height.toString() + "px";
             }
-            hoursTr.addEventListener('drop', add_task);
+            hoursTr.addEventListener('drop', getTaskLength);
             hoursTr.addEventListener('dragenter', drag_enter_prevent);
             hoursTr.addEventListener('dragover', drag_over_prevent);
 
@@ -376,6 +381,25 @@ function sendId(e) {
     xhr.addEventListener('error', onNetworkError);
     xhr.open('POST', 'protected/encrypt');
     xhr.send(params);
+}
+
+function formatDate(seconds) {
+
+    const date = new Date(seconds);
+
+    let yyyy = date.getFullYear();
+    let mm = date.getMonth() + 1;
+    let dd = date.getDate();
+
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+
+    return yyyy + "-" + mm + "-" + dd;
 }
 
 function copyToClipBoard(e) {
@@ -472,8 +496,9 @@ function renameDay(e) {
 
     const titleEl = tdEl.firstChild;
     let oldDate = null;
-    if (titleEl.firstElementChild != null) {
-        oldDate = titleEl.firstElementChild.innerText;
+    if (titleEl.getAttribute("name") != null) {
+        oldDate = titleEl.getAttribute("name");
+        console.log(oldDate);
     }
     const oldTitle = buttonEl.id;
 
@@ -566,15 +591,6 @@ function getCurrentDate() {
     return today;
 }
 
-function timeConverter(UNIX_timestamp) {
-    const a = new Date(UNIX_timestamp * 1000);
-    const year = a.getFullYear();
-    const month = a.getMonth();
-    const date = a.getDate();
-    const time = year + '-' + month + '-' + date;
-    return time;
-}
-
 function onUpdateDayResponse() {
     if (this.status === OK) {
         const userDto = JSON.parse(this.responseText);
@@ -622,6 +638,7 @@ function updateScheduleFields(e) {
 
     const descInputEl = document.createElement("INPUT");
     descInputEl.setAttribute("type", "text");
+    descInputEl.placeholder = oldDesc;
     descInputEl.placeholder = oldDesc;
     descInputEl.setAttribute("class", "input-min");
     descTd.appendChild(descInputEl);
@@ -684,15 +701,23 @@ function onUpdateScheduleResponse() {
 
 }
 
-function add_task(ev) {
+
+function getTaskLength(ev) {
     ev.preventDefault();
+    const task_id = ev.dataTransfer.getData("text");
     if (ev.target.firstChild != null) {
         newError(mainDiv, "You already added a task for this hour!");
         return false;
     }
+    Prompt("How long will it take to finish with the task?", "Enter a Number!", "Add", "Cancel", function (number) {
+        add_task(ev, number, task_id);
+    });
+}
+
+function add_task(ev, number, task_id) {
     const hourValue = ev.target.id;
-    const taskId = ev.dataTransfer.getData("text");
-    let number = prompt("How long will it take to finish with the task?", "");
+    const taskId = task_id;
+
     let parsedNum = parseInt(number);
     if (number === "0") {
         newError(mainDiv, "Number can not be 0!");
@@ -754,6 +779,8 @@ function added_drag_start(ev) {
 
     ev.target.firstElementChild.removeAttribute("class");
     ev.target.firstElementChild.setAttribute("class", "hidden");
+
+    dayId = ev.target.parentElement.parentElement.parentElement.firstChild.id;
 }
 
 function added_drag_end(ev) {

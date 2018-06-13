@@ -75,7 +75,7 @@ function createTaskDiv(userDto) {
 
 
         let deleteTaskButt = document.createElement("button");
-        deleteTaskButt.addEventListener('click', removeTask);
+        deleteTaskButt.addEventListener('click', ConfirmRemoveTask);
         deleteTaskButt.setAttribute("class", "delete-btn");
 
         taskLi.appendChild(taskSpan);
@@ -128,7 +128,7 @@ function createScheduleDiv(userDto) {
         }
 
         let deleteScheduleButt = document.createElement("button");
-        deleteScheduleButt.addEventListener('click', removeSchedule);
+        deleteScheduleButt.addEventListener('click', ConfirmRemoveSchedule);
         deleteScheduleButt.setAttribute("class", "delete-btn");
 
 

@@ -127,7 +127,7 @@ function remove_from_schedule(ev){
     trash.style.transform = "rotate(0deg)";
     trash.style.transition = "transform 250ms";
 
-    const data = JSON.stringify({"taskId": taskId, "scheduleId": scheduleId});
+    const data = JSON.stringify({"taskId": taskId, "scheduleId": scheduleId, "dayId": dayId});
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onDeleteFromScheduleResponse);
     xhr.addEventListener('error', onNetworkError);
@@ -208,6 +208,77 @@ function onLoad() {
             onMessageResponse(mainDiv, this);
         }
     }
+}
+
+
+function Confirm(title, msg, $true, $false, onContinue) {
+    const $content = "<div class='dialog-ovelay'>" +
+        "<div class='dialog'><header c>" +
+        " <h3> " + title + " </h3> " +
+        "<i class='fa fa-close'></i>" +
+        "</header>" +
+        "<div class='dialog-msg'>" +
+        " <p> " + msg + " </p> " +
+        "</div>" +
+        "<footer>" +
+        "<div class='controls'>" +
+        " <button class='button button-danger doAction'>" + $true + "</button> " +
+        " <button class='button button-default cancelAction'>" + $false + "</button> " +
+        "</div>" +
+        "</footer>" +
+        "</div>" +
+        "</div>";
+    $('body').prepend($content);
+    $('.doAction').click(function () {
+        $(this).parents('.dialog-ovelay').fadeOut(500, function () {
+            $(this).remove();
+            onContinue();
+        });
+
+    });
+    $('.cancelAction, .fa-close').click(function () {
+        $(this).parents('.dialog-ovelay').fadeOut(500, function () {
+            $(this).remove();
+        });
+
+    });
+
+}
+
+function Prompt(title, msg, $true, $false, onContinue) {
+    const $content = "<div class='dialog-ovelay'>" +
+        "<div class='dialog'><header>" +
+        " <h3> " + title + " </h3> " +
+        "<i class='fa fa-close'></i>" +
+        "</header>" +
+        "<div class='dialog-msg'>" +
+        " <p> " + msg + " </p> " +
+        "<br>" +
+        "<input name=\"long\" class=\"input\" type=\"number\" id=\"long\">" +
+        "</div>" +
+        "<footer>" +
+        "<div class='controls'>" +
+        " <button class='button button-danger doAction'>" + $true + "</button> " +
+        " <button class='button button-default cancelAction'>" + $false + "</button> " +
+        "</div>" +
+        "</footer>" +
+        "</div>" +
+        "</div>";
+    $('body').prepend($content);
+    $('.doAction').click(function () {
+        $(this).parents('.dialog-ovelay').fadeOut(500, function () {
+            const number = document.getElementById("long").value;
+            $(this).remove();
+            onContinue(number);
+        });
+
+    });
+    $('.cancelAction, .fa-close').click(function () {
+        $(this).parents('.dialog-ovelay').fadeOut(500, function () {
+            $(this).remove();
+        });
+
+    });
 }
 
 document.addEventListener('DOMContentLoaded', onLoad);
