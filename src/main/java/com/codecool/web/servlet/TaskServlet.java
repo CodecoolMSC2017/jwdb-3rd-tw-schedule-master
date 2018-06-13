@@ -45,11 +45,9 @@ public class TaskServlet extends AbstractServlet {
                 else{
                     tasks = taskService.findAllByUserAndScheduleId(userId,Integer.parseInt(currentId));
                 }
-                Schedule schedule = scheduleService.findById(Integer.parseInt(currentId));
                 List<Schedule> schedules = scheduleService.findAllByUserId(userId);
 
                 UserDto userDto =  new UserDto(user, tasks, schedules);
-                userDto.setSchedule(schedule);
             sendMessage(resp, HttpServletResponse.SC_OK, userDto);
         } catch (SQLException ex) {
             handleSqlError(resp, ex);

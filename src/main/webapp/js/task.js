@@ -258,8 +258,6 @@ function ConfirmRemoveTask(e) {
 function onDeleteTaskResponse() {
     if (this.status === OK) {
         const userDto = JSON.parse(this.responseText);
-        removeAllChildren(daysDiv);
-        listingDays(userDto);
         document.getElementById("tasksUl").remove();
         createTaskDiv(userDto);
     } else {

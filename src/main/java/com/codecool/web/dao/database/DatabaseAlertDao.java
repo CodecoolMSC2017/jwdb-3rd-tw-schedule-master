@@ -47,8 +47,24 @@ public class DatabaseAlertDao extends AbstractDaoFactory implements AlertDao{
 
     @Override
     public int getTaskIdByDayId(int dayId, String hourId) throws SQLException {
-        String sql = "";
-        return 0;
+
+        String sql = "SELECT task.id " +
+                "FROM task_hour \n" +
+                "JOIN task ON task_hour.task_id = task.id \n" +
+                "JOIN schedule ON schedule.id = task_hour.schedule_id \n" +
+                "JOIN day ON day.schedule_id = schedule.id\n" +
+                "JOIN app_user ON schedule.app_user_id = app_user.id \n" +
+                "WHERE ? = ANY(regexp_split_to_array(hour_ids,E',')) AND day.id = ?";
+        try(PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1,hourId);
+            statement.setInt(2,dayId);
+            try(ResultSet resultSet = statement.executeQuery()){
+                if(resultSet.next()){
+                    return resultSet.getInt("id");
+                }
+                return -1;
+            }
+        }
 
     }
 
