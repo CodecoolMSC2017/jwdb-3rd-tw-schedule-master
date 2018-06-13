@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 class DatabaseTaskHourDao extends AbstractDaoFactory implements TaskHourDao {
@@ -100,9 +101,7 @@ class DatabaseTaskHourDao extends AbstractDaoFactory implements TaskHourDao {
                 }
             }
         }
-        for (int i = 0; i < hours.split(",").length; i++) {
-            hourIds.add(hours.split(",")[i]);
-        }
+        hourIds.addAll(Arrays.asList(hours.split(",")));
         return hourIds;
 
     }
