@@ -69,7 +69,8 @@ public class TaskHourServlet extends AbstractServlet {
             JsonNode jsonNode = createJsonNodeFromRequest(req);
             int taskId = Integer.parseInt(jsonNode.get("taskId").textValue());
             int scheduleId = Integer.parseInt(jsonNode.get("scheduleId").textValue());
-            taskHourService.disconnect(taskId,scheduleId);
+            int dayId = Integer.parseInt(jsonNode.get("dayId").textValue());
+            taskHourService.disconnect(taskId,scheduleId, dayId);
             User user = getUser(req);
             int userId = user.getId();
             List<Task> taskList = taskService.findAllByUserAndScheduleId(userId, scheduleId);

@@ -17,22 +17,24 @@ class DatabaseTaskHourDao extends AbstractDaoFactory implements TaskHourDao {
     }
 
     @Override
-    public void add(int taskId, int scheduleId, String hourId) throws SQLException {
-        String sql = "INSERT INTO task_hour (task_id, schedule_id, hour_ids) VALUES (?, ?, ?);";
+    public void add(int taskId, int scheduleId, int dayId, String hourId) throws SQLException {
+        String sql = "INSERT INTO task_hour (task_id, schedule_id,day_id, hour_ids) VALUES (?, ?, ?, ?);";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, taskId);
             statement.setInt(2, scheduleId);
-            statement.setString(3, hourId);
+            statement.setInt(3,dayId);
+            statement.setString(4, hourId);
             statement.executeUpdate();
         }
     }
 
     @Override
-    public void delete(int taskId, int scheduleId) throws SQLException {
-        String sql = "DELETE FROM task_hour WHERE task_id = ? AND schedule_id = ?;";
+    public void delete(int taskId, int scheduleId, int dayId) throws SQLException {
+        String sql = "DELETE FROM task_hour WHERE task_id = ? AND schedule_id = ? AND day_id = ?;";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, taskId);
             statement.setInt(2, scheduleId);
+            statement.setInt(3,dayId);
             statement.executeUpdate();
         }
     }
@@ -57,12 +59,13 @@ class DatabaseTaskHourDao extends AbstractDaoFactory implements TaskHourDao {
 
 
     @Override
-    public void update(int taskId, int scheduleId, String hourId) throws SQLException, InvalidArgumentException {
-        String sql = "UPDATE task_hour SET hour_ids = ? WHERE task_id = ? AND schedule_id = ?";
+    public void update(int taskId, int scheduleId, int dayId, String hourId) throws SQLException, InvalidArgumentException {
+        String sql = "UPDATE task_hour SET hour_ids = ? WHERE task_id = ? AND schedule_id = ? and day_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, hourId);
             statement.setInt(2, taskId);
             statement.setInt(3, scheduleId);
+            statement.setInt(4,dayId);
             statement.executeUpdate();
         }
 
@@ -126,11 +129,12 @@ class DatabaseTaskHourDao extends AbstractDaoFactory implements TaskHourDao {
         }
     }
     @Override
-    public Boolean isConnectionExists(int taskId, int scheduleId) throws SQLException {
-        String sql = "SELECT schedule_id,task_id FROM task_hour WHERE task_id = ? AND schedule_id = ?";
+    public Boolean isConnectionExists(int taskId, int scheduleId, int dayId) throws SQLException {
+        String sql = "SELECT schedule_id,task_id,day_id FROM task_hour WHERE task_id = ? AND schedule_id = ? AND day_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, taskId);
             statement.setInt(2, scheduleId);
+            statement.setInt(3,dayId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return true;

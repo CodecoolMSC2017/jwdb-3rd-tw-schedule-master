@@ -18,14 +18,14 @@ public class SimpleTaskHourService implements TaskHourService {
     }
 
     @Override
-    public void disconnect(int taskId, int scheduleId) throws SQLException {
-        taskHourDao.delete(taskId, scheduleId);
+    public void disconnect(int taskId, int scheduleId, int dayId) throws SQLException {
+        taskHourDao.delete(taskId, scheduleId,dayId );
     }
 
 
     @Override
-    public void connectTaskToSchedule(int scheduleId, int taskId, String hourId) throws SQLException {
-        taskHourDao.add(taskId, scheduleId, hourId);
+    public void connectTaskToSchedule(int scheduleId, int taskId, int dayId, String hourId) throws SQLException {
+        taskHourDao.add(taskId, scheduleId,dayId , hourId);
     }
 
     @Override
@@ -40,10 +40,10 @@ public class SimpleTaskHourService implements TaskHourService {
         for (int i = 1; i < taskLength; i++) {
             hourIds += "," + Integer.toString(Integer.parseInt(hourId) + i);
         }
-        if (taskHourDao.isConnectionExists(taskId, scheduleId)) {
-            taskHourDao.update(taskId, scheduleId, hourIds);
-        } else if (!taskHourDao.isConnectionExists(taskId, scheduleId)) {
-            connectTaskToSchedule(scheduleId, taskId, hourIds);
+        if (taskHourDao.isConnectionExists(taskId, scheduleId, dayId)) {
+            taskHourDao.update(taskId, scheduleId,dayId , hourIds);
+        } else if (!taskHourDao.isConnectionExists(taskId, scheduleId,dayId )) {
+            connectTaskToSchedule(scheduleId, taskId, dayId, hourIds );
         }
     }
 

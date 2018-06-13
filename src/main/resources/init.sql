@@ -55,10 +55,13 @@ CREATE TABLE task (
 CREATE TABLE task_hour (
 	task_id INTEGER,
     schedule_id INTEGER,
+    day_id INTEGER,
     hour_ids TEXT,
     PRIMARY KEY (task_id, schedule_id),
 	FOREIGN KEY (task_id) REFERENCES task("id")  ON DELETE CASCADE,
-    FOREIGN KEY (schedule_id) REFERENCES schedule("id") ON DELETE CASCADE
+    FOREIGN KEY (schedule_id) REFERENCES schedule("id") ON DELETE CASCADE,
+    FOREIGN KEY (day_id) REFERENCES day("id") ON DELETE CASCADE
+
 );
 
 INSERT INTO app_user (email, user_name, password, role)  VALUES
