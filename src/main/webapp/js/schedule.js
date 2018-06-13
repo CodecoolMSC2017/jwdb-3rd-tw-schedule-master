@@ -1,3 +1,5 @@
+let dayId = null;
+
 function showSchedule() {
     const scheduleEl = document.getElementById("schedulesUl");
     scheduleEl.classList.remove('hidden');
@@ -131,7 +133,7 @@ function removeSchedule(e) {
 }
 
 function ConfirmRemoveSchedule(e) {
-    const title = e.target.parentElement.children.item(1).textContent;
+    const title = e.target.parentElement.firstElementChild.id;
     Confirm('Are you sure to delete this schedule?', 'The schedule named ' + title + '  will be deleted.', 'OK', 'Cancel', function () {
         removeSchedule(e);
     });
@@ -339,7 +341,7 @@ function listingDays(userDto) {
                 let height = rowspan * 28;
                 hoursTd.style.height = height.toString() + "px";
             }
-            hoursTr.addEventListener('drop', add_task);
+            hoursTr.addEventListener('drop', getTaskLength);
             hoursTr.addEventListener('dragenter', drag_enter_prevent);
             hoursTr.addEventListener('dragover', drag_over_prevent);
 
@@ -589,15 +591,6 @@ function getCurrentDate() {
     return today;
 }
 
-function timeConverter(UNIX_timestamp) {
-    const a = new Date(UNIX_timestamp * 1000);
-    const year = a.getFullYear();
-    const month = a.getMonth();
-    const date = a.getDate();
-    const time = year + '-' + month + '-' + date;
-    return time;
-}
-
 function onUpdateDayResponse() {
     if (this.status === OK) {
         const userDto = JSON.parse(this.responseText);
@@ -645,6 +638,7 @@ function updateScheduleFields(e) {
 
     const descInputEl = document.createElement("INPUT");
     descInputEl.setAttribute("type", "text");
+    descInputEl.placeholder = oldDesc;
     descInputEl.placeholder = oldDesc;
     descInputEl.setAttribute("class", "input-min");
     descTd.appendChild(descInputEl);
@@ -707,15 +701,23 @@ function onUpdateScheduleResponse() {
 
 }
 
-function add_task(ev) {
+
+function getTaskLength(ev) {
     ev.preventDefault();
+    const task_id = ev.dataTransfer.getData("text");
     if (ev.target.firstChild != null) {
         newError(mainDiv, "You already added a task for this hour!");
         return false;
     }
+    Prompt("How long will it take to finish with the task?", "Enter a Number!", "Add", "Cancel", function (number) {
+        add_task(ev, number, task_id);
+    });
+}
+
+function add_task(ev, number, task_id) {
     const hourValue = ev.target.id;
-    const taskId = ev.dataTransfer.getData("text");
-    let number = prompt("How long will it take to finish with the task?", "");
+    const taskId = task_id;
+
     let parsedNum = parseInt(number);
     if (number === "0") {
         newError(mainDiv, "Number can not be 0!");
@@ -777,6 +779,8 @@ function added_drag_start(ev) {
 
     ev.target.firstElementChild.removeAttribute("class");
     ev.target.firstElementChild.setAttribute("class", "hidden");
+
+    dayId = ev.target.parentElement.parentElement.parentElement.firstChild.id;
 }
 
 function added_drag_end(ev) {

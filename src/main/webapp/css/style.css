@@ -862,9 +862,15 @@ li:last-child {
     overflow: hidden
 }
 
-.dialog-ovelay .dialog header {
+.dialog-ovelay .dialog .red {
     padding: 10px 8px;
     background-color: #f93e3c;
+    border-bottom: 1px solid #e5e5e5
+}
+
+.dialog-ovelay .dialog .red {
+    padding: 10px 8px;
+    background-color: #20acf9;
     border-bottom: 1px solid #e5e5e5
 }
 
