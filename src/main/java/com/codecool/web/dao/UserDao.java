@@ -21,4 +21,6 @@ public interface UserDao {
     void deleteUserbyId(int id) throws SQLException;
 
     User getByEmail(String email) throws SQLException;
+
+    User findByDayId(int dayId) throws SQLException;
 }
