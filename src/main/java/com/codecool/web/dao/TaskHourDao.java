@@ -8,15 +8,15 @@ import java.util.List;
 
 public interface TaskHourDao {
 
-    void add(int taskId, int scheduleId, String hourId) throws SQLException;
+    void add(int taskId, int scheduleId, int dayId, String hourId) throws SQLException;
 
-    void delete(int taskId,int scheduleId)throws SQLException;
+    void delete(int taskId, int scheduleId, int dayId)throws SQLException;
 
     void deleteByTaskId(int taskId)throws SQLException;
 
     void deleteByScheduleId(int scheduleId)throws SQLException;
 
-    void update(int taskId, int scheduleId, String hourId) throws SQLException, InvalidArgumentException;
+    void update(int taskId, int scheduleId, int dayId, String hourId) throws SQLException, InvalidArgumentException;
 
     List<Task> findTaskByScheduleId(int scheduleId)throws SQLException;
 
@@ -24,7 +24,7 @@ public interface TaskHourDao {
 
     Boolean validateHourIds(int userId,int dayId, String hourId) throws SQLException;
 
-    Boolean isConnectionExists(int taskId, int scheduleId) throws SQLException;
+    Boolean isConnectionExists(int taskId, int scheduleId, int dayId) throws SQLException;
 
 
 
