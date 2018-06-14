@@ -1,7 +1,9 @@
 package com.codecool.web.listener;
 
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.datasource.init.ScriptUtils;
+import com.codecool.web.alert.Alert;
+import jdk.jfr.StackTrace;
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -17,11 +19,20 @@ import java.sql.SQLException;
 @WebListener
 public final class WebappContextListener implements ServletContextListener {
 
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         registerCharacterEncodingFilter(sce);
         DataSource dataSource = putDataSourceToServletContext(sce);
-        runDatabaseInitScript(dataSource, "/init.sql");
+        /*runDatabaseInitScript(dataSource, "/init.sql");*/
+
+        try {
+            executeQuartz(dataSource);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private void registerCharacterEncodingFilter(ServletContextEvent sce) {
@@ -60,14 +71,14 @@ public final class WebappContextListener implements ServletContextListener {
             script on startup. Because of the try-with-resource construct the
             database connection is automatically closed at the end of the try-catch
             block.
-        */
+
         try (Connection connection = dataSource.getConnection()) {
             ScriptUtils.executeSqlScript(connection, new ClassPathResource(resource));
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new IllegalStateException(ex);
         }
-        /*
+
             Doing this is basically it's equivalent to this
 
             Connection connection = null;
@@ -87,6 +98,19 @@ public final class WebappContextListener implements ServletContextListener {
                 }
             }
         */
+    }
+    void executeQuartz(DataSource dataSource) throws SchedulerException {
+        JobDetail alert = JobBuilder.newJob(Alert.class).build();
+        JobDataMap jobDataMap = alert.getJobDataMap();
+        jobDataMap.put("dataSource", dataSource);
+
+        Trigger alertTrigger = TriggerBuilder.newTrigger().withIdentity("SimpleTrigger").withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInHours(01).repeatForever()).build();
+
+        Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+
+        scheduler.start();
+        scheduler.scheduleJob(alert,alertTrigger);
+
     }
 
     @Override

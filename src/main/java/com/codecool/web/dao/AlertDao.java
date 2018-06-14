@@ -8,5 +8,5 @@ public interface AlertDao {
 
     int getTaskIdByDayId(int dayId, String hourId)throws SQLException;
 
-    List<String> getHourIdsByDayId(int dayId)throws SQLException;
+    List<Integer> getHourIdsByDayId(int dayId)throws SQLException;
 }

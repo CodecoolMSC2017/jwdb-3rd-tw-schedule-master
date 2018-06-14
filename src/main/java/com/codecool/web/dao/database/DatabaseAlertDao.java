@@ -31,14 +31,14 @@ class DatabaseAlertDao extends AbstractDaoFactory implements AlertDao{
     }
 
     @Override
-    public List<String> getHourIdsByDayId(int dayId) throws SQLException {
-        List<String> hourIds = new ArrayList<>();
-        String sql = "SELECT hour.id FROM  day JOIN hour ON day.id = day_id WHERE day.id = ? ";
+    public List<Integer> getHourIdsByDayId(int dayId) throws SQLException {
+        List<Integer> hourIds = new ArrayList<>();
+        String sql = "SELECT hour.id as hour_id FROM  day JOIN hour ON day.id = day_id WHERE day.id = ? ORDER BY hour.id ";
         try(PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setInt(1,dayId);
             try(ResultSet resultSet = statement.executeQuery()){
                 while(resultSet.next()){
-                    hourIds.add(resultSet.getString("id"));
+                    hourIds.add(resultSet.getInt("hour_id"));
                 }
                 return hourIds;
             }
@@ -48,7 +48,7 @@ class DatabaseAlertDao extends AbstractDaoFactory implements AlertDao{
     @Override
     public int getTaskIdByDayId(int dayId, String hourId) throws SQLException {
 
-        String sql = "SELECT task.id " +
+        String sql = "SELECT task.id as final_task_id " +
                 "FROM task_hour \n" +
                 "JOIN task ON task_hour.task_id = task.id \n" +
                 "JOIN schedule ON schedule.id = task_hour.schedule_id \n" +
@@ -60,7 +60,7 @@ class DatabaseAlertDao extends AbstractDaoFactory implements AlertDao{
             statement.setInt(2,dayId);
             try(ResultSet resultSet = statement.executeQuery()){
                 if(resultSet.next()){
-                    return resultSet.getInt("id");
+                    return resultSet.getInt("final_task_id");
                 }
                 return -1;
             }

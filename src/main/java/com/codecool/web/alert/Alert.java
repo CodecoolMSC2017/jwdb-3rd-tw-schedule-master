@@ -9,95 +9,165 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import javax.mail.*;
-import javax.mail.internet.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 
 public class Alert implements org.quartz.Job {
-    Connection connection;
-    public Alert(Connection connection){
-    this.connection = connection;
+    private static HashMap<Integer, List<Integer>> hoursByDayId = new HashMap<>();
+    private static List<Integer> alertableTasksIds = new ArrayList<>();
+    private static HashMap<Integer, Integer> alerts = new HashMap<>();
+    private static List<Integer> alreadyAlerted = new ArrayList<>();
+    private Connection connection;
+    private AlertDao alertDao;
+    private HourDao hourDao;
+    private TaskDao taskDao;
+    private UserDao userDao;
+
+    public Alert() {
+        this.connection = null;
     }
-
-    AlertDao alertDao = (AlertDao) AbstractDaoFactory.getDao("alert",connection);
-    HourDao hourDao = (HourDao) AbstractDaoFactory.getDao("hour",connection);
-    TaskDao taskDao = (TaskDao) AbstractDaoFactory.getDao("task",connection);
-    UserDao userDao = (UserDao) AbstractDaoFactory.getDao("user",connection);
-    static HashMap<Integer,List<String>> hoursByDayId = new HashMap<>();
-
 
     void prepeareAlerts() throws SQLException {
-        for(int index:alertDao.getTodaysAlerts()){
-            hoursByDayId.put(index,alertDao.getHourIdsByDayId(index));
-        }
-    }
-
-    void handleAlert() throws SQLException {
         Date date = new Date();
         Calendar calendar = GregorianCalendar.getInstance();
         calendar.setTime(date);
         int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
-        for (Map.Entry<Integer,List<String>> entry : hoursByDayId.entrySet()){
-           for (String hourId : entry.getValue()){
-               int taskId = alertDao.getTaskIdByDayId(entry.getKey(),hourId);
-               if(taskId != -1){
-                   String taskName = taskDao.findById(taskId).getTitle();
-                   String userName = userDao.findByDayId(entry.getKey()).getUserName();
-                   String email = userDao.findByDayId(entry.getKey()).getEmail();
-                   int time = hourDao.findById(Integer.parseInt(hourId)).getValue();
-                   if( time-currentHour >= 1 && time-currentHour < 2 ){
-                        sendEmail(taskName,userName,time,email);
-                   }
-               }
-           }
+        for (int index : alertDao.getTodaysAlerts()) {
+            List<Integer> sortList = alertDao.getHourIdsByDayId(index);
+            hoursByDayId.put(index, sortList);
+
+        }
+        for (Map.Entry<Integer, List<Integer>> entry : hoursByDayId.entrySet()) {
+            boolean found = false;
+            for (int hourId : entry.getValue()) {
+                int time = hourDao.findById(hourId).getValue();
+                int taskId = alertDao.getTaskIdByDayId(entry.getKey(), Integer.toString(hourId));
+
+                if (time - currentHour > 1 && time - currentHour < 3 && !alertableTasksIds.contains(taskId) && taskId != -1 && !found) {
+
+                    found = true;
+                    alertableTasksIds.add(taskId);
+
+                }
+            }
+        }
+
+    }
+
+    void handleAlert() throws SQLException {
+        for (Map.Entry<Integer, Integer> entry : alerts.entrySet()) {
+            int hourId = entry.getValue();
+            int taskId = alertDao.getTaskIdByDayId(entry.getKey(), Integer.toString(hourId));
+
+            String taskName = taskDao.findById(taskId).getTitle();
+            System.out.println(taskName);
+            String userName = userDao.findByDayId(entry.getKey()).getUserName();
+            String email = userDao.findByDayId(entry.getKey()).getEmail();
+
+            int time = hourDao.findById(hourId).getValue();
+            sendEmailGmail(email, taskName, userName, time);
+            alreadyAlerted.add(taskId);
+
+
         }
     }
 
-    void sendEmail(String taskName,String userName,int dueDate,String email){
-        String to = email;
 
-        // Sender's email ID needs to be mentioned
-        String from = "reminder.myschedule@gmail.com";
+    void sendEmailGmail(String email, String taskName, String userName, int dueDate) {
 
-        // Assuming you are sending email from localhost
-        String host = "localhost";
+        final String username = "reminder.myschedule@gmail.com";
+        final String password = "myscheduleadmin";
 
-        // Get system properties
-        Properties properties = System.getProperties();
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
 
-        // Setup mail server
-        properties.setProperty("smtp.gmail.com", host);
-
-        // Get the default Session object.
-        Session session = Session.getDefaultInstance(properties);
+        Session session = Session.getInstance(props,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
 
         try {
-            // Create a default MimeMessage object.
-            MimeMessage message = new MimeMessage(session);
 
-            // Set From: header field of the header.
-            message.setFrom(new InternetAddress(from));
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("reminder.myschedule@gmail.com"));
+            message.setRecipients(Message.RecipientType.TO,
+                    InternetAddress.parse(email));
+            message.setSubject("Task reminder");
+            message.setText(String.format("Dear %s,\nyour upcoming %s task starts at %d:00", userName, taskName, dueDate));
 
-            // Set To: header field of the header.
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-
-            // Set Subject: header field
-            message.setSubject("REMINDER from myschedule.site");
-
-            // Now set the actual message
-            message.setText(String.format("Dear %s,\nyour upcoming %s task starts at %d:00",userName,taskName,dueDate));
             Transport.send(message);
-        } catch (MessagingException mex) {
-            mex.printStackTrace();
+
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
         }
     }
+
+
+    void reloadAlerts() throws SQLException {
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        for (Map.Entry<Integer, List<Integer>> entry : hoursByDayId.entrySet()) {
+            List<Integer> sortList = entry.getValue();
+            Collections.sort(sortList);
+            boolean found = false;
+            for (int hourId : sortList) {
+                int taskId = alertDao.getTaskIdByDayId(entry.getKey(), Integer.toString(hourId));
+                if (alertableTasksIds.contains(taskId) && !map.containsKey(entry.getKey()) && !found && !alreadyAlerted.contains(taskId)) {
+                    found = true;
+                    map.put(entry.getKey(), hourId);
+                    System.out.println(hourId);
+                }
+            }
+        }
+        System.out.println(map.size());
+        alerts.clear();
+        alerts.putAll(map);
+    }
+
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        DataSource dataSource = (DataSource) jobExecutionContext.getJobDetail().getJobDataMap().get("dataSource");
         try {
+            connection = dataSource.getConnection();
+
+            setConnection(connection);
+            alertDao = (AlertDao) AbstractDaoFactory.getDao("alert", connection);
+            hourDao = (HourDao) AbstractDaoFactory.getDao("hour", connection);
+            taskDao = (TaskDao) AbstractDaoFactory.getDao("task", connection);
+            userDao = (UserDao) AbstractDaoFactory.getDao("user", connection);
+
+            prepeareAlerts();
+            reloadAlerts();
             handleAlert();
+
+            Date date = new Date();
+            Calendar calendar = GregorianCalendar.getInstance();
+            calendar.setTime(date);
+            int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+            if(currentHour == 0 || currentHour == 24){
+                hoursByDayId = new HashMap<>();
+                alertableTasksIds = new ArrayList<>();
+                alerts = new HashMap<>();
+                alreadyAlerted = new ArrayList<>();
+            }
+
+
         } catch (SQLException e) {
-            System.out.println("The sqlquery return a null or nothing happening");
+            e.printStackTrace();
         }
     }
+
+    public void setConnection(Connection connection) {
+        this.connection = connection;
+    }
 }
+
