@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.SQLException;
+
 @WebServlet("/protected/date")
 public class DateServlet extends AbstractServlet {
 
@@ -30,12 +30,12 @@ public class DateServlet extends AbstractServlet {
             int userId = user.getId();
 
             JsonParser jsonParser = objectMapper.getFactory().createParser(req.getInputStream());
-            Day day = objectMapper.readValue(jsonParser,Day.class);
-            if(scheduleService.isExists(day.getId())){
-                doPut(req,resp);
+            Day day = objectMapper.readValue(jsonParser, Day.class);
+            if (scheduleService.isExists(day.getId())) {
+                scheduleService.updateDueDate(day, userId, day.getDueDate());
+            } else {
+                scheduleService.addDueDate(day, userId, day.getDueDate());
             }
-            scheduleService.addDueDate(day, userId, day.getDueDate());
-
             Schedule schedule = scheduleService.findById(day.getScheduleId());
 
             UserDto userDto = getDatas(resp, req);
@@ -58,8 +58,13 @@ public class DateServlet extends AbstractServlet {
 
             JsonParser jsonParser = objectMapper.getFactory().createParser(req.getInputStream());
             Day day = objectMapper.readValue(jsonParser, Day.class);
+            if (!scheduleService.isExists(day.getId())) {
+                scheduleService.addDueDate(day, userId, day.getDueDate());
+            } else {
+                scheduleService.updateDueDate(day, userId, day.getDueDate());
 
-            scheduleService.updateDueDate(day, userId, day.getDueDate());
+            }
+
 
             Schedule schedule = scheduleService.findById(day.getScheduleId());
 
@@ -74,28 +79,28 @@ public class DateServlet extends AbstractServlet {
         }
     }
 
-        @Override
+    @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-            try (Connection connection = getConnection(req.getServletContext())) {
-                ScheduleService scheduleService = new SimpleScheduleService(connection);
-                User user = getUser(req);
-                int userId = user.getId();
+        try (Connection connection = getConnection(req.getServletContext())) {
+            ScheduleService scheduleService = new SimpleScheduleService(connection);
+            User user = getUser(req);
+            int userId = user.getId();
 
-                JsonParser jsonParser = objectMapper.getFactory().createParser(req.getInputStream());
-                Day day = objectMapper.readValue(jsonParser, Day.class);
+            JsonParser jsonParser = objectMapper.getFactory().createParser(req.getInputStream());
+            Day day = objectMapper.readValue(jsonParser, Day.class);
 
-                scheduleService.deleteDueDateByDayId(day,userId);
+            scheduleService.deleteDueDateByDayId(day, userId);
 
-                Schedule schedule = scheduleService.findById(day.getScheduleId());
+            Schedule schedule = scheduleService.findById(day.getScheduleId());
 
-                UserDto userDto = getDatas(resp, req);
-                userDto.setSchedule(schedule);
+            UserDto userDto = getDatas(resp, req);
+            userDto.setSchedule(schedule);
 
-                sendMessage(resp, HttpServletResponse.SC_OK, userDto);
-            } catch (SQLException e) {
-                handleSqlError(resp, e);
-            } catch (DayAlreadyExistsException e) {
-                sendMessage(resp, 400, e.getMessage());
-            }
+            sendMessage(resp, HttpServletResponse.SC_OK, userDto);
+        } catch (SQLException e) {
+            handleSqlError(resp, e);
+        } catch (DayAlreadyExistsException e) {
+            sendMessage(resp, 400, e.getMessage());
+        }
     }
 }
