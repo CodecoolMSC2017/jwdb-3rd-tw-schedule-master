@@ -13,8 +13,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 @WebListener
 public final class WebappContextListener implements ServletContextListener {
