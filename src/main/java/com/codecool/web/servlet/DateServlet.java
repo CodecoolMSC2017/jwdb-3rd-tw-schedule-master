@@ -25,12 +25,15 @@ public class DateServlet extends AbstractServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try (Connection connection = getConnection(req.getServletContext())) {
             ScheduleService scheduleService = new SimpleScheduleService(connection);
+
             User user = getUser(req);
             int userId = user.getId();
 
             JsonParser jsonParser = objectMapper.getFactory().createParser(req.getInputStream());
             Day day = objectMapper.readValue(jsonParser,Day.class);
-
+            if(scheduleService.isExists(day.getId())){
+                doPut(req,resp);
+            }
             scheduleService.addDueDate(day, userId, day.getDueDate());
 
             Schedule schedule = scheduleService.findById(day.getScheduleId());
