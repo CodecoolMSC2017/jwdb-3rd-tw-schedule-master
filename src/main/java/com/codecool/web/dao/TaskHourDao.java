@@ -24,7 +24,7 @@ public interface TaskHourDao {
 
     Boolean validateHourIds(int userId,int dayId, String hourId) throws SQLException;
 
-    Boolean isConnectionExists(int taskId, int scheduleId, int dayId) throws SQLException;
+    Boolean isConnectionExists(int taskId, int scheduleId) throws SQLException;
 
 
 

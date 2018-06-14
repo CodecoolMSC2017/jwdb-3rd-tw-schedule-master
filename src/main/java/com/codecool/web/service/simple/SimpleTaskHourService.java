@@ -40,9 +40,9 @@ public class SimpleTaskHourService implements TaskHourService {
         for (int i = 1; i < taskLength; i++) {
             hourIds += "," + Integer.toString(Integer.parseInt(hourId) + i);
         }
-        if (taskHourDao.isConnectionExists(taskId, scheduleId, dayId)) {
+        if (taskHourDao.isConnectionExists(taskId, scheduleId)) {
             taskHourDao.update(taskId, scheduleId,dayId , hourIds);
-        } else if (!taskHourDao.isConnectionExists(taskId, scheduleId,dayId )) {
+        } else if (!taskHourDao.isConnectionExists(taskId, scheduleId)) {
             connectTaskToSchedule(scheduleId, taskId, dayId, hourIds );
         }
     }
