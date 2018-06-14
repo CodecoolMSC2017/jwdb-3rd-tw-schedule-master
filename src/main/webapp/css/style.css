@@ -108,7 +108,13 @@ li:last-child {
 }
 
 #name-field {
-    text-shadow: 1px 1px black;
+    text-shadow: 1px 1px grey;
+    border-radius: 20px;
+    border: 3px;
+    border-style: ridge;
+    border-color: #3498db;
+    background-color: white;
+    color: black;
 }
 /*
    ******************
@@ -198,6 +204,8 @@ li:last-child {
     border: 1px solid transparent;
     border-radius: 1px;
     transition: border .5s;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #datepicker:focus {
