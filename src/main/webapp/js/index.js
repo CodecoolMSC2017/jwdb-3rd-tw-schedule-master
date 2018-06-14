@@ -213,7 +213,7 @@ function onLoad() {
 
 function Confirm(title, msg, $true, $false, onContinue) {
     const $content = "<div class='dialog-ovelay'>" +
-        "<div class='dialog'><header c>" +
+        "<div class='dialog'><header class='red'>" +
         " <h3> " + title + " </h3> " +
         "<i class='fa fa-close'></i>" +
         "</header>" +
@@ -247,7 +247,7 @@ function Confirm(title, msg, $true, $false, onContinue) {
 
 function Prompt(title, msg, $true, $false, onContinue) {
     const $content = "<div class='dialog-ovelay'>" +
-        "<div class='dialog'><header>" +
+        "<div class='dialog'><header class='blue'>" +
         " <h3> " + title + " </h3> " +
         "<i class='fa fa-close'></i>" +
         "</header>" +

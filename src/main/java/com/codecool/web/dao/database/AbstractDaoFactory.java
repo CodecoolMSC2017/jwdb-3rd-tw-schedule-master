@@ -16,6 +16,7 @@ public abstract class AbstractDaoFactory {
     private static AbstractDaoFactory taskDatabaseDao;
     private static AbstractDaoFactory taskHourDatabaseDao;
     private static AbstractDaoFactory userDatabaseDao;
+    private static AbstractDaoFactory alertDatabaseDao;
 
     Connection connection;
 
@@ -61,6 +62,12 @@ public abstract class AbstractDaoFactory {
                     userDatabaseDao = new DatabaseUserDao(connection);
                 }
                 dao = userDatabaseDao;
+                break;
+            case "alert":
+                if (alertDatabaseDao == null) {
+                    alertDatabaseDao = new DatabaseAlertDao(connection);
+                }
+                dao = alertDatabaseDao;
                 break;
             default:
                 return null;

@@ -110,6 +110,21 @@ class DatabaseUserDao extends AbstractDaoFactory implements UserDao {
         return null;
     }
 
+    @Override
+    public User findByDayId(int dayId) throws SQLException {
+        String sql = "SELECT app_user.email FROM schedule JOIN day ON schedule.id = day.schedule_id JOIN app_user ON schedule.app_user_id = app_user.id WHERE day.id = ?";
+        try(PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setInt(1,dayId);
+            try(ResultSet resultSet = statement.executeQuery()){
+                if(resultSet.next()){
+                    return fetch(resultSet);
+                }
+            }
+            return null;
+        }
+    }
+
+
     private User fetch(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("id");
         String email = resultSet.getString("email");

@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DatabaseAlertDao extends AbstractDaoFactory implements AlertDao{
-    DatabaseAlertDao(Connection connection){super(connection);}
+class DatabaseAlertDao extends AbstractDaoFactory implements AlertDao{
+    public DatabaseAlertDao(Connection connection){super(connection);}
 
     @Override
     public List<Integer> getTodaysAlerts() throws SQLException {

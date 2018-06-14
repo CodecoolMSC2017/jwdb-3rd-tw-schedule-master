@@ -26,13 +26,14 @@
 
     <script src="${indexScriptUrl}"></script>
     <script src="${usersScriptUrl}"></script>
+    <script src="${googleUsersScriptUrl}"></script>
     <script src="${loginScriptUrl}"></script>
     <script src="${logoutScriptUrl}"></script>
     <script src="${registerScriptUrl}"></script>
     <script src="${scheduleScriptUrl}"></script>
     <script src="${taskScriptUrl}"></script>
     <script src="${mainPageScriptUrl}"></script>
-    <script src="${googleUsersScriptUrl}"></script>
+
     <script src="${jQueryScriptUrl}"></script>
     <script src="https://apis.google.com/js/platform.js" async defer>
         {
@@ -85,6 +86,8 @@
     <div id="name-logout-content" class="content hidden">
         <table id="name-logout-table">
             <tr>
+                <td id="picture-td">
+                </td>
                 <td id="name-td">
                     <h2 id="name-field"></h2>
                 </td>
