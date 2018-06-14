@@ -12,6 +12,7 @@ function onMainPageLoad(userDto) {
     const nameField = document.getElementById("name-field");
     nameField.textContent = userDto.user.userName;
     nameField.setAttribute("name", userDto.user.id);
+    removeAllChildren(document.getElementById("picture-td"));
 
     if (imageUrl != null) {
         const imgTd = document.getElementById("picture-td");

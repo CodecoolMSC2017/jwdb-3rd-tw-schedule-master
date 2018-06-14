@@ -236,6 +236,16 @@ function listingDays(userDto) {
     let hourFirstTable = document.createElement("table");
     hourFirstTable.setAttribute("class", "hours-table");
 
+    let dateFirstTr = document.createElement("tr");
+    dateFirstTr.setAttribute("class", "hours-row");
+
+    let dateFirstTd = document.createElement("td");
+    dateFirstTd.setAttribute("class", "hours-td");
+
+    dateFirstTd.textContent = "Date :";
+    dateFirstTr.appendChild(dateFirstTd);
+    hourFirstTable.appendChild(dateFirstTr);
+
 
     for (let i = 0; i < 24; i++) {
         let hourFirstTr = document.createElement("tr");
@@ -299,63 +309,85 @@ function listingDays(userDto) {
         td.appendChild(renameButt);
 
 
-        for (let j = 0; j < userDto.schedule.days[i].hours.length; j++) {
-            let hoursTr = document.createElement("tr");
-            hoursTr.setAttribute("id", userDto.schedule.days[i].hours[j].id);
-            hoursTr.setAttribute("class", "hours-row");
+        for (let j = -1; j < userDto.schedule.days[i].hours.length; j++) {
 
-            let hoursTd = document.createElement("td");
-            hoursTd.setAttribute("class", "hours-td");
-            hoursTd.setAttribute("id", userDto.schedule.days[i].hours[j].value);
+            if (j !== -1) {
 
-            if (userDto.schedule.days[i].hours[j].task != null && userDto.schedule.days[i].hours[j].task !== "deleted") {
 
-                let task = userDto.schedule.days[i].hours[j].task;
+                let hoursTr = document.createElement("tr");
+                hoursTr.setAttribute("id", userDto.schedule.days[i].hours[j].id);
+                hoursTr.setAttribute("class", "hours-row");
 
-                hoursTd.style.backgroundColor = task.color;
-                hoursTd.setAttribute("name", task.id);
+                let hoursTd = document.createElement("td");
+                hoursTd.setAttribute("class", "hours-td");
+                hoursTd.setAttribute("id", userDto.schedule.days[i].hours[j].value);
 
-                if (userDto.user != null) {
-                    hoursTd.classList.add("task-in-table");
-                    hoursTd.setAttribute('draggable', true);
-                    hoursTd.setAttribute('ondragstart', 'added_drag_start(event)');
-                    hoursTd.setAttribute('ondragend', 'added_drag_end(event)');
+                if (userDto.schedule.days[i].hours[j].task != null && userDto.schedule.days[i].hours[j].task !== "deleted") {
+
+                    let task = userDto.schedule.days[i].hours[j].task;
+
+                    hoursTd.style.backgroundColor = task.color;
+                    hoursTd.setAttribute("name", task.id);
+
+                    if (userDto.user != null) {
+                        hoursTd.classList.add("task-in-table");
+                        hoursTd.setAttribute('draggable', true);
+                        hoursTd.setAttribute('ondragstart', 'added_drag_start(event)');
+                        hoursTd.setAttribute('ondragend', 'added_drag_end(event)');
+                    }
+
+                    hoursTd.textContent = task.title;
+
+                    let next = j + 1;
+                    let rowspan = 1;
+                    while (userDto.schedule.days[i].hours[next] != null && userDto.schedule.days[i].hours[next].task != null && userDto.schedule.days[i].hours[next].task.id === userDto.schedule.days[i].hours[j].task.id) {
+                        rowspan++;
+                        userDto.schedule.days[i].hours[next].task = "deleted";
+                        next++;
+                    }
+
+                    hoursTd.classList.add("tooltip");
+                    let tooltipSpan = document.createElement("span");
+                    tooltipSpan.setAttribute("class", "tooltiptext");
+                    tooltipSpan.innerText = userDto.schedule.days[i].hours[j].task.description;
+                    hoursTd.appendChild(tooltipSpan);
+                    hoursTd.rowSpan = rowspan;
+                    let height = rowspan * 28;
+                    hoursTd.style.height = height.toString() + "px";
+                }
+                hoursTr.addEventListener('drop', getTaskLength);
+                hoursTr.addEventListener('dragenter', drag_enter_prevent);
+                hoursTr.addEventListener('dragover', drag_over_prevent);
+
+                if (userDto.schedule.days[i].hours[j].task == null || userDto.schedule.days[i].hours[j].task !== "deleted") {
+                    hoursTr.appendChild(hoursTd);
+                }
+                hoursTable.appendChild(hoursTr);
+            } else {
+
+                const dateTrEl = document.createElement("tr");
+                dateTrEl.setAttribute("class", "hours-row");
+
+                const dateTdEl = document.createElement("td");
+                dateTdEl.setAttribute("class", "hours-td");
+
+                if (userDto.schedule.days[i].dueDate != null) {
+                    const formatedDate = formatDate(userDto.schedule.days[i].dueDate);
+                    dateTdEl.textContent = formatedDate;
+                } else {
+                    dateTdEl.textContent = "No Date specified";
                 }
 
-                hoursTd.textContent = task.title;
-
-                let next = j + 1;
-                let rowspan = 1;
-                while (userDto.schedule.days[i].hours[next] != null && userDto.schedule.days[i].hours[next].task != null && userDto.schedule.days[i].hours[next].task.id === userDto.schedule.days[i].hours[j].task.id) {
-                    rowspan++;
-                    userDto.schedule.days[i].hours[next].task = "deleted";
-                    next++;
-                }
-
-                hoursTd.classList.add("tooltip");
-                let tooltipSpan = document.createElement("span");
-                tooltipSpan.setAttribute("class", "tooltiptext");
-                tooltipSpan.innerText = userDto.schedule.days[i].hours[j].task.description;
-                hoursTd.appendChild(tooltipSpan);
-                hoursTd.rowSpan = rowspan;
-                let height = rowspan * 28;
-                hoursTd.style.height = height.toString() + "px";
+                dateTrEl.appendChild(dateTdEl);
+                hoursTable.appendChild(dateTrEl);
             }
-            hoursTr.addEventListener('drop', getTaskLength);
-            hoursTr.addEventListener('dragenter', drag_enter_prevent);
-            hoursTr.addEventListener('dragover', drag_over_prevent);
-
-            if (userDto.schedule.days[i].hours[j].task == null || userDto.schedule.days[i].hours[j].task !== "deleted") {
-                hoursTr.appendChild(hoursTd);
-            }
-            hoursTable.appendChild(hoursTr);
+            td.appendChild(hoursTable);
+            tr.appendChild(td);
 
         }
-        td.appendChild(hoursTable);
-        tr.appendChild(td);
+        table.appendChild(tr);
+        daysDiv.appendChild(table);
     }
-    table.appendChild(tr);
-    daysDiv.appendChild(table);
     if (userDto.user != null) {
 
         const guestButton = document.createElement("button");
@@ -366,6 +398,7 @@ function listingDays(userDto) {
 
         daysDiv.appendChild(guestButton);
     }
+
 }
 
 function sendId(e) {
@@ -789,4 +822,5 @@ function added_drag_end(ev) {
     ev.target.firstElementChild.classList.add("tooltiptext");
     const trash = document.getElementById("trash-td");
     trash.classList.add("hidden");
+
 }
