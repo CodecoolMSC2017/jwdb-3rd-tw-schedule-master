@@ -144,6 +144,8 @@ function onDeleteScheduleResponse() {
         const userDto = JSON.parse(this.responseText);
         document.getElementById("schedulesUl").remove();
         createScheduleDiv(userDto);
+        document.getElementById("tasksUl").remove();
+        createTaskDiv(userDto);
     } else {
         onMessageResponse(mainDiv, this);
     }
